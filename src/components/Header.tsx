@@ -9,6 +9,7 @@ import {
   Video, 
   Heart, 
   Mic, 
+  Camera,
   ChevronDown,
   FileText,
   Plus
@@ -125,6 +126,16 @@ export function Header() {
                     <div>
                       <div className="font-medium">Interviews</div>
                       <div className="text-xs text-gray-500">Témoignages d'experts</div>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/reportages"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Camera className="w-4 h-4 text-gray-500" />
+                    <div>
+                      <div className="font-medium">Reportages Photo</div>
+                      <div className="text-xs text-gray-500">Galeries immersives</div>
                     </div>
                   </Link>
                 </div>
@@ -259,6 +270,14 @@ export function Header() {
                     >
                       <Mic className="w-4 h-4" />
                       <span>Interviews</span>
+                    </Link>
+                    <Link 
+                      to="/reportages" 
+                      className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Camera className="w-4 h-4" />
+                      <span>Reportages Photo</span>
                     </Link>
                   </div>
                 </div>
