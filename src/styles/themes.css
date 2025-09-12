@@ -1,0 +1,253 @@
+/* Variables CSS pour les thèmes */
+:root {
+  --theme-primary: #D2691E;
+  --theme-secondary: #1e3a8a;
+  --theme-accent: #fbbf24;
+  --theme-background: linear-gradient(135deg, #fed7aa 0%, #fef3c7 50%, #dbeafe 100%);
+  --theme-surface: #ffffff;
+  --theme-text: #1f2937;
+  --theme-text-secondary: #6b7280;
+  --theme-font-sans: "Inter", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
+  --theme-border-radius: 12px;
+  --theme-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --theme-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Classe thématiques génériques */
+.theme-text {
+  color: var(--theme-text) !important;
+}
+
+.theme-text-muted {
+  color: var(--theme-text-secondary) !important;
+}
+
+.theme-bg {
+  background: var(--theme-background) !important;
+}
+
+.theme-surface {
+  background: var(--theme-surface) !important;
+}
+
+.theme-primary {
+  color: var(--theme-primary) !important;
+}
+
+.theme-primary-bg {
+  background-color: var(--theme-primary) !important;
+  color: white;
+}
+
+.theme-border {
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Styles spécifiques par thème */
+
+/* Thème Sénégalais */
+body.theme-senegalais {
+  font-family: var(--theme-font-sans);
+}
+
+.theme-senegalais .admin-card {
+  @apply bg-white rounded-2xl shadow-lg border border-gray-100;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.theme-senegalais .btn-primary {
+  @apply bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800;
+  @apply text-white font-bold px-8 py-4 rounded-xl transition-all duration-300;
+  @apply shadow-lg hover:shadow-xl transform hover:-translate-y-1;
+}
+
+.theme-senegalais .btn-secondary {
+  @apply bg-blue-900 hover:bg-blue-800 text-white font-bold px-8 py-4 rounded-xl;
+  @apply transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1;
+}
+
+/* Thème Minimaliste Ultra-Moderne */
+body.theme-minimaliste {
+  font-family: "Inter", "system-ui", "-apple-system", sans-serif;
+  background-color: #ffffff;
+  color: #000000;
+  line-height: 1.6;
+}
+
+.theme-minimaliste {
+  --theme-primary: #000000;
+  --theme-secondary: #6c757d;
+  --theme-accent: #374151;
+  --theme-background: #ffffff;
+  --theme-surface: #f8f9fa;
+  --theme-text: #000000;
+  --theme-text-secondary: #6c757d;
+  --theme-font-sans: "Inter", "system-ui", "-apple-system", sans-serif;
+}
+
+.theme-minimaliste .admin-card {
+  background: #ffffff;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
+}
+
+.theme-minimaliste .btn-primary {
+  background: #000000;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-minimaliste .btn-primary:hover {
+  background: #1f2937;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px 0 rgb(0 0 0 / 0.15);
+}
+
+.theme-minimaliste .btn-secondary {
+  background: #ffffff;
+  color: #000000;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-minimaliste .btn-secondary:hover {
+  background: #f8f9fa;
+  border-color: #9ca3af;
+}
+
+.theme-minimaliste input,
+.theme-minimaliste textarea,
+.theme-minimaliste select {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #000000;
+  transition: all 0.2s ease;
+}
+
+.theme-minimaliste input:focus,
+.theme-minimaliste textarea:focus,
+.theme-minimaliste select:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgb(0 0 0 / 0.05);
+}
+
+.theme-minimaliste h1,
+.theme-minimaliste h2,
+.theme-minimaliste h3,
+.theme-minimaliste h4,
+.theme-minimaliste h5,
+.theme-minimaliste h6 {
+  color: #000000;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.theme-minimaliste h1 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+}
+
+.theme-minimaliste h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.theme-minimaliste h3 {
+  font-size: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.theme-minimaliste p,
+.theme-minimaliste div {
+  color: #000000;
+  line-height: 1.6;
+}
+
+.theme-minimaliste .text-muted {
+  color: #6c757d !important;
+}
+
+/* Sidebar admin pour thème minimaliste */
+.theme-minimaliste .admin-sidebar {
+  background: #000000;
+  border: none;
+  padding: 2rem 0;
+}
+
+.theme-minimaliste .admin-sidebar a {
+  color: #ffffff;
+  padding: 1rem 2rem;
+  margin: 0.25rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.theme-minimaliste .admin-sidebar a:hover,
+.theme-minimaliste .admin-sidebar a.active {
+  background: #1f2937;
+  color: #ffffff;
+}
+
+/* Layout pour thème minimaliste */
+.theme-minimaliste .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.theme-minimaliste .main-content {
+  padding: 4rem 0;
+}
+
+/* Animations */
+.fade-in {
+  animation: fade-in 0.5s ease-out;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Styles responsifs pour les deux thèmes */
+@media (max-width: 768px) {
+  .admin-card {
+    padding: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  .theme-minimaliste h1 {
+    font-size: 2rem;
+  }
+  
+  .theme-minimaliste h2 {
+    font-size: 1.75rem;
+  }
+}

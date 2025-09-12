@@ -1,0 +1,76 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Build outputs
+dist/
+build/
+.vite/
+.tmp/
+
+# Environment files
+.env
+.env.local
+.env.production
+.env.development
+
+# TypeScript
+*.tsbuildinfo
+.tsbuildinfo
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.backup
+*.bak
+
+# Test files temporaires
+test-*.js
+debug-*.js
+verification-*.js
+
+# Documentation temporaire
+diagnostic-*.md
+diagnostic-*.sh
+test-exhaustif-*.sh
+test-rapport-*.md
+RAPPORT-*.md
+RESOLUTION-*.md
+SCRIPTS-*.md
+STATUS-*.md
+
+# Fichiers de sauvegarde
+*.loi200812
+loi200812-blog/
+
+# Supabase local
+.supabase/
