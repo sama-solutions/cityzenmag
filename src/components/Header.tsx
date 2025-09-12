@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, Twitter, Menu, X, Sparkles, Hash, Settings, Video, Heart } from 'lucide-react'
+import { Search, Twitter, Menu, X, Sparkles, Hash, Settings, Video, Heart, Mic } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeSelector } from './ThemeSelector'
 import { useSyncTwitter } from '../hooks/useData'
@@ -86,6 +86,14 @@ export function Header() {
             </Link>
             
             <Link 
+              to="/interviews" 
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
+            >
+              <Mic className="w-4 h-4" />
+              <span>Interviews</span>
+            </Link>
+            
+            <Link 
               to="/debat" 
               className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
             >
@@ -165,6 +173,15 @@ export function Header() {
               >
                 <Search className="w-5 h-5" />
                 <span>Rechercher</span>
+              </Link>
+              
+              <Link 
+                to="/interviews" 
+                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Mic className="w-5 h-5" />
+                <span>Interviews</span>
               </Link>
               
               <Link 

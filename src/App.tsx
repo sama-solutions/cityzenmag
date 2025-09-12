@@ -5,6 +5,7 @@ import { Header } from './components/Header'
 import { Home } from './pages/Home'
 import { Search } from './pages/Search'
 import { ThreadDetail } from './pages/ThreadDetail'
+import { Interviews } from './pages/Interviews'
 import { DebatePage } from './pages/DebatePage'
 import { ShareStoryPage } from './pages/ShareStoryPage'
 import { AdminLogin } from './pages/admin/AdminLogin'
@@ -47,6 +48,14 @@ function App() {
                     <Header />
                     <main className="container mx-auto px-4 py-8">
                       <ThreadDetail />
+                    </main>
+                  </>
+                } />
+                <Route path="/interviews" element={
+                  <>
+                    <Header />
+                    <main className="container mx-auto px-4 py-8">
+                      <Interviews />
                     </main>
                   </>
                 } />
