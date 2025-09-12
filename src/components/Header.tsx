@@ -1,6 +1,18 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Search, Twitter, Menu, X, Sparkles, Hash, Settings, Video, Heart, Mic } from 'lucide-react'
+import { 
+  Search, 
+  Twitter, 
+  Menu, 
+  X, 
+  Hash, 
+  Video, 
+  Heart, 
+  Mic, 
+  ChevronDown,
+  FileText,
+  Plus
+} from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeSelector } from './ThemeSelector'
 import { useSyncTwitter } from '../hooks/useData'
@@ -8,6 +20,8 @@ import { useAuth } from '../contexts/AuthContext'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [isContentMenuOpen, setIsContentMenuOpen] = useState(false)
+  const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const { syncNow, loading: syncing } = useSyncTwitter()
   const { isAdmin } = useAuth()
@@ -57,185 +71,258 @@ export function Header() {
                 theme === 'senegalais' ? 'text-yellow-200' : 'text-gray-600'
               }`}>Magazine de Transparence & Modernisation</p>
             </div>
-            {/* Motif décoratif */}
-            <div className={`hidden lg:block w-8 h-8 border-2 rounded-full ${
-              theme === 'senegalais' ? 'border-yellow-400/50' : 'border-gray-300'
-            }`}>
-              <div className={`w-4 h-4 rounded-full mt-1 ml-1 opacity-60 ${
-                theme === 'senegalais' ? 'bg-yellow-400' : 'bg-gray-400'
-              }`}></div>
-            </div>
           </Link>
 
-          {/* Desktop Navigation - Style Sénégalais */}
-          <nav className="hidden md:flex items-center space-x-8">
+          {/* Desktop Navigation - 2 niveaux */}
+          <nav className="hidden lg:flex items-center space-x-2">
+            {/* Niveau 1 : Navigation principale */}
             <Link 
               to="/" 
-              className="text-yellow-200 hover:text-white font-bold transition-colors font-sans flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-white/10"
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
+                theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+              }`}
             >
               <Hash className="w-4 h-4" />
               <span>Accueil</span>
             </Link>
-            {/* Navigation Links - Style Sénégalais */}
-            <Link 
-              to="/search" 
-              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
-            >
-              <Search className="w-4 h-4" />
-              <span>Rechercher</span>
-            </Link>
-            
-            <Link 
-              to="/interviews" 
-              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
-            >
-              <Mic className="w-4 h-4" />
-              <span>Interviews</span>
-            </Link>
-            
-            <Link 
-              to="/debat" 
-              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
-            >
-              <Video className="w-4 h-4" />
-              <span>Proposer un débat</span>
-            </Link>
-            
-            <Link 
-              to="/partager-histoire" 
-              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
-            >
-              <Heart className="w-4 h-4" />
-              <span>Partagez votre histoire</span>
-            </Link>
+
+            {/* Dropdown Contenu */}
+            <div className="relative">
+              <button
+                onMouseEnter={() => setIsContentMenuOpen(true)}
+                onMouseLeave={() => setIsContentMenuOpen(false)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
+                  theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+                }`}
+              >
+                <FileText className="w-4 h-4" />
+                <span>Contenu</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+
+              {/* Sous-menu Contenu */}
+              {isContentMenuOpen && (
+                <div 
+                  className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50"
+                  onMouseEnter={() => setIsContentMenuOpen(true)}
+                  onMouseLeave={() => setIsContentMenuOpen(false)}
+                >
+                  <Link
+                    to="/search"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Search className="w-4 h-4 text-gray-500" />
+                    <div>
+                      <div className="font-medium">Rechercher</div>
+                      <div className="text-xs text-gray-500">Articles et analyses</div>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/interviews"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Mic className="w-4 h-4 text-gray-500" />
+                    <div>
+                      <div className="font-medium">Interviews</div>
+                      <div className="text-xs text-gray-500">Témoignages d'experts</div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Dropdown Participer */}
+            <div className="relative">
+              <button
+                onMouseEnter={() => setIsParticipateMenuOpen(true)}
+                onMouseLeave={() => setIsParticipateMenuOpen(false)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
+                  theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+                }`}
+              >
+                <Plus className="w-4 h-4" />
+                <span>Participer</span>
+                <ChevronDown className="w-3 h-3" />
+              </button>
+
+              {/* Sous-menu Participer */}
+              {isParticipateMenuOpen && (
+                <div 
+                  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50"
+                  onMouseEnter={() => setIsParticipateMenuOpen(true)}
+                  onMouseLeave={() => setIsParticipateMenuOpen(false)}
+                >
+                  <Link
+                    to="/debat"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Video className="w-4 h-4 text-gray-500" />
+                    <div>
+                      <div className="font-medium">Proposer un débat</div>
+                      <div className="text-xs text-gray-500">Organiser une discussion</div>
+                    </div>
+                  </Link>
+                  <Link
+                    to="/partager-histoire"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Heart className="w-4 h-4 text-gray-500" />
+                    <div>
+                      <div className="font-medium">Partager votre histoire</div>
+                      <div className="text-xs text-gray-500">Témoignage citoyen</div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
           </nav>
 
-          {/* Search Bar - Style Sénégalais */}
-          <form onSubmit={handleSearch} className="hidden md:flex items-center">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Rechercher dans les threads..."
-                className="w-72 pl-5 pr-12 py-3 bg-white/90 border-2 border-orange-300 rounded-2xl focus:ring-4 focus:ring-yellow-400/50 focus:border-yellow-400 focus:bg-white outline-none font-sans placeholder-gray-600 shadow-lg backdrop-blur-sm"
-              />
-              <button 
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-600 hover:text-orange-700 bg-yellow-400 w-8 h-8 rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-all hover:scale-110"
-              >
-                <Search className="w-4 h-4" />
-              </button>
-            </div>
-          </form>
+          {/* Actions à droite */}
+          <div className="hidden lg:flex items-center space-x-4">
+            {/* Search Bar - Compacte */}
+            <form onSubmit={handleSearch} className="flex items-center">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Rechercher..."
+                  className="w-64 pl-4 pr-10 py-2 bg-white/90 border border-orange-300 rounded-xl focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 focus:bg-white outline-none font-sans placeholder-gray-600 shadow-md backdrop-blur-sm"
+                />
+                <button 
+                  type="submit"
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-600 hover:text-orange-700 p-1 rounded-md hover:bg-yellow-100 transition-all"
+                >
+                  <Search className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
 
-          {/* Sync Button - Style Sénégalais */}
-          <button
-            onClick={handleSync}
-            disabled={syncing}
-            className={`hidden md:flex items-center space-x-3 px-6 py-3 rounded-2xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 font-sans border-2 ${
-              syncing 
-                ? 'bg-gray-100/80 text-gray-500 cursor-not-allowed border-gray-300' 
-                : 'bg-white text-orange-600 hover:bg-yellow-50 border-orange-300 hover:border-yellow-400'
-            }`}
-          >
-            <div className="w-6 h-6 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center">
-              <Twitter className={`w-4 h-4 text-white ${syncing ? 'animate-spin' : ''}`} />
-            </div>
-            <span>{syncing ? 'Synchronisation...' : 'Synchroniser'}</span>
-          </button>
+            {/* Sync Button - Compact */}
+            <button
+              onClick={handleSync}
+              disabled={syncing}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all shadow-md hover:shadow-lg ${
+                syncing 
+                  ? 'bg-gray-100 text-gray-500 cursor-not-allowed' 
+                  : 'bg-white text-orange-600 hover:bg-yellow-50 border border-orange-300 hover:border-yellow-400'
+              }`}
+            >
+              <Twitter className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
+              <span className="hidden xl:block">{syncing ? 'Sync...' : 'Sync'}</span>
+            </button>
 
-          {/* Mobile Menu Button - Style Sénégalais */}
+            {/* Theme Selector */}
+            <ThemeSelector showLabel={false} variant="button" />
+          </div>
+
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden p-3 text-yellow-200 hover:text-white bg-white/10 rounded-2xl hover:bg-white/20 transition-all"
+            className="lg:hidden p-3 text-yellow-200 hover:text-white bg-white/10 rounded-2xl hover:bg-white/20 transition-all"
           >
             {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
-        {/* Mobile Menu - Style Sénégalais */}
+        {/* Mobile Menu - Simplifié */}
         {isMenuOpen && (
-          <div className="md:hidden py-6 border-t-2 border-yellow-400/30 bg-gradient-to-r from-orange-700 to-blue-800">
-            <div className="space-y-6">
-              <Link 
-                to="/" 
-                className="flex items-center space-x-3 text-yellow-200 hover:text-white font-bold transition-colors font-sans px-4 py-3 rounded-xl hover:bg-white/10"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Hash className="w-5 h-5" />
-                <span>Accueil</span>
-              </Link>
-              <Link 
-                to="/search" 
-                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Search className="w-5 h-5" />
-                <span>Rechercher</span>
-              </Link>
-              
-              <Link 
-                to="/interviews" 
-                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Mic className="w-5 h-5" />
-                <span>Interviews</span>
-              </Link>
-              
-              <Link 
-                to="/debat" 
-                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Video className="w-5 h-5" />
-                <span>Proposer un débat</span>
-              </Link>
-              
-              <Link 
-                to="/partager-histoire" 
-                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <Heart className="w-5 h-5" />
-                <span>Partagez votre histoire</span>
-              </Link>
-              
-              {/* Mobile Search */}
-              <form onSubmit={handleSearch} className="flex items-center px-4">
-                <div className="relative w-full">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Rechercher..."
-                    className="w-full pl-5 pr-12 py-3 bg-white/90 border-2 border-orange-300 rounded-2xl focus:ring-4 focus:ring-yellow-400/50 focus:border-yellow-400 focus:bg-white outline-none font-sans placeholder-gray-600 shadow-lg"
-                  />
-                  <button 
-                    type="submit"
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-600 hover:text-orange-700 bg-yellow-400 w-8 h-8 rounded-full flex items-center justify-center shadow-md"
-                  >
-                    <Search className="w-4 h-4" />
-                  </button>
+          <div className="lg:hidden py-6 border-t-2 border-yellow-400/30 bg-gradient-to-r from-orange-700 to-blue-800">
+            <div className="space-y-4">
+              {/* Navigation principale mobile */}
+              <div className="space-y-2">
+                <Link 
+                  to="/" 
+                  className="flex items-center space-x-3 text-yellow-200 hover:text-white font-bold transition-colors font-sans px-4 py-3 rounded-xl hover:bg-white/10"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Hash className="w-5 h-5" />
+                  <span>Accueil</span>
+                </Link>
+
+                {/* Section Contenu */}
+                <div className="px-4">
+                  <div className="text-yellow-300 text-sm font-bold mb-2 uppercase tracking-wide">Contenu</div>
+                  <div className="space-y-1 ml-4">
+                    <Link 
+                      to="/search" 
+                      className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Search className="w-4 h-4" />
+                      <span>Rechercher</span>
+                    </Link>
+                    <Link 
+                      to="/interviews" 
+                      className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Mic className="w-4 h-4" />
+                      <span>Interviews</span>
+                    </Link>
+                  </div>
                 </div>
-              </form>
+
+                {/* Section Participer */}
+                <div className="px-4">
+                  <div className="text-yellow-300 text-sm font-bold mb-2 uppercase tracking-wide">Participer</div>
+                  <div className="space-y-1 ml-4">
+                    <Link 
+                      to="/debat" 
+                      className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Video className="w-4 h-4" />
+                      <span>Proposer un débat</span>
+                    </Link>
+                    <Link 
+                      to="/partager-histoire" 
+                      className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Heart className="w-4 h-4" />
+                      <span>Partager votre histoire</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+
+              {/* Mobile Search */}
+              <div className="px-4 pt-4 border-t border-white/20">
+                <form onSubmit={handleSearch} className="flex items-center">
+                  <div className="relative w-full">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      placeholder="Rechercher..."
+                      className="w-full pl-4 pr-10 py-3 bg-white/90 border border-orange-300 rounded-xl focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 focus:bg-white outline-none font-sans placeholder-gray-600 shadow-lg"
+                    />
+                    <button 
+                      type="submit"
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-600 hover:text-orange-700 bg-yellow-400 w-8 h-8 rounded-lg flex items-center justify-center shadow-md"
+                    >
+                      <Search className="w-4 h-4" />
+                    </button>
+                  </div>
+                </form>
+              </div>
 
               {/* Mobile Sync Button */}
-              <button
-                onClick={handleSync}
-                disabled={syncing}
-                className={`mx-4 flex items-center justify-center space-x-3 px-6 py-4 rounded-2xl font-bold transition-all duration-300 shadow-lg font-sans border-2 w-full ${
-                  syncing 
-                    ? 'bg-gray-100/80 text-gray-500 cursor-not-allowed border-gray-300' 
-                    : 'bg-white text-orange-600 hover:bg-yellow-50 border-orange-300'
-                }`}
-              >
-                <div className="w-6 h-6 bg-gradient-to-br from-orange-500 to-yellow-500 rounded-full flex items-center justify-center">
-                  <Twitter className={`w-4 h-4 text-white ${syncing ? 'animate-spin' : ''}`} />
-                </div>
-                <span>{syncing ? 'Synchronisation...' : 'Synchroniser'}</span>
-              </button>
+              <div className="px-4">
+                <button
+                  onClick={handleSync}
+                  disabled={syncing}
+                  className={`flex items-center justify-center space-x-3 px-6 py-3 rounded-xl font-bold transition-all shadow-lg font-sans border w-full ${
+                    syncing 
+                      ? 'bg-gray-100/80 text-gray-500 cursor-not-allowed border-gray-300' 
+                      : 'bg-white text-orange-600 hover:bg-yellow-50 border-orange-300'
+                  }`}
+                >
+                  <Twitter className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
+                  <span>{syncing ? 'Synchronisation...' : 'Synchroniser'}</span>
+                </button>
+              </div>
             </div>
           </div>
         )}
