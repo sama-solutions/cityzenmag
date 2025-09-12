@@ -2,6 +2,76 @@ import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 import type { Thread, Tweet, MediaFile, ThreadWithTweets } from '../types/database'
 
+// Function to extract title from tweet content
+function extractTitleFromTweets(tweets: any[]): string | null {
+  // Try to find the best title from the first few tweets
+  for (const tweet of tweets) {
+    const content = tweet.content
+    
+    // Remove common thread indicators and clean up
+    let cleanContent = content
+      .replace(/^\d+\/\d+\s*/, '') // Remove numbering like "1/9"
+      .replace(/[👇🔎🧵⬇️]+/g, '') // Remove thread emojis
+      .replace(/https?:\/\/[^\s]+/g, '') // Remove URLs
+      .trim()
+    
+    // Split into sentences and find the best title candidate
+    const sentences = cleanContent.split(/[.!?]\s+/)
+    
+    for (const sentence of sentences) {
+      const cleanSentence = sentence
+        .replace(/\n/g, ' ') // Replace line breaks with spaces
+        .replace(/\s+/g, ' ') // Normalize spaces
+        .trim()
+      
+      // Check if this sentence could be a good title
+      if (cleanSentence && 
+          cleanSentence.length > 20 && 
+          cleanSentence.length < 150 && 
+          !cleanSentence.match(/^[👇🔎🧵⬇️\s]+$/) && // Not just emojis
+          !cleanSentence.startsWith('@') && // Not a mention
+          !cleanSentence.match(/^\d+\/\d+/) && // Not just numbering
+          !cleanSentence.toLowerCase().includes('thread') && // Not meta-thread text
+          !cleanSentence.toLowerCase().includes('voici') // Not intro text
+      ) {
+        // Clean up the title further
+        let title = cleanSentence
+          .replace(/^[^a-zA-ZÀ-ſĀ-ɏ]+/, '') // Remove leading non-letters
+          .replace(/[.]{2,}/g, '...') // Normalize ellipsis
+          .trim()
+        
+        // Ensure proper length
+        if (title.length > 120) {
+          title = title.substring(0, 120).trim()
+          if (!title.endsWith('...')) {
+            title += '...'
+          }
+        }
+        
+        return title
+      }
+    }
+    
+    // If no good sentence found, try the first meaningful line
+    const lines = cleanContent.split('\n')
+    for (const line of lines) {
+      const cleanLine = line.trim()
+      
+      if (cleanLine && 
+          cleanLine.length > 20 && 
+          cleanLine.length < 120 && 
+          !cleanLine.match(/^[👇🔎🧵⬇️\s]+$/) &&
+          !cleanLine.startsWith('@') &&
+          !cleanLine.match(/^\d+\/\d+/)
+      ) {
+        return cleanLine.replace(/\s+/g, ' ').trim()
+      }
+    }
+  }
+  
+  return null
+}
+
 export function useThreads() {
   const [threads, setThreads] = useState<(Thread & { featured_image?: MediaFile })[]>([])
   const [loading, setLoading] = useState(true)
@@ -34,24 +104,31 @@ export function useThreads() {
           return
         }
 
-        // For each thread, get the featured image and Twitter publication date (first tweet's date)
+        // For each thread, get the featured image, Twitter publication date, and extract title from tweets
         const threadsWithImages = await Promise.all(
           threadsData.map(async (thread) => {
             try {
-              // Get first tweet of the thread with its publication date
-              const { data: firstTweet, error: tweetError } = await supabase
+              // Get first few tweets of the thread to extract title and get publication date
+              const { data: tweets, error: tweetError } = await supabase
                 .from('tweets')
-                .select('tweet_id, date_posted')
+                .select('tweet_id, date_posted, content, position')
                 .eq('thread_id', thread.thread_id)
                 .order('date_posted', { ascending: true })
-                .limit(1)
-                .maybeSingle()
+                .limit(3)
 
               let threadWithDate = { ...thread }
               
-              if (!tweetError && firstTweet) {
+              if (!tweetError && tweets && tweets.length > 0) {
+                const firstTweet = tweets[0]
+                
                 // Use Twitter publication date instead of thread creation date
                 threadWithDate.date_created = firstTweet.date_posted
+                
+                // Extract title from tweet content
+                const extractedTitle = extractTitleFromTweets(tweets)
+                if (extractedTitle && extractedTitle.length > 10) {
+                  threadWithDate.title = extractedTitle
+                }
                 
                 // Get image for first tweet
                 const { data: mediaFile, error: mediaError } = await supabase
