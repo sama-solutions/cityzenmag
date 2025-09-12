@@ -54,6 +54,16 @@ export function Home() {
     setSearchParams(params)
   }, [searchTerm, selectedCategory, completionFilter, sortBy, setSearchParams])
 
+  // Vérification des filtres actifs
+  const hasActiveFilters = searchTerm || selectedCategory || completionFilter !== 'all' || sortBy !== 'date'
+
+  // Article le plus récent pour la section Hero
+  const latestThread = useMemo(() => {
+    if (!threads || threads.length === 0) return null
+    // Les threads sont déjà triés par date de publication Twitter (décroissant)
+    return threads[0]
+  }, [threads])
+
   // Filtres et tri en temps réel
   const filteredAndSortedThreads = useMemo(() => {
     if (!threads) return []
@@ -81,7 +91,7 @@ export function Home() {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'date':
-          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+          return new Date(b.date_created).getTime() - new Date(a.date_created).getTime()
         case 'popularity':
           const aPopularity = (a.like_count || 0) + (a.view_count || 0)
           const bPopularity = (b.like_count || 0) + (b.view_count || 0)
@@ -96,14 +106,21 @@ export function Home() {
     return filtered
   }, [threads, searchTerm, selectedCategory, completionFilter, sortBy])
 
+  // Articles à afficher dans la grille (exclut l'article Hero si pas de filtres)
+  const gridThreads = useMemo(() => {
+    if (hasActiveFilters || !latestThread) {
+      return filteredAndSortedThreads
+    }
+    // Si pas de filtres, exclure l'article Hero de la grille
+    return filteredAndSortedThreads.slice(1)
+  }, [filteredAndSortedThreads, hasActiveFilters, latestThread])
+
   const clearFilters = () => {
     setSearchTerm('')
     setSelectedCategory('')
     setCompletionFilter('all')
     setSortBy('date')
   }
-
-  const hasActiveFilters = searchTerm || selectedCategory || completionFilter !== 'all' || sortBy !== 'date'
 
   if (loading) return <LoadingSpinner />
   if (error) return (
@@ -223,6 +240,144 @@ export function Home() {
         </div>
       </div>
 
+      {/* Section Hero - Article le plus récent */}
+      {!hasActiveFilters && latestThread && (
+        <div className={`relative overflow-hidden rounded-3xl shadow-2xl border-2 ${
+          theme === 'senegalais' 
+            ? 'bg-gradient-to-br from-white via-orange-50 to-yellow-50 border-orange-200'
+            : 'bg-gradient-to-br from-gray-50 to-white border-gray-200'
+        }`}>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
+            {/* Contenu de l'article */}
+            <div className="space-y-6">
+              <div className="flex items-center space-x-3">
+                <span className={`px-4 py-2 rounded-full text-sm font-bold ${
+                  theme === 'senegalais' 
+                    ? 'bg-orange-600 text-white' 
+                    : 'bg-black text-white'
+                }`}>
+                  🔥 Dernier Article
+                </span>
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  latestThread.complete
+                    ? theme === 'senegalais'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-green-100 text-green-800'
+                    : theme === 'senegalais'
+                      ? 'bg-yellow-100 text-yellow-800'
+                      : 'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {latestThread.complete ? '✓ Complet' : '🔄 En cours'}
+                </span>
+              </div>
+              
+              <h2 className={`text-3xl lg:text-4xl font-bold leading-tight ${
+                theme === 'senegalais' ? 'text-gray-900' : 'text-gray-900'
+              }`}>
+                {latestThread.title}
+              </h2>
+              
+              {latestThread.description && (
+                <p className={`text-lg leading-relaxed ${
+                  theme === 'senegalais' ? 'text-gray-700' : 'text-gray-600'
+                }`}>
+                  {latestThread.description.length > 200 
+                    ? `${latestThread.description.substring(0, 200)}...` 
+                    : latestThread.description}
+                </p>
+              )}
+              
+              <div className="flex items-center space-x-6 text-sm text-gray-500">
+                <div className="flex items-center space-x-2">
+                  <Clock className="w-4 h-4" />
+                  <span>
+                    {new Date(latestThread.date_created).toLocaleDateString('fr-FR', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric'
+                    })}
+                  </span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Twitter className="w-4 h-4" />
+                  <span>{latestThread.total_tweets} tweets</span>
+                </div>
+                {latestThread.view_count && (
+                  <div className="flex items-center space-x-2">
+                    <Eye className="w-4 h-4" />
+                    <span>{latestThread.view_count} vues</span>
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex flex-wrap gap-2">
+                {latestThread.hashtags.slice(0, 3).map((tag, index) => (
+                  <span key={index} className={`px-3 py-1 rounded-full text-sm font-medium ${
+                    theme === 'senegalais'
+                      ? 'bg-blue-100 text-blue-800'
+                      : 'bg-gray-100 text-gray-700'
+                  }`}>
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              
+              <Link
+                to={`/thread/${latestThread.thread_id}`}
+                className={`inline-flex items-center space-x-2 px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${
+                  theme === 'senegalais'
+                    ? 'bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white'
+                    : 'bg-black hover:bg-gray-800 text-white'
+                }`}
+              >
+                <span>Lire l'article</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+            
+            {/* Image de l'article */}
+            <div className="relative">
+              {latestThread.featured_image ? (
+                <div className="relative h-80 lg:h-full rounded-2xl overflow-hidden shadow-lg">
+                  <img
+                    src={latestThread.featured_image.local_path || latestThread.featured_image.original_url}
+                    alt={latestThread.title}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement
+                      target.src = latestThread.featured_image?.original_url || ''
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                </div>
+              ) : (
+                <div className={`h-80 lg:h-full rounded-2xl flex items-center justify-center ${
+                  theme === 'senegalais'
+                    ? 'bg-gradient-to-br from-orange-200 to-yellow-200'
+                    : 'bg-gradient-to-br from-gray-200 to-gray-300'
+                }`}>
+                  <div className="text-center">
+                    <Twitter className={`w-16 h-16 mx-auto mb-4 ${
+                      theme === 'senegalais' ? 'text-orange-600' : 'text-gray-600'
+                    }`} />
+                    <p className={`text-lg font-medium ${
+                      theme === 'senegalais' ? 'text-orange-800' : 'text-gray-700'
+                    }`}>
+                      Thread Twitter
+                    </p>
+                    <p className={`text-sm ${
+                      theme === 'senegalais' ? 'text-orange-600' : 'text-gray-500'
+                    }`}>
+                      {latestThread.total_tweets} tweets
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Section Filtres et Recherche */}
       <div className={`p-6 rounded-2xl border ${
         theme === 'minimaliste' 
@@ -238,6 +393,13 @@ export function Home() {
                 theme === 'senegalais' ? 'bg-orange-100 text-orange-800' : 'bg-gray-100 text-gray-800'
               }`}>
                 {filteredAndSortedThreads.length} résultat(s)
+              </span>
+            )}
+            {!hasActiveFilters && latestThread && (
+              <span className={`px-3 py-1 rounded-full text-sm font-medium ${
+                theme === 'senegalais' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'
+              }`}>
+                Article le plus récent mis en avant
               </span>
             )}
           </div>
@@ -447,12 +609,12 @@ export function Home() {
       </div>
 
       {/* Grille/Liste Articles */}
-      {filteredAndSortedThreads.length > 0 ? (
+      {gridThreads.length > 0 ? (
         <div className={`${viewMode === 'grid' 
           ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8' 
           : 'space-y-6'
         }`}>
-          {filteredAndSortedThreads.map((thread) => (
+          {gridThreads.map((thread) => (
             <ThreadCard key={thread.id} thread={thread} viewMode={viewMode} />
           ))}
         </div>
