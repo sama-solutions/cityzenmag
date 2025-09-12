@@ -1,10 +1,9 @@
-import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
-import { Search, Twitter, Menu, X, Sparkles, Hash, Settings } from 'lucide-react'
-import { useSyncTwitter } from '../hooks/useData'
-import { useAuth } from '../contexts/AuthContext'
+import { Link, useNavigate } from 'react-router-dom'
+import { Search, Twitter, Menu, X, Sparkles, Hash, Settings, Video, Heart } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeSelector } from './ThemeSelector'
+import { useSyncTwitter } from '../hooks/useData'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -76,12 +75,29 @@ export function Header() {
               <Hash className="w-4 h-4" />
               <span>Accueil</span>
             </Link>
+            {/* Navigation Links - Style Sénégalais */}
             <Link 
               to="/search" 
-              className="text-yellow-200 hover:text-white font-bold transition-colors font-sans flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-white/10"
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
             >
               <Search className="w-4 h-4" />
-              <span>Recherche</span>
+              <span>Rechercher</span>
+            </Link>
+            
+            <Link 
+              to="/debat" 
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
+            >
+              <Video className="w-4 h-4" />
+              <span>Proposer un débat</span>
+            </Link>
+            
+            <Link 
+              to="/partager-histoire" 
+              className="flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm"
+            >
+              <Heart className="w-4 h-4" />
+              <span>Partagez votre histoire</span>
             </Link>
           </nav>
 
@@ -143,11 +159,29 @@ export function Header() {
               </Link>
               <Link 
                 to="/search" 
-                className="flex items-center space-x-3 text-yellow-200 hover:text-white font-bold transition-colors font-sans px-4 py-3 rounded-xl hover:bg-white/10"
+                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <Search className="w-5 h-5" />
-                <span>Recherche</span>
+                <span>Rechercher</span>
+              </Link>
+              
+              <Link 
+                to="/debat" 
+                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Video className="w-5 h-5" />
+                <span>Proposer un débat</span>
+              </Link>
+              
+              <Link 
+                to="/partager-histoire" 
+                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Heart className="w-5 h-5" />
+                <span>Partagez votre histoire</span>
               </Link>
               
               {/* Mobile Search */}

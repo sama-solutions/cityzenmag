@@ -5,6 +5,8 @@ import { Header } from './components/Header'
 import { Home } from './pages/Home'
 import { Search } from './pages/Search'
 import { ThreadDetail } from './pages/ThreadDetail'
+import { DebatePage } from './pages/DebatePage'
+import { ShareStoryPage } from './pages/ShareStoryPage'
 import { AdminLogin } from './pages/admin/AdminLogin'
 import { AdminDashboard } from './pages/admin/AdminDashboard'
 import { AdminCategories } from './pages/admin/AdminCategories'
@@ -45,6 +47,22 @@ function App() {
                     <Header />
                     <main className="container mx-auto px-4 py-8">
                       <ThreadDetail />
+                    </main>
+                  </>
+                } />
+                <Route path="/debat" element={
+                  <>
+                    <Header />
+                    <main>
+                      <DebatePage />
+                    </main>
+                  </>
+                } />
+                <Route path="/partager-histoire" element={
+                  <>
+                    <Header />
+                    <main>
+                      <ShareStoryPage />
                     </main>
                   </>
                 } />

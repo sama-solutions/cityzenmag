@@ -1,21 +1,20 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { 
-  Twitter, 
-  Hash, 
-  Calendar, 
-  TrendingUp, 
-  CheckCircle, 
-  Clock, 
-  AlertCircle, 
-  Eye, 
-  Filter, 
+import {
+  Filter,
+  SortAsc,
+  SortDesc,
+  Calendar,
+  Hash,
+  CheckCircle,
+  Clock,
   Search,
   X,
-  SlidersHorizontal,
-  ArrowUpDown,
   Grid,
-  List
+  List,
+  Video,
+  Heart,
+  ArrowRight
 } from 'lucide-react'
 import { useThreads } from '../hooks/useData'
 import { ThreadCard } from '../components/ThreadCard'
