@@ -27,6 +27,8 @@ import { LoadingSpinner } from '../components/LoadingSpinner'
 import { ThemeSelector } from '../components/ThemeSelector'
 import { LayoutSelector, type LayoutType } from '../components/LayoutSelector'
 import { ColumnLayout } from '../components/layouts/ColumnLayout'
+import { FocusLayout } from '../components/layouts/FocusLayout'
+import { MosaicLayout } from '../components/layouts/MosaicLayout'
 import { useTheme } from '../contexts/ThemeContext'
 
 type SortOption = 'date' | 'popularity' | 'title'
@@ -599,6 +601,10 @@ export function Home() {
       {/* Section Articles avec Layout Dynamique */}
       {layoutType === 'columns' ? (
         <ColumnLayout threads={gridThreads} viewMode={viewMode} />
+      ) : layoutType === 'focus' ? (
+        <FocusLayout threads={gridThreads} viewMode={viewMode} />
+      ) : layoutType === 'mosaic' ? (
+        <MosaicLayout threads={gridThreads} viewMode={viewMode} />
       ) : (
         <>
           {/* Header Articles */}
