@@ -139,7 +139,7 @@ export function Home() {
 
   return (
     <div className="space-y-8">
-      {/* Hero Section - Magazine Style avec Sélecteur de Thème */}
+      {/* Hero Section - Magazine Style avec Article le Plus Récent */}
       <div className={`relative overflow-hidden rounded-3xl shadow-2xl ${
         theme === 'senegalais' 
           ? 'bg-gradient-to-br from-orange-800 via-blue-900 to-yellow-600 border-4 border-yellow-400/20'
@@ -161,222 +161,210 @@ export function Home() {
           </div>
         )}
         
-        <div className="relative text-center py-20 px-8">
-          <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-8 shadow-2xl ${
-            theme === 'senegalais'
-              ? 'bg-gradient-to-br from-yellow-400 to-orange-600 border-4 border-white/20'
-              : 'bg-white border-4 border-gray-300'
-          }`}>
-            <svg className={`w-12 h-12 ${theme === 'senegalais' ? 'text-white' : 'text-black'}`} viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L15.09 5.09L19 4L18.18 7.82L22 9L18.18 10.18L19 14L15.09 12.91L12 16L8.91 12.91L5 14L5.82 10.18L2 9L5.82 7.82L5 4L8.91 5.09L12 2Z"/>
-            </svg>
+        <div className="relative px-8 py-12">
+          {/* Header du Magazine */}
+          <div className="text-center mb-12">
+            <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 shadow-2xl ${
+              theme === 'senegalais'
+                ? 'bg-gradient-to-br from-yellow-400 to-orange-600 border-4 border-white/20'
+                : 'bg-white border-4 border-gray-300'
+            }`}>
+              <svg className={`w-10 h-10 ${theme === 'senegalais' ? 'text-white' : 'text-black'}`} viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 2L15.09 5.09L19 4L18.18 7.82L22 9L18.18 10.18L19 14L15.09 12.91L12 16L8.91 12.91L5 14L5.82 10.18L2 9L5.82 7.82L5 4L8.91 5.09L12 2Z"/>
+              </svg>
+            </div>
+            <h1 className="text-5xl lg:text-6xl font-bold text-white mb-4 tracking-tight font-sans">
+              CityzenMag
+            </h1>
+            <div className={`h-2 w-24 mx-auto mb-6 rounded-full ${
+              theme === 'senegalais'
+                ? 'bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600'
+                : 'bg-white'
+            }`}></div>
+            <p className={`text-lg lg:text-xl max-w-3xl mx-auto leading-relaxed font-sans ${
+              theme === 'senegalais' ? 'text-yellow-100' : 'text-gray-300'
+            }`}>
+              Le magazine digital de la transparence et de la modernisation institutionnelle au Sénégal
+            </p>
+            <div className={`mt-6 text-base font-sans ${
+              theme === 'senegalais' ? 'text-yellow-300' : 'text-gray-300'
+            }`}>
+              Par <span className={`font-bold px-3 py-1 rounded-full ${
+                theme === 'senegalais' ? 'text-white bg-orange-600/30' : 'text-black bg-white'
+              }`}>@loi200812</span>
+            </div>
           </div>
-          <h1 className="text-6xl font-bold text-white mb-6 tracking-tight font-sans">
-            CityzenMag
-          </h1>
-          <div className={`h-2 w-32 mx-auto mb-8 rounded-full ${
-            theme === 'senegalais'
-              ? 'bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600'
-              : 'bg-white'
-          }`}></div>
-          <p className={`text-2xl mb-10 max-w-4xl mx-auto leading-relaxed font-sans ${
-            theme === 'senegalais' ? 'text-yellow-100' : 'text-gray-300'
-          }`}>
-            Le magazine digital de la transparence et de la modernisation institutionnelle au Sénégal
-          </p>
-          <p className={`text-xl max-w-3xl mx-auto mb-8 font-sans ${
-            theme === 'senegalais' ? 'text-orange-200' : 'text-gray-400'
-          }`}>
-            Un espace dédié aux questions qui dérangent et aux solutions qui arrangent
-            {theme === 'senegalais' && ' - Dans l\'esprit de la Teranga'}
-          </p>
-          <div className={`mt-10 text-lg font-sans ${
-            theme === 'senegalais' ? 'text-yellow-300' : 'text-gray-300'
-          }`}>
-            Par <span className={`font-bold px-4 py-2 rounded-full ${
-              theme === 'senegalais' ? 'text-white bg-orange-600/30' : 'text-black bg-white'
-            }`}>@loi200812</span>
-          </div>
-        
+
+          {/* Article le Plus Récent Intégré */}
+          {!hasActiveFilters && latestThread && (
+            <div className={`relative overflow-hidden rounded-2xl shadow-xl border-2 mb-8 ${
+              theme === 'senegalais' 
+                ? 'bg-white/95 backdrop-blur-sm border-white/30'
+                : 'bg-white/95 backdrop-blur-sm border-white/30'
+            }`}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
+                {/* Contenu de l'article */}
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                      theme === 'senegalais' 
+                        ? 'bg-orange-600 text-white' 
+                        : 'bg-black text-white'
+                    }`}>
+                      🔥 Dernier Article
+                    </span>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      latestThread.complete
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {latestThread.complete ? '✓ Complet' : '🔄 En cours'}
+                    </span>
+                  </div>
+                  
+                  <h2 className="text-2xl lg:text-3xl font-bold leading-tight text-gray-900">
+                    {latestThread.title}
+                  </h2>
+                  
+                  {latestThread.description && (
+                    <p className="text-gray-700 leading-relaxed">
+                      {latestThread.description.length > 150 
+                        ? `${latestThread.description.substring(0, 150)}...` 
+                        : latestThread.description}
+                    </p>
+                  )}
+                  
+                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                    <div className="flex items-center space-x-1">
+                      <Clock className="w-4 h-4" />
+                      <span>
+                        {new Date(latestThread.date_created).toLocaleDateString('fr-FR', {
+                          day: 'numeric',
+                          month: 'short'
+                        })}
+                      </span>
+                    </div>
+                    <div className="flex items-center space-x-1">
+                      <Twitter className="w-4 h-4" />
+                      <span>{latestThread.total_tweets} tweets</span>
+                    </div>
+                    {latestThread.view_count && (
+                      <div className="flex items-center space-x-1">
+                        <Eye className="w-4 h-4" />
+                        <span>{latestThread.view_count}</span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {latestThread.hashtags.slice(0, 2).map((tag, index) => (
+                      <span key={index} className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        theme === 'senegalais'
+                          ? 'bg-blue-100 text-blue-800'
+                          : 'bg-gray-100 text-gray-700'
+                      }`}>
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <Link
+                    to={`/thread/${latestThread.thread_id}`}
+                    className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg font-bold transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 ${
+                      theme === 'senegalais'
+                        ? 'bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white'
+                        : 'bg-black hover:bg-gray-800 text-white'
+                    }`}
+                  >
+                    <span>Lire l'article</span>
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                
+                {/* Image de l'article */}
+                <div className="relative">
+                  {latestThread.featured_image ? (
+                    <div className="relative h-64 lg:h-full rounded-xl overflow-hidden shadow-lg">
+                      <img
+                        src={latestThread.featured_image.local_path || latestThread.featured_image.original_url}
+                        alt={latestThread.title}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement
+                          target.src = latestThread.featured_image?.original_url || ''
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                  ) : (
+                    <div className={`h-64 lg:h-full rounded-xl flex items-center justify-center ${
+                      theme === 'senegalais'
+                        ? 'bg-gradient-to-br from-orange-100 to-yellow-100'
+                        : 'bg-gradient-to-br from-gray-100 to-gray-200'
+                    }`}>
+                      <div className="text-center">
+                        <Twitter className={`w-12 h-12 mx-auto mb-3 ${
+                          theme === 'senegalais' ? 'text-orange-600' : 'text-gray-600'
+                        }`} />
+                        <p className={`text-sm font-medium ${
+                          theme === 'senegalais' ? 'text-orange-800' : 'text-gray-700'
+                        }`}>
+                          Thread Twitter
+                        </p>
+                        <p className={`text-xs ${
+                          theme === 'senegalais' ? 'text-orange-600' : 'text-gray-500'
+                        }`}>
+                          {latestThread.total_tweets} tweets
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-2xl mx-auto mt-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center group">
-              <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform ${
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:scale-110 transition-transform ${
                 theme === 'senegalais' ? 'bg-yellow-400' : 'bg-white'
               }`}>
-                <span className={`text-3xl font-bold ${
+                <span className={`text-2xl font-bold ${
                   theme === 'senegalais' ? 'text-orange-900' : 'text-black'
                 }`}>{threads?.length || 0}</span>
               </div>
-              <div className={`text-sm uppercase tracking-widest font-bold ${
+              <div className={`text-xs uppercase tracking-widest font-bold ${
                 theme === 'senegalais' ? 'text-yellow-200' : 'text-gray-400'
               }`}>Articles</div>
             </div>
             <div className="text-center group">
-              <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform ${
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:scale-110 transition-transform ${
                 theme === 'senegalais' ? 'bg-orange-500' : 'bg-white'
               }`}>
-                <span className={`text-3xl font-bold ${
+                <span className={`text-2xl font-bold ${
                   theme === 'senegalais' ? 'text-white' : 'text-black'
                 }`}>{totalTweets}</span>
               </div>
-              <div className={`text-sm uppercase tracking-widest font-bold ${
+              <div className={`text-xs uppercase tracking-widest font-bold ${
                 theme === 'senegalais' ? 'text-orange-200' : 'text-gray-400'
               }`}>Analyses</div>
             </div>
             <div className="text-center group">
-              <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform ${
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:scale-110 transition-transform ${
                 theme === 'senegalais' ? 'bg-blue-900' : 'bg-white'
               }`}>
-                <span className={`text-3xl font-bold ${
+                <span className={`text-2xl font-bold ${
                   theme === 'senegalais' ? 'text-yellow-400' : 'text-black'
                 }`}>{completeThreads}</span>
               </div>
-              <div className={`text-sm uppercase tracking-widest font-bold ${
+              <div className={`text-xs uppercase tracking-widest font-bold ${
                 theme === 'senegalais' ? 'text-blue-200' : 'text-gray-400'
               }`}>Dossiers Complets</div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Section Hero - Article le plus récent */}
-      {!hasActiveFilters && latestThread && (
-        <div className={`relative overflow-hidden rounded-3xl shadow-2xl border-2 ${
-          theme === 'senegalais' 
-            ? 'bg-gradient-to-br from-white via-orange-50 to-yellow-50 border-orange-200'
-            : 'bg-gradient-to-br from-gray-50 to-white border-gray-200'
-        }`}>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-8">
-            {/* Contenu de l'article */}
-            <div className="space-y-6">
-              <div className="flex items-center space-x-3">
-                <span className={`px-4 py-2 rounded-full text-sm font-bold ${
-                  theme === 'senegalais' 
-                    ? 'bg-orange-600 text-white' 
-                    : 'bg-black text-white'
-                }`}>
-                  🔥 Dernier Article
-                </span>
-                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                  latestThread.complete
-                    ? theme === 'senegalais'
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-green-100 text-green-800'
-                    : theme === 'senegalais'
-                      ? 'bg-yellow-100 text-yellow-800'
-                      : 'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {latestThread.complete ? '✓ Complet' : '🔄 En cours'}
-                </span>
-              </div>
-              
-              <h2 className={`text-3xl lg:text-4xl font-bold leading-tight ${
-                theme === 'senegalais' ? 'text-gray-900' : 'text-gray-900'
-              }`}>
-                {latestThread.title}
-              </h2>
-              
-              {latestThread.description && (
-                <p className={`text-lg leading-relaxed ${
-                  theme === 'senegalais' ? 'text-gray-700' : 'text-gray-600'
-                }`}>
-                  {latestThread.description.length > 200 
-                    ? `${latestThread.description.substring(0, 200)}...` 
-                    : latestThread.description}
-                </p>
-              )}
-              
-              <div className="flex items-center space-x-6 text-sm text-gray-500">
-                <div className="flex items-center space-x-2">
-                  <Clock className="w-4 h-4" />
-                  <span>
-                    {new Date(latestThread.date_created).toLocaleDateString('fr-FR', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Twitter className="w-4 h-4" />
-                  <span>{latestThread.total_tweets} tweets</span>
-                </div>
-                {latestThread.view_count && (
-                  <div className="flex items-center space-x-2">
-                    <Eye className="w-4 h-4" />
-                    <span>{latestThread.view_count} vues</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {latestThread.hashtags.slice(0, 3).map((tag, index) => (
-                  <span key={index} className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    theme === 'senegalais'
-                      ? 'bg-blue-100 text-blue-800'
-                      : 'bg-gray-100 text-gray-700'
-                  }`}>
-                    {tag}
-                  </span>
-                ))}
-              </div>
-              
-              <Link
-                to={`/thread/${latestThread.thread_id}`}
-                className={`inline-flex items-center space-x-2 px-6 py-3 rounded-xl font-bold transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1 ${
-                  theme === 'senegalais'
-                    ? 'bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white'
-                    : 'bg-black hover:bg-gray-800 text-white'
-                }`}
-              >
-                <span>Lire l'article</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-            
-            {/* Image de l'article */}
-            <div className="relative">
-              {latestThread.featured_image ? (
-                <div className="relative h-80 lg:h-full rounded-2xl overflow-hidden shadow-lg">
-                  <img
-                    src={latestThread.featured_image.local_path || latestThread.featured_image.original_url}
-                    alt={latestThread.title}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = latestThread.featured_image?.original_url || ''
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
-                </div>
-              ) : (
-                <div className={`h-80 lg:h-full rounded-2xl flex items-center justify-center ${
-                  theme === 'senegalais'
-                    ? 'bg-gradient-to-br from-orange-200 to-yellow-200'
-                    : 'bg-gradient-to-br from-gray-200 to-gray-300'
-                }`}>
-                  <div className="text-center">
-                    <Twitter className={`w-16 h-16 mx-auto mb-4 ${
-                      theme === 'senegalais' ? 'text-orange-600' : 'text-gray-600'
-                    }`} />
-                    <p className={`text-lg font-medium ${
-                      theme === 'senegalais' ? 'text-orange-800' : 'text-gray-700'
-                    }`}>
-                      Thread Twitter
-                    </p>
-                    <p className={`text-sm ${
-                      theme === 'senegalais' ? 'text-orange-600' : 'text-gray-500'
-                    }`}>
-                      {latestThread.total_tweets} tweets
-                    </p>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Section Filtres et Recherche */}
       <div className={`p-6 rounded-2xl border ${
