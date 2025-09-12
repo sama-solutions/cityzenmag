@@ -191,6 +191,16 @@ export function Header() {
                       <div className="text-xs text-gray-500">Décryptages d'experts</div>
                     </div>
                   </Link>
+                  <Link
+                    to="/temoignages"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <MessageCircle className="w-4 h-4 text-gray-500" />
+                    <div>
+                      <div className="font-medium">Témoignages Citoyens</div>
+                      <div className="text-xs text-gray-500">Voix des citoyens</div>
+                    </div>
+                  </Link>
                 </div>
               )}
             </div>
@@ -339,6 +349,14 @@ export function Header() {
                     >
                       <Video className="w-4 h-4" />
                       <span>Vidéos Analyses</span>
+                    </Link>
+                    <Link 
+                      to="/temoignages" 
+                      className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      <span>Témoignages Citoyens</span>
                     </Link>
                   </div>
                 </div>

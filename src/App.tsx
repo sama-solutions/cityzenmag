@@ -8,6 +8,7 @@ import { ThreadDetail } from './pages/ThreadDetail'
 import { Interviews } from './pages/Interviews'
 import { PhotoReports } from './pages/PhotoReports'
 import { VideoAnalyses } from './pages/VideoAnalyses'
+import { Testimonials } from './pages/Testimonials'
 import { DebatePage } from './pages/DebatePage'
 import { ShareStoryPage } from './pages/ShareStoryPage'
 import { AdminLogin } from './pages/admin/AdminLogin'
@@ -74,6 +75,14 @@ function App() {
                     <Header />
                     <main className="container mx-auto px-4 py-8">
                       <VideoAnalyses />
+                    </main>
+                  </>
+                } />
+                <Route path="/temoignages" element={
+                  <>
+                    <Header />
+                    <main className="container mx-auto px-4 py-8">
+                      <Testimonials />
                     </main>
                   </>
                 } />
