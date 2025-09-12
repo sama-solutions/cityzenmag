@@ -138,6 +138,16 @@ export function Header() {
                       <div className="text-xs text-gray-500">Galeries immersives</div>
                     </div>
                   </Link>
+                  <Link
+                    to="/videos"
+                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                  >
+                    <Video className="w-4 h-4 text-gray-500" />
+                    <div>
+                      <div className="font-medium">Vidéos Analyses</div>
+                      <div className="text-xs text-gray-500">Décryptages d'experts</div>
+                    </div>
+                  </Link>
                 </div>
               )}
             </div>
@@ -278,6 +288,14 @@ export function Header() {
                     >
                       <Camera className="w-4 h-4" />
                       <span>Reportages Photo</span>
+                    </Link>
+                    <Link 
+                      to="/videos" 
+                      className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Video className="w-4 h-4" />
+                      <span>Vidéos Analyses</span>
                     </Link>
                   </div>
                 </div>
