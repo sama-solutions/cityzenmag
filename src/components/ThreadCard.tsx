@@ -6,9 +6,10 @@ import { useTheme } from '../contexts/ThemeContext'
 interface ThreadCardProps {
   thread: Thread & { featured_image?: MediaFile }
   viewMode?: 'grid' | 'list'
+  compact?: boolean
 }
 
-export function ThreadCard({ thread, viewMode = 'grid' }: ThreadCardProps) {
+export function ThreadCard({ thread, viewMode = 'grid', compact = false }: ThreadCardProps) {
   const { theme } = useTheme()
   
   const formatDate = (dateString: string) => {
@@ -61,6 +62,74 @@ export function ThreadCard({ thread, viewMode = 'grid' }: ThreadCardProps) {
       ? 'bg-white rounded-2xl shadow-lg border-2 border-orange-200/50 hover:shadow-2xl hover:border-orange-300 backdrop-blur-sm'
       : 'bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-gray-300'
   }`
+
+  // Mode compact pour les colonnes
+  if (compact) {
+    return (
+      <Link to={`/thread/${thread.thread_id}`} className={`${baseClasses} hover:-translate-y-1`}>
+        <div className="p-4 space-y-3">
+          {/* Header compact */}
+          <div className="flex items-start justify-between">
+            <h3 className={`text-base font-bold leading-tight line-clamp-2 flex-1 pr-2 ${
+              theme === 'senegalais' ? 'text-gray-900 group-hover:text-orange-600' : 'text-gray-900 group-hover:text-black'
+            }`}>
+              {thread.title}
+            </h3>
+            <div className={`flex-shrink-0 px-2 py-1 rounded-full text-xs font-medium ${
+              thread.complete
+                ? theme === 'senegalais'
+                  ? 'bg-green-100 text-green-800'
+                  : 'bg-green-100 text-green-800'
+                : theme === 'senegalais'
+                  ? 'bg-yellow-100 text-yellow-800'
+                  : 'bg-yellow-100 text-yellow-800'
+            }`}>
+              {thread.complete ? '✓' : '⏳'}
+            </div>
+          </div>
+          
+          {/* Description compacte */}
+          {thread.description && (
+            <p className="text-sm theme-text-muted line-clamp-2 leading-relaxed">
+              {thread.description.length > 80 
+                ? `${thread.description.substring(0, 80)}...` 
+                : thread.description}
+            </p>
+          )}
+          
+          {/* Footer compact */}
+          <div className="flex items-center justify-between text-xs theme-text-muted">
+            <div className="flex items-center space-x-3">
+              <span className="flex items-center space-x-1">
+                <Calendar className="w-3 h-3" />
+                <span>
+                  {new Date(thread.date_created).toLocaleDateString('fr-FR', {
+                    day: 'numeric',
+                    month: 'short'
+                  })}
+                </span>
+              </span>
+              <span className="flex items-center space-x-1">
+                <MessageCircle className="w-3 h-3" />
+                <span>{thread.total_tweets}</span>
+              </span>
+            </div>
+            
+            {/* Premier hashtag */}
+            {thread.hashtags && thread.hashtags.length > 0 && (
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                theme === 'senegalais'
+                  ? 'bg-blue-100 text-blue-800'
+                  : 'bg-gray-100 text-gray-700'
+              }`}>
+                {thread.hashtags[0].replace('#', '')}
+              </span>
+            )}
+          </div>
+        </div>
+      </Link>
+    )
+  }
 
   if (viewMode === 'list') {
     return (

@@ -25,6 +25,8 @@ import { useThreads } from '../hooks/useData'
 import { ThreadCard } from '../components/ThreadCard'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 import { ThemeSelector } from '../components/ThemeSelector'
+import { LayoutSelector, type LayoutType } from '../components/LayoutSelector'
+import { ColumnLayout } from '../components/layouts/ColumnLayout'
 import { useTheme } from '../contexts/ThemeContext'
 
 type SortOption = 'date' | 'popularity' | 'title'
@@ -41,6 +43,7 @@ export function Home() {
   const [completionFilter, setCompletionFilter] = useState<'all' | 'complete' | 'partial'>(searchParams.get('completion') as any || 'all')
   const [sortBy, setSortBy] = useState<SortOption>(searchParams.get('sort') as SortOption || 'date')
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
+  const [layoutType, setLayoutType] = useState<LayoutType>('grid')
   const [showFilters, setShowFilters] = useState(false)
 
   // Synchroniser avec l'URL
@@ -480,32 +483,44 @@ export function Home() {
               <option value="title">Ordre alphabétique</option>
             </select>
 
-            {/* Mode d'affichage */}
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all ${
-                  viewMode === 'grid'
-                    ? theme === 'senegalais'
-                      ? 'bg-orange-600 text-white'
-                      : 'bg-black text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <Grid className="w-5 h-5" />
-              </button>
-              <button
-                onClick={() => setViewMode('list')}
-                className={`flex items-center justify-center w-12 h-12 rounded-xl transition-all ${
-                  viewMode === 'list'
-                    ? theme === 'senegalais'
-                      ? 'bg-orange-600 text-white'
-                      : 'bg-black text-white'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                }`}
-              >
-                <List className="w-5 h-5" />
-              </button>
+            {/* Mode d'affichage et Layout */}
+            <div className="flex items-center space-x-4">
+              {/* Layout Selector */}
+              <LayoutSelector 
+                currentLayout={layoutType}
+                onLayoutChange={setLayoutType}
+              />
+              
+              {/* View Mode (seulement pour layout grid) */}
+              {layoutType === 'grid' && (
+                <div className="flex items-center space-x-2 border-l pl-4">
+                  <span className="text-sm font-medium theme-text-muted">Vue:</span>
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all ${
+                      viewMode === 'grid'
+                        ? theme === 'senegalais'
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-black text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <Grid className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all ${
+                      viewMode === 'list'
+                        ? theme === 'senegalais'
+                          ? 'bg-orange-600 text-white'
+                          : 'bg-black text-white'
+                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    }`}
+                  >
+                    <List className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -582,52 +597,59 @@ export function Home() {
         </div>
       )}
 
-      {/* Section Articles */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8">
-        <div>
-          <h2 className="text-4xl font-bold theme-text font-sans mb-2">
-            {hasActiveFilters ? 'Résultats de recherche' : 'Articles Récents'}
-          </h2>
-          <div className={`h-1 w-32 rounded-full ${
-            theme === 'senegalais'
-              ? 'bg-gradient-to-r from-orange-600 to-yellow-500'
-              : 'bg-black'
-          }`}></div>
-        </div>
-      </div>
-
-      {/* Grille/Liste Articles */}
-      {gridThreads.length > 0 ? (
-        <div className={`${viewMode === 'grid' 
-          ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8' 
-          : 'space-y-6'
-        }`}>
-          {gridThreads.map((thread) => (
-            <ThreadCard key={thread.id} thread={thread} viewMode={viewMode} />
-          ))}
-        </div>
+      {/* Section Articles avec Layout Dynamique */}
+      {layoutType === 'columns' ? (
+        <ColumnLayout threads={gridThreads} viewMode={viewMode} />
       ) : (
-        <div className="text-center py-16">
-          <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg ${
-            theme === 'senegalais' ? 'bg-gradient-to-br from-orange-500 to-yellow-500' : 'bg-gray-900'
-          }`}>
-            <Eye className="w-12 h-12 text-white" />
-          </div>
-          <p className="text-gray-500 text-xl font-sans mb-4">Aucun article trouvé</p>
-          <p className="text-gray-400 font-sans mb-6">Essayez de modifier vos filtres de recherche.</p>
-          {hasActiveFilters && (
-            <button
-              onClick={clearFilters}
-              className={`px-6 py-3 rounded-xl font-bold transition-all ${
+        <>
+          {/* Header Articles */}
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 mb-8">
+            <div>
+              <h2 className="text-4xl font-bold theme-text font-sans mb-2">
+                {hasActiveFilters ? 'Résultats de recherche' : 'Articles Récents'}
+              </h2>
+              <div className={`h-1 w-32 rounded-full ${
                 theme === 'senegalais'
-                  ? 'bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white'
-                  : 'bg-black hover:bg-gray-800 text-white'
-              }`}
-            >
-              Effacer tous les filtres
-            </button>
+                  ? 'bg-gradient-to-r from-orange-600 to-yellow-500'
+                  : 'bg-black'
+              }`}></div>
+            </div>
+          </div>
+
+          {/* Grille/Liste Articles */}
+          {gridThreads.length > 0 ? (
+            <div className={`${viewMode === 'grid' 
+              ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8' 
+              : 'space-y-6'
+            }`}>
+              {gridThreads.map((thread) => (
+                <ThreadCard key={thread.id} thread={thread} viewMode={viewMode} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg ${
+                theme === 'senegalais' ? 'bg-gradient-to-br from-orange-500 to-yellow-500' : 'bg-gray-900'
+              }`}>
+                <Eye className="w-12 h-12 text-white" />
+              </div>
+              <p className="text-gray-500 text-xl font-sans mb-4">Aucun article trouvé</p>
+              <p className="text-gray-400 font-sans mb-6">Essayez de modifier vos filtres de recherche.</p>
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className={`px-6 py-3 rounded-xl font-bold transition-all ${
+                    theme === 'senegalais'
+                      ? 'bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800 text-white'
+                      : 'bg-black hover:bg-gray-800 text-white'
+                  }`}
+                >
+                  Effacer tous les filtres
+                </button>
+              )}
+            </div>
           )}
-        </div>
+        </>
       )}
       
       {/* CTA */}
