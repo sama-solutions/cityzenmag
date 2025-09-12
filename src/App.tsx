@@ -17,6 +17,7 @@ import { AdminCategories } from './pages/admin/AdminCategories'
 import { AdminContent } from './pages/admin/AdminContent'
 import { AdminScheduler } from './pages/admin/AdminScheduler'
 import { AdminMenus } from './pages/admin/AdminMenus'
+import { AdminAnalytics } from './pages/admin/AdminAnalytics'
 import { AdminLayout } from './components/admin/AdminLayout'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import './App.css'
@@ -111,7 +112,8 @@ function App() {
                   <Route path="categories" element={<AdminCategories />} />
                   <Route path="content" element={<AdminContent />} />
                   <Route path="scheduler" element={<AdminScheduler />} />
-                  <Route path="menus" element={<AdminMenus />} />
+                    <Route path="menus" element={<AdminMenus />} />
+                    <Route path="analytics" element={<AdminAnalytics />} />
                 </Route>
               </Routes>
             </div>
