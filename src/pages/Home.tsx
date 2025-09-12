@@ -394,27 +394,35 @@ export function Home() {
               </span>
             )}
           </div>
-          <div className="flex items-center space-x-2">
-            <button
-              onClick={() => setShowFilters(!showFilters)}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${
-                theme === 'senegalais'
-                  ? 'bg-orange-100 text-orange-800 hover:bg-orange-200'
-                  : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
-              }`}
-            >
-              <SlidersHorizontal className="w-4 h-4" />
-              <span>Filtres</span>
-            </button>
-            {hasActiveFilters && (
+          <div className="flex items-center space-x-4">
+            {/* Layout Selector toujours visible */}
+            <LayoutSelector 
+              currentLayout={layoutType}
+              onLayoutChange={setLayoutType}
+            />
+            
+            <div className="flex items-center space-x-2">
               <button
-                onClick={clearFilters}
-                className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                onClick={() => setShowFilters(!showFilters)}
+                className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all ${
+                  theme === 'senegalais'
+                    ? 'bg-orange-100 text-orange-800 hover:bg-orange-200'
+                    : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+                }`}
               >
-                <X className="w-4 h-4" />
-                <span>Effacer</span>
+                <SlidersHorizontal className="w-4 h-4" />
+                <span>Filtres</span>
               </button>
-            )}
+              {hasActiveFilters && (
+                <button
+                  onClick={clearFilters}
+                  className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                >
+                  <X className="w-4 h-4" />
+                  <span>Effacer</span>
+                </button>
+              )}
+            </div>
           </div>
         </div>
 
@@ -483,45 +491,36 @@ export function Home() {
               <option value="title">Ordre alphabétique</option>
             </select>
 
-            {/* Mode d'affichage et Layout */}
-            <div className="flex items-center space-x-4">
-              {/* Layout Selector */}
-              <LayoutSelector 
-                currentLayout={layoutType}
-                onLayoutChange={setLayoutType}
-              />
-              
-              {/* View Mode (seulement pour layout grid) */}
-              {layoutType === 'grid' && (
-                <div className="flex items-center space-x-2 border-l pl-4">
-                  <span className="text-sm font-medium theme-text-muted">Vue:</span>
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all ${
-                      viewMode === 'grid'
-                        ? theme === 'senegalais'
-                          ? 'bg-orange-600 text-white'
-                          : 'bg-black text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    <Grid className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all ${
-                      viewMode === 'list'
-                        ? theme === 'senegalais'
-                          ? 'bg-orange-600 text-white'
-                          : 'bg-black text-white'
-                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                    }`}
-                  >
-                    <List className="w-4 h-4" />
-                  </button>
-                </div>
-              )}
-            </div>
+            {/* Mode d'affichage (seulement pour layout grid) */}
+            {layoutType === 'grid' && (
+              <div className="flex items-center space-x-2">
+                <span className="text-sm font-medium theme-text-muted">Vue:</span>
+                <button
+                  onClick={() => setViewMode('grid')}
+                  className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all ${
+                    viewMode === 'grid'
+                      ? theme === 'senegalais'
+                        ? 'bg-orange-600 text-white'
+                        : 'bg-black text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  <Grid className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => setViewMode('list')}
+                  className={`flex items-center justify-center w-10 h-10 rounded-xl transition-all ${
+                    viewMode === 'list'
+                      ? theme === 'senegalais'
+                        ? 'bg-orange-600 text-white'
+                        : 'bg-black text-white'
+                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  }`}
+                >
+                  <List className="w-4 h-4" />
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
