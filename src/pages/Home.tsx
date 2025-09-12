@@ -14,7 +14,12 @@ import {
   List,
   Video,
   Heart,
-  ArrowRight
+  ArrowRight,
+  AlertCircle,
+  SlidersHorizontal,
+  TrendingUp,
+  Eye,
+  Twitter
 } from 'lucide-react'
 import { useThreads } from '../hooks/useData'
 import { ThreadCard } from '../components/ThreadCard'

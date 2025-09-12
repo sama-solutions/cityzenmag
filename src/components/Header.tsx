@@ -4,6 +4,7 @@ import { Search, Twitter, Menu, X, Sparkles, Hash, Settings, Video, Heart } from
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeSelector } from './ThemeSelector'
 import { useSyncTwitter } from '../hooks/useData'
+import { useAuth } from '../contexts/AuthContext'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)

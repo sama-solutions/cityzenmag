@@ -67,7 +67,6 @@ export const translations = {
   
   // Statuts
   'Published': 'Publié',
-  'Draft': 'Brouillon',
   'Archived': 'Archivé',
   'Pending': 'En attente',
   'Active': 'Actif',

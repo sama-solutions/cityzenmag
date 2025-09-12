@@ -189,61 +189,61 @@ export function DebatePage() {
 
   if (isInMeeting) {
     return (
-      <div className=\"min-h-screen bg-gray-900\">
+      <div className="min-h-screen bg-gray-900">
         {/* Header du débat */}
-        <div className=\"bg-white shadow-sm border-b p-4\">
-          <div className=\"max-w-7xl mx-auto flex items-center justify-between\">
-            <div className=\"flex items-center space-x-4\">
+        <div className="bg-white shadow-sm border-b p-4">
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center space-x-4">
               <button
                 onClick={() => setIsInMeeting(false)}
-                className=\"flex items-center space-x-2 text-gray-600 hover:text-gray-800\"
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-800"
               >
-                <ArrowLeft className=\"w-5 h-5\" />
+                <ArrowLeft className="w-5 h-5" />
                 <span>Quitter le débat</span>
               </button>
               <div>
-                <h1 className=\"text-xl font-bold\">
+                <h1 className="text-xl font-bold">
                   {activeRooms.find(r => r.id === selectedRoom)?.title}
                 </h1>
-                <p className=\"text-sm text-gray-600\">
+                <p className="text-sm text-gray-600">
                   {activeRooms.find(r => r.id === selectedRoom)?.participants} participants
                 </p>
               </div>
             </div>
             
-            <div className=\"flex items-center space-x-2\">
-              <span className=\"flex items-center space-x-1 text-red-600\">
-                <div className=\"w-2 h-2 bg-red-600 rounded-full animate-pulse\"></div>
-                <span className=\"text-sm font-medium\">EN DIRECT</span>
+            <div className="flex items-center space-x-2">
+              <span className="flex items-center space-x-1 text-red-600">
+                <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium">EN DIRECT</span>
               </span>
             </div>
           </div>
         </div>
         
         {/* Container Jitsi */}
-        <div id=\"jitsi-container\" className=\"w-full\" style={{ height: 'calc(100vh - 80px)' }}></div>
+        <div id="jitsi-container" className="w-full" style={{ height: 'calc(100vh - 80px)' }}></div>
       </div>
     )
   }
 
   return (
-    <div className=\"min-h-screen theme-bg\">
+    <div className="min-h-screen theme-bg">
       {/* Header */}
       <div className={`${
         theme === 'senegalais' 
           ? 'bg-gradient-to-r from-orange-600 via-blue-900 to-yellow-600' 
           : 'bg-gray-900'
       } text-white`}>
-        <div className=\"max-w-7xl mx-auto px-4 py-12\">
+        <div className="max-w-7xl mx-auto px-4 py-12">
           <Link 
-            to=\"/\" 
-            className=\"inline-flex items-center space-x-2 text-white/80 hover:text-white mb-6\"
+            to="/" 
+            className="inline-flex items-center space-x-2 text-white/80 hover:text-white mb-6"
           >
-            <ArrowLeft className=\"w-4 h-4\" />
+            <ArrowLeft className="w-4 h-4" />
             <span>Retour à l'accueil</span>
           </Link>
           
-          <div className=\"text-center\">
+          <div className="text-center">
             <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6 ${
               theme === 'senegalais' ? 'bg-yellow-400' : 'bg-white'
             }`}>
@@ -251,20 +251,20 @@ export function DebatePage() {
                 theme === 'senegalais' ? 'text-blue-900' : 'text-gray-900'
               }`} />
             </div>
-            <h1 className=\"text-4xl font-bold mb-4\">Débats Citoyens</h1>
-            <p className=\"text-xl text-white/90 max-w-3xl mx-auto\">
+            <h1 className="text-4xl font-bold mb-4">Débats Citoyens</h1>
+            <p className="text-xl text-white/90 max-w-3xl mx-auto">
               Participez aux débats en direct sur les enjeux de transparence et de modernisation au Sénégal
             </p>
           </div>
         </div>
       </div>
 
-      <div className=\"max-w-7xl mx-auto px-4 py-8\">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Actions */}
-        <div className=\"flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8\">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           <div>
-            <h2 className=\"text-2xl font-bold theme-text mb-2\">Débats en cours et à venir</h2>
-            <p className=\"theme-text-muted\">Rejoignez la conversation ou proposez un nouveau sujet</p>
+            <h2 className="text-2xl font-bold theme-text mb-2">Débats en cours et à venir</h2>
+            <p className="theme-text-muted">Rejoignez la conversation ou proposez un nouveau sujet</p>
           </div>
           
           <button
@@ -275,83 +275,83 @@ export function DebatePage() {
                 : 'bg-black hover:bg-gray-800 text-white'
             }`}
           >
-            <Play className=\"w-5 h-5\" />
+            <Play className="w-5 h-5" />
             <span>Proposer un débat</span>
           </button>
         </div>
 
         {/* Formulaire de création */}
         {showCreateForm && (
-          <div className=\"bg-white rounded-2xl shadow-lg border p-6 mb-8\">
-            <h3 className=\"text-xl font-bold mb-4\">Créer un nouveau débat</h3>
+          <div className="bg-white rounded-2xl shadow-lg border p-6 mb-8">
+            <h3 className="text-xl font-bold mb-4">Créer un nouveau débat</h3>
             
-            <form onSubmit={handleCreateDebate} className=\"space-y-4\">
+            <form onSubmit={handleCreateDebate} className="space-y-4">
               <div>
-                <label className=\"block text-sm font-medium mb-2\">Titre du débat</label>
+                <label className="block text-sm font-medium mb-2">Titre du débat</label>
                 <input
-                  type=\"text\"
+                  type="text"
                   value={formData.title}
                   onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                  className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500\"
-                  placeholder=\"Ex: Transparence dans les marchés publics\"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  placeholder="Ex: Transparence dans les marchés publics"
                   required
                 />
               </div>
               
               <div>
-                <label className=\"block text-sm font-medium mb-2\">Description</label>
+                <label className="block text-sm font-medium mb-2">Description</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500\"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                   rows={3}
-                  placeholder=\"Décrivez le sujet et les points à débattre...\"
+                  placeholder="Décrivez le sujet et les points à débattre..."
                   required
                 />
               </div>
               
-              <div className=\"grid grid-cols-1 md:grid-cols-2 gap-4\">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className=\"block text-sm font-medium mb-2\">Catégorie</label>
+                  <label className="block text-sm font-medium mb-2">Catégorie</label>
                   <select
                     value={formData.category}
                     onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                    className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500\"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                   >
-                    <option value=\"transparence\">Transparence</option>
-                    <option value=\"modernisation\">Modernisation</option>
-                    <option value=\"democratie\">Démocratie</option>
-                    <option value=\"economie\">Économie</option>
-                    <option value=\"social\">Social</option>
+                    <option value="transparence">Transparence</option>
+                    <option value="modernisation">Modernisation</option>
+                    <option value="democratie">Démocratie</option>
+                    <option value="economie">Économie</option>
+                    <option value="social">Social</option>
                   </select>
                 </div>
                 
                 <div>
-                  <label className=\"block text-sm font-medium mb-2\">Participants max</label>
+                  <label className="block text-sm font-medium mb-2">Participants max</label>
                   <input
-                    type=\"number\"
+                    type="number"
                     value={formData.maxParticipants}
                     onChange={(e) => setFormData(prev => ({ ...prev, maxParticipants: parseInt(e.target.value) }))}
-                    className=\"w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500\"
-                    min=\"2\"
-                    max=\"50\"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                    min="2"
+                    max="50"
                   />
                 </div>
               </div>
               
-              <div className=\"flex items-center space-x-4\">
+              <div className="flex items-center space-x-4">
                 <button
-                  type=\"submit\"
-                  className=\"flex items-center space-x-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold transition-all\"
+                  type="submit"
+                  className="flex items-center space-x-2 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold transition-all"
                 >
-                  <Play className=\"w-4 h-4\" />
+                  <Play className="w-4 h-4" />
                   <span>Créer le débat</span>
                 </button>
                 
                 <button
-                  type=\"button\"
+                  type="button"
                   onClick={() => setShowCreateForm(false)}
-                  className=\"px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all\"
+                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all"
                 >
                   Annuler
                 </button>
@@ -361,62 +361,62 @@ export function DebatePage() {
         )}
 
         {/* Liste des débats */}
-        <div className=\"grid grid-cols-1 lg:grid-cols-2 gap-6\">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {activeRooms.map((room) => (
-            <div key={room.id} className=\"bg-white rounded-2xl shadow-lg border overflow-hidden\">
+            <div key={room.id} className="bg-white rounded-2xl shadow-lg border overflow-hidden">
               {/* Header de la carte */}
-              <div className=\"p-6 border-b\">
-                <div className=\"flex items-start justify-between mb-4\">
-                  <div className=\"flex-1\">
-                    <div className=\"flex items-center space-x-3 mb-2\">
+              <div className="p-6 border-b">
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-2">
                       <span className={`px-3 py-1 rounded-full text-sm font-bold ${getCategoryColor(room.category)}`}>
                         {room.category}
                       </span>
                       {room.isLive && (
-                        <span className=\"flex items-center space-x-1 text-red-600\">
-                          <div className=\"w-2 h-2 bg-red-600 rounded-full animate-pulse\"></div>
-                          <span className=\"text-sm font-medium\">EN DIRECT</span>
+                        <span className="flex items-center space-x-1 text-red-600">
+                          <div className="w-2 h-2 bg-red-600 rounded-full animate-pulse"></div>
+                          <span className="text-sm font-medium">EN DIRECT</span>
                         </span>
                       )}
                     </div>
-                    <h3 className=\"text-xl font-bold text-gray-900 mb-2\">{room.title}</h3>
-                    <p className=\"text-gray-600 text-sm leading-relaxed\">{room.description}</p>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">{room.title}</h3>
+                    <p className="text-gray-600 text-sm leading-relaxed">{room.description}</p>
                   </div>
                 </div>
                 
                 {/* Métadonnées */}
-                <div className=\"flex items-center justify-between text-sm text-gray-500\">
-                  <div className=\"flex items-center space-x-4\">
-                    <div className=\"flex items-center space-x-1\">
-                      <Users className=\"w-4 h-4\" />
+                <div className="flex items-center justify-between text-sm text-gray-500">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center space-x-1">
+                      <Users className="w-4 h-4" />
                       <span>{room.participants}/{room.maxParticipants}</span>
                     </div>
-                    <div className=\"flex items-center space-x-1\">
-                      <Clock className=\"w-4 h-4\" />
+                    <div className="flex items-center space-x-1">
+                      <Clock className="w-4 h-4" />
                       <span>{new Date(room.startTime).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                   </div>
-                  <span className=\"text-gray-600\">par {room.host}</span>
+                  <span className="text-gray-600">par {room.host}</span>
                 </div>
               </div>
               
               {/* Actions */}
-              <div className=\"p-6 bg-gray-50\">
-                <div className=\"flex items-center justify-between\">
-                  <div className=\"flex items-center space-x-2\">
+              <div className="p-6 bg-gray-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
                     {room.tags.map((tag, index) => (
-                      <span key={index} className=\"px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full\">
+                      <span key={index} className="px-2 py-1 bg-gray-200 text-gray-700 text-xs rounded-full">
                         #{tag}
                       </span>
                     ))}
                   </div>
                   
-                  <div className=\"flex items-center space-x-2\">
-                    <button className=\"p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-all\">
-                      <Share2 className=\"w-4 h-4\" />
+                  <div className="flex items-center space-x-2">
+                    <button className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-all">
+                      <Share2 className="w-4 h-4" />
                     </button>
-                    <button className=\"p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-all\">
-                      <MessageCircle className=\"w-4 h-4\" />
+                    <button className="p-2 text-gray-600 hover:text-gray-800 hover:bg-gray-200 rounded-lg transition-all">
+                      <MessageCircle className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => joinDebate(room.id)}
@@ -429,7 +429,7 @@ export function DebatePage() {
                           : 'bg-orange-600 hover:bg-orange-700 text-white'
                       }`}
                     >
-                      <Video className=\"w-4 h-4\" />
+                      <Video className="w-4 h-4" />
                       <span>{room.isLive ? 'Rejoindre' : 'Programmer'}</span>
                     </button>
                   </div>
@@ -441,22 +441,19 @@ export function DebatePage() {
 
         {/* Message si aucun débat */}
         {activeRooms.length === 0 && (
-          <div className=\"text-center py-12\">
-            <Video className=\"w-16 h-16 mx-auto text-gray-300 mb-4\" />
-            <h3 className=\"text-xl font-bold text-gray-900 mb-2\">Aucun débat en cours</h3>
-            <p className=\"text-gray-600 mb-6\">Soyez le premier à proposer un débat citoyen !</p>
+          <div className="text-center py-12">
+            <Video className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Aucun débat en cours</h3>
+            <p className="text-gray-600 mb-6">Soyez le premier à proposer un débat citoyen !</p>
             <button
               onClick={() => setShowCreateForm(true)}
-              className=\"px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold transition-all\"
+              className="px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white rounded-xl font-bold transition-all"
             >
               Proposer un débat
             </button>
           </div>
         )}
       </div>
-
-      {/* Script Jitsi Meet */}
-      <script src=\"https://meet.jit.si/external_api.js\"></script>
     </div>
   )
 }
