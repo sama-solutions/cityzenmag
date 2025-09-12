@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { 
   Search, 
@@ -12,7 +12,9 @@ import {
   Camera,
   ChevronDown,
   FileText,
-  Plus
+  Plus,
+  MessageSquare,
+  Users
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeSelector } from './ThemeSelector'
@@ -23,11 +25,21 @@ export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isContentMenuOpen, setIsContentMenuOpen] = useState(false)
   const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false)
+  const [contentMenuTimeout, setContentMenuTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [participateMenuTimeout, setParticipateMenuTimeout] = useState<NodeJS.Timeout | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const { syncNow, loading: syncing } = useSyncTwitter()
   const { isAdmin } = useAuth()
   const { theme } = useTheme()
   const navigate = useNavigate()
+
+  // Nettoyage des timeouts au démontage
+  useEffect(() => {
+    return () => {
+      if (contentMenuTimeout) clearTimeout(contentMenuTimeout)
+      if (participateMenuTimeout) clearTimeout(participateMenuTimeout)
+    }
+  }, [contentMenuTimeout, participateMenuTimeout])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
@@ -43,6 +55,37 @@ export function Header() {
     } catch (error) {
       console.error('Sync failed:', error)
     }
+  }
+
+  // Fonctions pour gérer les menus avec délai
+  const handleContentMenuEnter = () => {
+    if (contentMenuTimeout) {
+      clearTimeout(contentMenuTimeout)
+      setContentMenuTimeout(null)
+    }
+    setIsContentMenuOpen(true)
+  }
+
+  const handleContentMenuLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsContentMenuOpen(false)
+    }, 150) // Délai de 150ms
+    setContentMenuTimeout(timeout)
+  }
+
+  const handleParticipateMenuEnter = () => {
+    if (participateMenuTimeout) {
+      clearTimeout(participateMenuTimeout)
+      setParticipateMenuTimeout(null)
+    }
+    setIsParticipateMenuOpen(true)
+  }
+
+  const handleParticipateMenuLeave = () => {
+    const timeout = setTimeout(() => {
+      setIsParticipateMenuOpen(false)
+    }, 150) // Délai de 150ms
+    setParticipateMenuTimeout(timeout)
   }
 
   return (
@@ -90,8 +133,8 @@ export function Header() {
             {/* Dropdown Contenu */}
             <div className="relative">
               <button
-                onMouseEnter={() => setIsContentMenuOpen(true)}
-                onMouseLeave={() => setIsContentMenuOpen(false)}
+                onMouseEnter={handleContentMenuEnter}
+                onMouseLeave={handleContentMenuLeave}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
                   theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
                 }`}
@@ -105,8 +148,8 @@ export function Header() {
               {isContentMenuOpen && (
                 <div 
                   className="absolute top-full left-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50"
-                  onMouseEnter={() => setIsContentMenuOpen(true)}
-                  onMouseLeave={() => setIsContentMenuOpen(false)}
+                  onMouseEnter={handleContentMenuEnter}
+                  onMouseLeave={handleContentMenuLeave}
                 >
                   <Link
                     to="/search"
@@ -155,8 +198,8 @@ export function Header() {
             {/* Dropdown Participer */}
             <div className="relative">
               <button
-                onMouseEnter={() => setIsParticipateMenuOpen(true)}
-                onMouseLeave={() => setIsParticipateMenuOpen(false)}
+                onMouseEnter={handleParticipateMenuEnter}
+                onMouseLeave={handleParticipateMenuLeave}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
                   theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
                 }`}
@@ -170,14 +213,14 @@ export function Header() {
               {isParticipateMenuOpen && (
                 <div 
                   className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50"
-                  onMouseEnter={() => setIsParticipateMenuOpen(true)}
-                  onMouseLeave={() => setIsParticipateMenuOpen(false)}
+                  onMouseEnter={handleParticipateMenuEnter}
+                  onMouseLeave={handleParticipateMenuLeave}
                 >
                   <Link
                     to="/debat"
                     className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
                   >
-                    <Video className="w-4 h-4 text-gray-500" />
+                    <MessageSquare className="w-4 h-4 text-gray-500" />
                     <div>
                       <div className="font-medium">Proposer un débat</div>
                       <div className="text-xs text-gray-500">Organiser une discussion</div>
@@ -309,7 +352,7 @@ export function Header() {
                       className="flex items-center space-x-3 px-3 py-2 text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <Video className="w-4 h-4" />
+                      <MessageSquare className="w-4 h-4" />
                       <span>Proposer un débat</span>
                     </Link>
                     <Link 
