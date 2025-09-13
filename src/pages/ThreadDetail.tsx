@@ -3,7 +3,6 @@ import { ArrowLeft, Calendar, Hash, CheckCircle, Clock, ExternalLink, AlertCircl
 import { useThreadWithTweets } from '../hooks/useData'
 import { TweetCard } from '../components/TweetCard'
 import { LoadingSpinner } from '../components/LoadingSpinner'
-import { TestModal } from '../components/TestModal'
 import { useState } from 'react'
 import { mockTweets, mockMediaFiles } from '../data/mockData'
 
@@ -77,9 +76,7 @@ export function ThreadDetail() {
   })
 
   return (
-    <div className={`${presentationMode ? 'max-w-7xl' : 'max-w-4xl'} mx-auto space-y-6`}>
-      {/* Test Modal pour diagnostic */}
-      <TestModal />
+    <div className={`${presentationMode ? 'max-w-7xl' : 'max-w-4xl'} mx-auto space-y-6 px-4 sm:px-6`}>
       {/* Navigation and Controls */}
       <div className="flex items-center justify-between">
         <Link 

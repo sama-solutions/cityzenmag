@@ -25,22 +25,6 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
 
   const tweetMediaFiles = mediaFiles.filter(media => media.tweet_id === tweet.tweet_id)
   
-  // Debug: Log media files
-  console.log('🖼️ TweetCard media debug:', {
-    tweetId: tweet.tweet_id,
-    totalMediaFiles: mediaFiles.length,
-    tweetMediaFiles: tweetMediaFiles.length,
-    mediaFiles: tweetMediaFiles.map(m => ({ id: m.id, tweet_id: m.tweet_id, local_path: m.local_path })),
-    allMediaFiles: mediaFiles.map(m => ({ id: m.id, tweet_id: m.tweet_id, local_path: m.local_path }))
-  })
-  
-  // Debug: Test si on a des images
-  if (tweetMediaFiles.length > 0) {
-    console.log('✅ Images disponibles pour ce tweet:', tweetMediaFiles.length)
-  } else {
-    console.log('⚠️ Aucune image pour ce tweet. Total médias:', mediaFiles.length)
-  }
-  
   const formatContent = (content: string) => {
     // First, convert URLs to clickable links
     let formattedContent = content.replace(
@@ -66,7 +50,6 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
   const getLocalMediaUrl = (mediaFile: MediaFile) => {
     // Pour les tests, utiliser directement l'URL originale si c'est une URL Picsum
     if (mediaFile.original_url && mediaFile.original_url.includes('picsum.photos')) {
-      console.log('🖼️ Using Picsum URL for test:', mediaFile.original_url)
       return mediaFile.original_url
     }
     
@@ -76,11 +59,8 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
   }
 
   const handleImageClick = (index: number) => {
-    console.log('🖼️ Image clicked:', { index, tweetMediaFilesLength: tweetMediaFiles.length })
-    
     // Vérifier que l'index est valide
     if (index < 0 || index >= tweetMediaFiles.length) {
-      console.error('🖼️ Invalid image index:', index)
       return
     }
     
@@ -89,12 +69,6 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
     
     // Puis ouvrir le modal
     setIsImageModalOpen(true)
-    
-    console.log('🖼️ Modal opening:', { 
-      selectedImageIndex: index, 
-      isImageModalOpen: true,
-      imageUrl: getLocalMediaUrl(tweetMediaFiles[index])
-    })
   }
 
   // Gestion du clavier pour le modal
@@ -123,64 +97,25 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isImageModalOpen, tweetMediaFiles.length])
 
-  // Log pour debug du rendu
-  console.log('🖼️ TweetCard render:', {
-    isImageModalOpen,
-    selectedImageIndex,
-    tweetMediaFilesLength: tweetMediaFiles.length
-  })
-
   return (
-    <div className={`bg-white rounded-lg p-8 ${showBorder ? 'border border-gray-200' : ''} min-h-[400px]`}>
-      {/* Bouton de test pour debug */}
-      {tweetMediaFiles.length > 0 && (
-        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-yellow-800">Debug Agrandissement</p>
-              <p className="text-xs text-yellow-600">{tweetMediaFiles.length} image(s) détectée(s)</p>
-            </div>
-            <div className="flex space-x-2">
-              <button
-                onClick={() => {
-                  console.log('🖼️ Test button clicked - forcing modal open')
-                  setSelectedImageIndex(0)
-                  setIsImageModalOpen(true)
-                }}
-                className="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700"
-              >
-                Test Modal 🖼️
-              </button>
-              <button
-                onClick={() => {
-                  console.log('🖼️ Force modal - no conditions')
-                  setIsImageModalOpen(!isImageModalOpen)
-                }}
-                className="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700"
-              >
-                Toggle Modal
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+    <div className={`bg-white rounded-lg p-4 sm:p-8 ${showBorder ? 'border border-gray-200' : ''} min-h-[300px] sm:min-h-[400px]`}>
 
       {/* Tweet Header */}
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center space-x-4">
-          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-2xl">L</span>
+      <div className="flex items-center justify-between mb-4 sm:mb-6">
+        <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-600 rounded-full flex items-center justify-center">
+            <span className="text-white font-bold text-lg sm:text-2xl">L</span>
           </div>
           <div>
-            <div className="flex items-center space-x-3">
-              <h4 className="font-bold text-xl text-gray-900">@loi200812</h4>
-              <span className="text-blue-600 text-lg font-bold bg-blue-50 px-4 py-2 rounded-lg">
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              <h4 className="font-bold text-lg sm:text-xl text-gray-900">@loi200812</h4>
+              <span className="text-blue-600 text-sm sm:text-lg font-bold bg-blue-50 px-2 py-1 sm:px-4 sm:py-2 rounded-lg">
                 {tweet.position}
               </span>
             </div>
-            <p className="text-base text-gray-500 flex items-center space-x-2 mt-1">
-              <Calendar className="w-4 h-4" />
-              <span>{formatDate(tweet.date_posted)}</span>
+            <p className="text-sm sm:text-base text-gray-500 flex items-center space-x-2 mt-1">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="text-xs sm:text-sm">{formatDate(tweet.date_posted)}</span>
             </p>
           </div>
         </div>
@@ -195,11 +130,11 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
         </a>
       </div>
 
-      {/* Main Content Layout: Image Left, Text Right */}
-      <div className="flex gap-8 items-start">
-        {/* Media Section - Left Side */}
+      {/* Main Content Layout: Responsive - Column on mobile, Row on desktop */}
+      <div className="flex flex-col lg:flex-row gap-4 lg:gap-8 items-start">
+        {/* Media Section - Top on mobile, Left on desktop */}
         {tweetMediaFiles.length > 0 && (
-          <div className="flex-shrink-0 w-1/3">
+          <div className="w-full lg:flex-shrink-0 lg:w-1/3">
             <div className="space-y-4">
               {tweetMediaFiles.map((media, index) => (
                 <div key={index} className="relative group cursor-pointer">
@@ -208,7 +143,7 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
                     alt={`Media ${index + 1}`}
                     className="w-full object-contain rounded-xl border border-gray-200 group-hover:opacity-90 transition-opacity shadow-lg"
                     style={{
-                      maxHeight: '400px',
+                      maxHeight: '300px',
                       height: 'auto'
                     }}
                     loading="lazy"
@@ -238,39 +173,38 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
           </div>
         )}
 
-        {/* Text Content - Right Side */}
-        <div className={`${tweetMediaFiles.length > 0 ? 'flex-1' : 'w-full'} flex flex-col justify-center`}>
+        {/* Text Content - Bottom on mobile, Right on desktop */}
+        <div className={`${tweetMediaFiles.length > 0 ? 'w-full lg:flex-1' : 'w-full'} flex flex-col justify-center`}>
           <div className="space-y-4">
             <p 
-              className="text-gray-800 leading-relaxed text-xl font-medium"
-              style={{ fontSize: '1.375rem', lineHeight: '1.6' }}
+              className="text-gray-800 leading-relaxed text-base sm:text-lg lg:text-xl font-medium"
               dangerouslySetInnerHTML={{ __html: formatContent(tweet.content) }}
             />
             
             {/* Engagement Stats - Moved to bottom of text */}
-            <div className="flex items-center space-x-8 pt-4 border-t border-gray-100">
+            <div className="flex items-center space-x-4 sm:space-x-6 lg:space-x-8 pt-4 border-t border-gray-100">
               {tweet.engagement.likes > 0 && (
-                <div className="flex items-center space-x-2 text-gray-500">
-                  <Heart className="w-5 h-5" />
-                  <span className="text-lg font-medium">{tweet.engagement.likes}</span>
+                <div className="flex items-center space-x-1 sm:space-x-2 text-gray-500">
+                  <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-sm sm:text-base lg:text-lg font-medium">{tweet.engagement.likes}</span>
                 </div>
               )}
               {tweet.engagement.retweets > 0 && (
-                <div className="flex items-center space-x-2 text-gray-500">
-                  <Repeat className="w-5 h-5" />
-                  <span className="text-lg font-medium">{tweet.engagement.retweets}</span>
+                <div className="flex items-center space-x-1 sm:space-x-2 text-gray-500">
+                  <Repeat className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-sm sm:text-base lg:text-lg font-medium">{tweet.engagement.retweets}</span>
                 </div>
               )}
               {tweet.engagement.replies > 0 && (
-                <div className="flex items-center space-x-2 text-gray-500">
-                  <MessageCircle className="w-5 h-5" />
-                  <span className="text-lg font-medium">{tweet.engagement.replies}</span>
+                <div className="flex items-center space-x-1 sm:space-x-2 text-gray-500">
+                  <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-sm sm:text-base lg:text-lg font-medium">{tweet.engagement.replies}</span>
                 </div>
               )}
               {tweet.engagement.quotes > 0 && (
-                <div className="flex items-center space-x-2 text-gray-500">
-                  <Eye className="w-5 h-5" />
-                  <span className="text-lg font-medium">{tweet.engagement.quotes}</span>
+                <div className="flex items-center space-x-1 sm:space-x-2 text-gray-500">
+                  <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="text-sm sm:text-base lg:text-lg font-medium">{tweet.engagement.quotes}</span>
                 </div>
               )}
             </div>
@@ -317,10 +251,10 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
         </div>
       )}
 
-      {/* Modal d'agrandissement des images - Version adaptée à l'écran */}
+      {/* Modal d'agrandissement des images - Version responsive */}
       {isImageModalOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center p-2 sm:p-4"
+          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center p-1 sm:p-4"
           style={{ zIndex: 9999 }}
           onClick={() => setIsImageModalOpen(false)}
         >
@@ -336,20 +270,19 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
               ✕
             </button>
             
-            {/* Image avec contraintes d'écran */}
+            {/* Image avec contraintes d'écran optimisées mobile */}
             {tweetMediaFiles.length > 0 && tweetMediaFiles[selectedImageIndex] && (
               <img
                 src={getLocalMediaUrl(tweetMediaFiles[selectedImageIndex])}
                 alt={`Image ${selectedImageIndex + 1}`}
                 className="max-w-full max-h-full object-contain"
                 style={{
-                  maxWidth: 'calc(100vw - 1rem)',
-                  maxHeight: 'calc(100vh - 1rem)',
+                  maxWidth: 'calc(100vw - 0.5rem)',
+                  maxHeight: 'calc(100vh - 0.5rem)',
                   width: 'auto',
                   height: 'auto'
                 }}
                 onError={(e) => {
-                  console.log('🖼️ Image error, trying fallback')
                   const target = e.target as HTMLImageElement
                   if (tweetMediaFiles[selectedImageIndex]) {
                     target.src = tweetMediaFiles[selectedImageIndex].original_url
@@ -358,9 +291,9 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
               />
             )}
             
-            {/* Info debug */}
-            <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-blue-600 text-white p-2 rounded text-sm">
-              Image {selectedImageIndex + 1} / {tweetMediaFiles.length}
+            {/* Info compteur */}
+            <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-black bg-opacity-70 text-white p-2 rounded text-xs sm:text-sm">
+              {selectedImageIndex + 1} / {tweetMediaFiles.length}
             </div>
             
             {/* Message si pas d'images */}
