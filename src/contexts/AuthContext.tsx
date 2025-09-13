@@ -23,7 +23,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setLoading(true)
       
       // Simulation d'authentification pour le développement
-      if (email === 'admin@cityzenmag.com' && password === 'admin123') {
+      const validEmails = ['admin@cityzenmag.com', 'admin@cityzenmag.sn']
+      const validPasswords = ['admin123', 'admin']
+      
+      if (validEmails.includes(email) && validPasswords.includes(password)) {
         const mockUser = { id: '1', email }
         const mockAdminUser: AdminUser = {
           id: '1',
