@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { Calendar, Hash, MessageCircle, Heart, Eye, CheckCircle, Clock, Sparkles, TrendingUp } from 'lucide-react'
 import type { Thread, MediaFile } from '../types/database'
 import { useTheme } from '../contexts/ThemeContext'
+import { SocialButtons } from './social/SocialButtons'
 
 interface ThreadCardProps {
   thread: Thread & { featured_image?: MediaFile }
@@ -335,6 +336,21 @@ export function ThreadCard({ thread, viewMode = 'grid', compact = false }: Threa
             )}
           </div>
         )}
+
+        {/* Social Buttons */}
+        <div className="mb-4" onClick={(e) => e.preventDefault()}>
+          <SocialButtons
+            contentId={thread.thread_id}
+            contentType="thread"
+            title={thread.title}
+            description={thread.description || ''}
+            url={`${window.location.origin}/thread/${thread.thread_id}`}
+            size="sm"
+            layout="horizontal"
+            showLabels={false}
+            showStats={true}
+          />
+        </div>
 
         {/* Footer */}
         <div className={`flex items-center justify-between pt-4 ${

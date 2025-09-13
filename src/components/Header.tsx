@@ -15,11 +15,13 @@ import {
   Plus,
   MessageSquare,
   MessageCircle,
-  Users
+  Users,
+  Bookmark
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeSelector } from './ThemeSelector'
 import { AdvancedSearchBar } from './search/AdvancedSearchBar'
+import { FavoritesPanel } from './social/FavoritesPanel'
 import { useSyncTwitter } from '../hooks/useData'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -29,6 +31,7 @@ export function Header() {
   const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false)
   const [contentMenuTimeout, setContentMenuTimeout] = useState<NodeJS.Timeout | null>(null)
   const [participateMenuTimeout, setParticipateMenuTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [showFavorites, setShowFavorites] = useState(false)
   const { syncNow, loading: syncing } = useSyncTwitter()
   const { isAdmin } = useAuth()
   const { theme } = useTheme()
@@ -254,18 +257,34 @@ export function Header() {
               />
             </div>
 
+            {/* Bouton Favoris */}
+            <button
+              onClick={() => setShowFavorites(true)}
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all ${
+                theme === 'senegalais'
+                  ? 'bg-orange-100 text-orange-600 hover:bg-orange-200 border border-orange-300'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
+              }`}
+              title="Mes favoris"
+            >
+              <Bookmark className="w-4 h-4" />
+              <span className="hidden sm:inline">Favoris</span>
+            </button>
+
             {/* Sync Button - Compact */}
             <button
               onClick={handleSync}
               disabled={syncing}
-              className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all shadow-md hover:shadow-lg ${
-                syncing 
-                  ? 'bg-gray-100 text-gray-500 cursor-not-allowed' 
-                  : 'bg-white text-orange-600 hover:bg-yellow-50 border border-orange-300 hover:border-yellow-400'
+              className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all ${
+                syncing
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : theme === 'senegalais'
+                    ? 'bg-blue-900 text-yellow-400 hover:bg-blue-800 border-2 border-yellow-400/30'
+                    : 'bg-blue-600 text-white hover:bg-blue-700'
               }`}
             >
               <Twitter className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />
-              <span className="hidden xl:block">{syncing ? 'Sync...' : 'Sync'}</span>
+              <span className="hidden sm:inline">{syncing ? 'Sync...' : 'Sync'}</span>
             </button>
 
             {/* Theme Selector */}
@@ -393,7 +412,15 @@ export function Header() {
             </div>
           </div>
         )}
-      </div>
-    </header>
+          </div>
+        </div>
+      </header>
+
+      {/* Panel des favoris */}
+      <FavoritesPanel
+        isOpen={showFavorites}
+        onClose={() => setShowFavorites(false)}
+      />
+    </>
   )
 }
