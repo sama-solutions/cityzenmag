@@ -64,6 +64,13 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
   }
 
   const getLocalMediaUrl = (mediaFile: MediaFile) => {
+    // Pour les tests, utiliser directement l'URL originale si c'est une URL Picsum
+    if (mediaFile.original_url && mediaFile.original_url.includes('picsum.photos')) {
+      console.log('🖼️ Using Picsum URL for test:', mediaFile.original_url)
+      return mediaFile.original_url
+    }
+    
+    // Sinon, utiliser l'URL Supabase normale
     const supabaseUrl = 'https://ghpptudzucrnygrozpht.supabase.co'
     return `${supabaseUrl}/storage/v1/object/public/twitter-media/${mediaFile.local_path}`
   }
@@ -104,6 +111,28 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
 
   return (
     <div className={`bg-white rounded-lg p-8 ${showBorder ? 'border border-gray-200' : ''} min-h-[400px]`}>
+      {/* Bouton de test pour debug */}
+      {tweetMediaFiles.length > 0 && (
+        <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm font-medium text-yellow-800">Debug Agrandissement</p>
+              <p className="text-xs text-yellow-600">{tweetMediaFiles.length} image(s) détectée(s)</p>
+            </div>
+            <button
+              onClick={() => {
+                console.log('🖼️ Test button clicked - forcing modal open')
+                setSelectedImageIndex(0)
+                setIsImageModalOpen(true)
+              }}
+              className="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700"
+            >
+              Test Modal 🖼️
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Tweet Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-4">
