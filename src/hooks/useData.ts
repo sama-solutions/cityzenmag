@@ -337,3 +337,6 @@ export function useSyncTwitter() {
 
   return { syncNow, loading, error }
 }
+
+// Export alias for backward compatibility
+export const useData = useThreads
