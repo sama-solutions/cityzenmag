@@ -14,6 +14,7 @@ import {
   FileText,
   Plus,
   MessageSquare,
+  MessageCircle,
   Users
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
