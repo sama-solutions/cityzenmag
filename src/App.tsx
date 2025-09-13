@@ -18,7 +18,6 @@ import { AdminContent } from './pages/admin/AdminContent'
 import { AdminScheduler } from './pages/admin/AdminScheduler'
 import { AdminMenus } from './pages/admin/AdminMenus'
 import { AdminAnalytics } from './pages/admin/AdminAnalytics'
-import TwitterImport from './pages/admin/TwitterImport'
 import { AdminLayout } from './components/admin/AdminLayout'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import './App.css'
@@ -115,7 +114,6 @@ function App() {
                   <Route path="scheduler" element={<AdminScheduler />} />
                   <Route path="menus" element={<AdminMenus />} />
                   <Route path="analytics" element={<AdminAnalytics />} />
-                  <Route path="twitter-import" element={<TwitterImport />} />
                 </Route>
               </Routes>
             </div>
