@@ -77,10 +77,27 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
 
   const handleImageClick = (index: number) => {
     console.log('🖼️ Image clicked:', { index, tweetMediaFilesLength: tweetMediaFiles.length })
-    alert(`Image ${index + 1} cliquée ! Total images: ${tweetMediaFiles.length}`)
+    
+    // Vérifier que l'index est valide
+    if (index < 0 || index >= tweetMediaFiles.length) {
+      console.error('🖼️ Invalid image index:', index)
+      return
+    }
+    
+    // Mettre à jour l'index d'abord
     setSelectedImageIndex(index)
+    
+    // Puis ouvrir le modal
     setIsImageModalOpen(true)
-    console.log('🖼️ Modal state updated:', { selectedImageIndex: index, isImageModalOpen: true })
+    
+    console.log('🖼️ Modal opening:', { 
+      selectedImageIndex: index, 
+      isImageModalOpen: true,
+      imageUrl: getLocalMediaUrl(tweetMediaFiles[index])
+    })
+    
+    // Alert pour confirmer
+    alert(`Image ${index + 1} cliquée ! Modal devrait s'ouvrir.`)
   }
 
   // Gestion du clavier pour le modal
@@ -109,6 +126,13 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isImageModalOpen, tweetMediaFiles.length])
 
+  // Log pour debug du rendu
+  console.log('🖼️ TweetCard render:', {
+    isImageModalOpen,
+    selectedImageIndex,
+    tweetMediaFilesLength: tweetMediaFiles.length
+  })
+
   return (
     <div className={`bg-white rounded-lg p-8 ${showBorder ? 'border border-gray-200' : ''} min-h-[400px]`}>
       {/* Bouton de test pour debug */}
@@ -119,16 +143,27 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
               <p className="text-sm font-medium text-yellow-800">Debug Agrandissement</p>
               <p className="text-xs text-yellow-600">{tweetMediaFiles.length} image(s) détectée(s)</p>
             </div>
-            <button
-              onClick={() => {
-                console.log('🖼️ Test button clicked - forcing modal open')
-                setSelectedImageIndex(0)
-                setIsImageModalOpen(true)
-              }}
-              className="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700"
-            >
-              Test Modal 🖼️
-            </button>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => {
+                  console.log('🖼️ Test button clicked - forcing modal open')
+                  setSelectedImageIndex(0)
+                  setIsImageModalOpen(true)
+                }}
+                className="bg-yellow-600 text-white px-3 py-1 rounded text-sm hover:bg-yellow-700"
+              >
+                Test Modal 🖼️
+              </button>
+              <button
+                onClick={() => {
+                  console.log('🖼️ Force modal - no conditions')
+                  setIsImageModalOpen(!isImageModalOpen)
+                }}
+                className="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700"
+              >
+                Toggle Modal
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -281,38 +316,59 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
         </div>
       )}
 
-      {/* Modal d'agrandissement des images - Version simplifiée pour debug */}
-      {isImageModalOpen && tweetMediaFiles.length > 0 && (
-        console.log('🖼️ MODAL RENDERING:', { isImageModalOpen, tweetMediaFilesLength: tweetMediaFiles.length, selectedImageIndex }) ||
+      {/* Modal d'agrandissement des images - Version corrigée */}
+      {isImageModalOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center"
           style={{ zIndex: 9999 }}
+          onClick={() => setIsImageModalOpen(false)}
         >
-          <div className="relative max-w-4xl max-h-4xl">
+          <div 
+            className="relative max-w-4xl max-h-4xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             {/* Bouton fermer */}
             <button
               onClick={() => setIsImageModalOpen(false)}
-              className="absolute top-4 right-4 z-10 bg-red-600 text-white p-2 rounded-full hover:bg-red-700"
+              className="absolute top-4 right-4 z-10 bg-red-600 text-white p-3 rounded-full hover:bg-red-700 text-xl font-bold"
             >
               ✕
             </button>
             
             {/* Image */}
-            <img
-              src={getLocalMediaUrl(tweetMediaFiles[selectedImageIndex])}
-              alt={`Image ${selectedImageIndex + 1}`}
-              className="max-w-full max-h-full object-contain"
-              onError={(e) => {
-                console.log('🖼️ Image error, trying fallback')
-                const target = e.target as HTMLImageElement
-                target.src = tweetMediaFiles[selectedImageIndex].original_url
-              }}
-            />
+            {tweetMediaFiles.length > 0 && tweetMediaFiles[selectedImageIndex] && (
+              <img
+                src={getLocalMediaUrl(tweetMediaFiles[selectedImageIndex])}
+                alt={`Image ${selectedImageIndex + 1}`}
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => {
+                  console.log('🖼️ Image error, trying fallback')
+                  const target = e.target as HTMLImageElement
+                  if (tweetMediaFiles[selectedImageIndex]) {
+                    target.src = tweetMediaFiles[selectedImageIndex].original_url
+                  }
+                }}
+              />
+            )}
             
             {/* Info debug */}
             <div className="absolute bottom-4 left-4 bg-blue-600 text-white p-2 rounded">
-              Image {selectedImageIndex + 1} / {tweetMediaFiles.length}
+              Modal ouvert - Image {selectedImageIndex + 1} / {tweetMediaFiles.length}
             </div>
+            
+            {/* Message si pas d'images */}
+            {tweetMediaFiles.length === 0 && (
+              <div className="bg-white p-8 rounded-lg text-center">
+                <h3 className="text-xl font-bold mb-4">Aucune image</h3>
+                <p>Aucune image trouvée pour ce tweet.</p>
+                <button
+                  onClick={() => setIsImageModalOpen(false)}
+                  className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                >
+                  Fermer
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
