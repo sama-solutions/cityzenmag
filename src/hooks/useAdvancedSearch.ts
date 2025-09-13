@@ -14,10 +14,10 @@ export function useAdvancedSearch() {
 
   // Charger tous les contenus pour l'indexation
   const { threads = [] } = useData() || {}
-  const { interviews = [] } = useInterviews() || {}
-  const { reports: photoReports = [] } = usePhotoReports() || {}
-  const { videos: videoAnalyses = [] } = useVideoAnalyses() || {}
-  const { testimonials = [] } = useTestimonials() || {}
+  const { allInterviews: interviews = [] } = useInterviews() || {}
+  const { allReports: photoReports = [] } = usePhotoReports() || {}
+  const { allVideos: videoAnalyses = [] } = useVideoAnalyses() || {}
+  const { allTestimonials: testimonials = [] } = useTestimonials() || {}
 
   // Indexer le contenu quand il est chargé
   useEffect(() => {
