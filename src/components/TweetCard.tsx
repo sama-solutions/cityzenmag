@@ -25,6 +25,14 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
 
   const tweetMediaFiles = mediaFiles.filter(media => media.tweet_id === tweet.tweet_id)
   
+  // Debug: Log media files
+  console.log('🖼️ TweetCard media debug:', {
+    tweetId: tweet.tweet_id,
+    totalMediaFiles: mediaFiles.length,
+    tweetMediaFiles: tweetMediaFiles.length,
+    mediaFiles: tweetMediaFiles.map(m => ({ id: m.id, tweet_id: m.tweet_id, local_path: m.local_path }))
+  })
+  
   const formatContent = (content: string) => {
     // First, convert URLs to clickable links
     let formattedContent = content.replace(
@@ -53,8 +61,10 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
   }
 
   const handleImageClick = (index: number) => {
+    console.log('🖼️ Image clicked:', { index, tweetMediaFilesLength: tweetMediaFiles.length })
     setSelectedImageIndex(index)
     setIsImageModalOpen(true)
+    console.log('🖼️ Modal state updated:', { selectedImageIndex: index, isImageModalOpen: true })
   }
 
   // Gestion du clavier pour le modal
@@ -233,106 +243,35 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
         </div>
       )}
 
-      {/* Modal d'agrandissement des images */}
+      {/* Modal d'agrandissement des images - Version simplifiée pour debug */}
       {isImageModalOpen && tweetMediaFiles.length > 0 && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
-          {/* Header Controls */}
-          <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-10">
-            <div className="flex items-center space-x-2 text-white">
-              <span className="text-lg font-medium">
-                {selectedImageIndex + 1} / {tweetMediaFiles.length}
-              </span>
-              <span className="text-sm text-gray-300">
-                Cliquez pour fermer • Échap pour quitter
-              </span>
-            </div>
-            
+          <div className="relative max-w-4xl max-h-4xl">
+            {/* Bouton fermer */}
             <button
               onClick={() => setIsImageModalOpen(false)}
-              className="p-2 bg-black bg-opacity-50 text-white rounded-lg hover:bg-opacity-70 transition-all"
-              title="Fermer (Échap)"
+              className="absolute top-4 right-4 z-10 bg-red-600 text-white p-2 rounded-full hover:bg-red-700"
             >
-              <ExternalLink className="w-5 h-5 rotate-45" />
+              ✕
             </button>
-          </div>
-
-          {/* Navigation Arrows */}
-          {tweetMediaFiles.length > 1 && (
-            <>
-              <button
-                onClick={() => setSelectedImageIndex(prev => prev > 0 ? prev - 1 : tweetMediaFiles.length - 1)}
-                className="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-all z-10"
-                title="Image précédente"
-              >
-                <span className="text-2xl">‹</span>
-              </button>
-              
-              <button
-                onClick={() => setSelectedImageIndex(prev => prev < tweetMediaFiles.length - 1 ? prev + 1 : 0)}
-                className="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-black bg-opacity-50 text-white rounded-full hover:bg-opacity-70 transition-all z-10"
-                title="Image suivante"
-              >
-                <span className="text-2xl">›</span>
-              </button>
-            </>
-          )}
-
-          {/* Main Image */}
-          <div 
-            className="flex-1 flex items-center justify-center p-16 overflow-hidden cursor-pointer"
-            onClick={() => setIsImageModalOpen(false)}
-          >
+            
+            {/* Image */}
             <img
               src={getLocalMediaUrl(tweetMediaFiles[selectedImageIndex])}
               alt={`Image ${selectedImageIndex + 1}`}
-              className="max-w-full max-h-full object-contain select-none"
+              className="max-w-full max-h-full object-contain"
               onError={(e) => {
+                console.log('🖼️ Image error, trying fallback')
                 const target = e.target as HTMLImageElement
                 target.src = tweetMediaFiles[selectedImageIndex].original_url
               }}
-              draggable={false}
             />
-          </div>
-
-          {/* Bottom Info */}
-          <div className="absolute bottom-4 left-4 right-4 text-center text-white z-10">
-            <div className="bg-black bg-opacity-50 rounded-lg px-4 py-2 inline-block">
-              <p className="text-sm">
-                <span className="font-medium">Mode Présentation:</span>
-                {' '}Cliquez n'importe où pour fermer • Flèches pour naviguer
-              </p>
+            
+            {/* Info debug */}
+            <div className="absolute bottom-4 left-4 bg-blue-600 text-white p-2 rounded">
+              Image {selectedImageIndex + 1} / {tweetMediaFiles.length}
             </div>
           </div>
-
-          {/* Thumbnail Strip */}
-          {tweetMediaFiles.length > 1 && (
-            <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex space-x-2 z-10">
-              {tweetMediaFiles.map((image, index) => (
-                <button
-                  key={index}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    setSelectedImageIndex(index)
-                  }}
-                  className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
-                    index === selectedImageIndex 
-                      ? 'border-white shadow-lg' 
-                      : 'border-gray-500 hover:border-gray-300'
-                  }`}
-                >
-                  <img
-                    src={getLocalMediaUrl(image)}
-                    alt={`Miniature ${index + 1}`}
-                    className="w-full h-full object-cover"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      target.src = image.original_url
-                    }}
-                  />
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       )}
     </div>
