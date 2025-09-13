@@ -222,7 +222,7 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
                       target.src = media.original_url
                     }}
                   />
-                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-xl flex items-center justify-center">
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-200 rounded-xl flex items-center justify-center pointer-events-none">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <div className="bg-black bg-opacity-70 text-white p-3 rounded-full">
                         <Expand className="w-6 h-6" />
@@ -230,7 +230,7 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
                     </div>
                   </div>
                   {/* Indicateur pour les présentateurs */}
-                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
                     <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded-full font-medium">
                       Cliquer pour agrandir
                     </div>
