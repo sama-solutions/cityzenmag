@@ -30,6 +30,14 @@ export function useAdvancedSearch() {
           (photoReports && photoReports.length > 0) || (videoAnalyses && videoAnalyses.length > 0) || 
           (testimonials && testimonials.length > 0)) {
         try {
+          console.log('Début indexation:', {
+            threads: threads?.length || 0,
+            interviews: interviews?.length || 0,
+            photoReports: photoReports?.length || 0,
+            videoAnalyses: videoAnalyses?.length || 0,
+            testimonials: testimonials?.length || 0
+          })
+          
           searchService.indexContent(
             threads || [],
             interviews || [],
@@ -37,10 +45,14 @@ export function useAdvancedSearch() {
             videoAnalyses || [],
             testimonials || []
           )
+          
+          console.log('Indexation réussie')
           setIsIndexed(true)
+          setError(null)
         } catch (err) {
-          console.error('Erreur indexation:', err)
-          setError('Erreur lors de l\'indexation du contenu')
+          console.error('Erreur indexation détaillée:', err)
+          const errorMessage = err instanceof Error ? err.message : 'Erreur inconnue lors de l\'indexation'
+          setError(`Erreur lors de l'indexation du contenu: ${errorMessage}`)
         }
       } else {
         // Même s'il n'y a pas de contenu, marquer comme indexé pour éviter les erreurs
