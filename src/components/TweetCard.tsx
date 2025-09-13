@@ -283,7 +283,11 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
 
       {/* Modal d'agrandissement des images - Version simplifiée pour debug */}
       {isImageModalOpen && tweetMediaFiles.length > 0 && (
-        <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex items-center justify-center">
+        console.log('🖼️ MODAL RENDERING:', { isImageModalOpen, tweetMediaFilesLength: tweetMediaFiles.length, selectedImageIndex }) ||
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center"
+          style={{ zIndex: 9999 }}
+        >
           <div className="relative max-w-4xl max-h-4xl">
             {/* Bouton fermer */}
             <button
