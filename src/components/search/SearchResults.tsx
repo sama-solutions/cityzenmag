@@ -191,7 +191,7 @@ export function SearchResults({
                     </div>
                   )}
 
-                  {/* Métadonnées */}
+                  {/* Métadonnées et metadata */}
                   <div className="flex items-center space-x-4 text-sm text-gray-500">
                     {result.author && (
                       <div className="flex items-center">

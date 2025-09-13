@@ -13,28 +13,38 @@ export function useAdvancedSearch() {
   const [isIndexed, setIsIndexed] = useState(false)
 
   // Charger tous les contenus pour l'indexation
-  const { threads } = useData()
-  const { interviews } = useInterviews()
-  const { photoReports } = usePhotoReports()
-  const { videoAnalyses } = useVideoAnalyses()
-  const { testimonials } = useTestimonials()
+  const { threads = [] } = useData() || {}
+  const { interviews = [] } = useInterviews() || {}
+  const { reports: photoReports = [] } = usePhotoReports() || {}
+  const { videos: videoAnalyses = [] } = useVideoAnalyses() || {}
+  const { testimonials = [] } = useTestimonials() || {}
 
   // Indexer le contenu quand il est chargé
   useEffect(() => {
-    if (threads.length > 0 || interviews.length > 0 || photoReports.length > 0 || 
-        videoAnalyses.length > 0 || testimonials.length > 0) {
-      try {
-        searchService.indexContent(
-          threads,
-          interviews,
-          photoReports,
-          videoAnalyses,
-          testimonials
-        )
+    // Vérifier que tous les hooks ont retourné des données (même vides)
+    if (threads !== undefined && interviews !== undefined && photoReports !== undefined && 
+        videoAnalyses !== undefined && testimonials !== undefined) {
+      
+      // Vérifier s'il y a du contenu à indexer
+      if ((threads && threads.length > 0) || (interviews && interviews.length > 0) || 
+          (photoReports && photoReports.length > 0) || (videoAnalyses && videoAnalyses.length > 0) || 
+          (testimonials && testimonials.length > 0)) {
+        try {
+          searchService.indexContent(
+            threads || [],
+            interviews || [],
+            photoReports || [],
+            videoAnalyses || [],
+            testimonials || []
+          )
+          setIsIndexed(true)
+        } catch (err) {
+          console.error('Erreur indexation:', err)
+          setError('Erreur lors de l\'indexation du contenu')
+        }
+      } else {
+        // Même s'il n'y a pas de contenu, marquer comme indexé pour éviter les erreurs
         setIsIndexed(true)
-      } catch (err) {
-        console.error('Erreur indexation:', err)
-        setError('Erreur lors de l\'indexation du contenu')
       }
     }
   }, [threads, interviews, photoReports, videoAnalyses, testimonials])

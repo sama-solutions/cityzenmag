@@ -152,6 +152,11 @@ export function AdvancedSearchBar({
             value={query}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
+            onKeyDown={(e) => {
+              if (e.key === 'Escape') {
+                setIsOpen(false)
+              }
+            }}
             placeholder={placeholder}
             className={`flex-1 px-4 py-0 bg-transparent border-none outline-none ${sizeClasses[size]} placeholder-gray-500`}
           />
