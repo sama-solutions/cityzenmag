@@ -8,7 +8,8 @@ import {
   Menu as MenuIcon,
   BarChart3,
   LogOut,
-  Home
+  Home,
+  Twitter
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useTheme } from '../../contexts/ThemeContext'
@@ -18,6 +19,7 @@ const menuItems = [
   { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
   { path: '/admin/categories', icon: FolderOpen, label: 'Catégories' },
   { path: '/admin/content', icon: FileText, label: 'Contenu' },
+  { path: '/admin/twitter-import', icon: Twitter, label: 'Import Twitter' },
   { path: '/admin/scheduler', icon: Calendar, label: 'Planificateur' },
   { path: '/admin/menus', icon: MenuIcon, label: 'Menus' },
   { path: '/admin/analytics', icon: BarChart3, label: 'Analytics' }

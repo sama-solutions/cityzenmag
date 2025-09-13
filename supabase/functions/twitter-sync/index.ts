@@ -12,7 +12,13 @@ Deno.serve(async (req) => {
     }
 
     try {
-        console.log('Starting Twitter sync for @loi200812');
+        // Parse request body
+        const body = await req.json().catch(() => ({}));
+        const mode = body.mode || 'latest'; // 'latest', 'full', or 'batch'
+        const limit = body.limit || (mode === 'latest' ? 20 : 100);
+        const batchSize = body.batchSize || 10;
+        
+        console.log(`Starting Twitter sync for @loi200812 (mode: ${mode}, limit: ${limit})`);
 
         // Get environment variables
         const twitterBearerToken = Deno.env.get('TWITTER_BEARER_TOKEN');
@@ -41,10 +47,11 @@ Deno.serve(async (req) => {
         const userId = userData.data.id;
         console.log(`Found user ID: ${userId} for @${username}`);
 
-        // Get recent tweets with all fields we need
+        // Get tweets with all fields we need (adjust limit based on mode)
+        const maxResults = Math.min(limit, 100); // Twitter API limit is 100
         const tweetsResponse = await fetch(
             `https://api.twitter.com/2/users/${userId}/tweets?` +
-            `max_results=100&` +
+            `max_results=${maxResults}&` +
             `tweet.fields=created_at,public_metrics,conversation_id,in_reply_to_user_id&` +
             `media.fields=url,type,width,height&` +
             `expansions=attachments.media_keys`,
@@ -82,9 +89,27 @@ Deno.serve(async (req) => {
 
         let processedThreads = 0;
         let processedTweets = 0;
+        let processedMedia = 0;
+
+        // Filter threads based on mode
+        let threadsToProcess = Array.from(threadGroups.entries());
+        
+        if (mode === 'latest') {
+            // Sort by most recent tweet in each thread and take only the first one
+            threadsToProcess.sort(([, tweetsA], [, tweetsB]) => {
+                const latestA = Math.max(...tweetsA.map(t => new Date(t.created_at).getTime()));
+                const latestB = Math.max(...tweetsB.map(t => new Date(t.created_at).getTime()));
+                return latestB - latestA;
+            });
+            threadsToProcess = threadsToProcess.slice(0, 1);
+            console.log(`Mode 'latest': Processing only the most recent thread`);
+        } else if (mode === 'batch') {
+            threadsToProcess = threadsToProcess.slice(0, batchSize);
+            console.log(`Mode 'batch': Processing ${threadsToProcess.length} threads`);
+        }
 
         // Process each thread
-        for (const [conversationId, threadTweets] of threadGroups) {
+        for (const [conversationId, threadTweets] of threadsToProcess) {
             try {
                 // Sort tweets by creation time
                 threadTweets.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
@@ -224,6 +249,60 @@ Deno.serve(async (req) => {
                         if (createTweetResponse.ok) {
                             processedTweets++;
                             console.log(`Saved tweet ${position}: ${tweet.text.substring(0, 50)}...`);
+                            
+                            // Process media files for this tweet
+                            if (mediaUrls.length > 0) {
+                                for (const mediaUrl of mediaUrls) {
+                                    try {
+                                        // Check if media already exists
+                                        const existingMediaResponse = await fetch(
+                                            `${supabaseUrl}/rest/v1/media_files?original_url=eq.${encodeURIComponent(mediaUrl)}`,
+                                            {
+                                                headers: {
+                                                    'Authorization': `Bearer ${serviceRoleKey}`,
+                                                    'apikey': serviceRoleKey,
+                                                    'Content-Type': 'application/json'
+                                                }
+                                            }
+                                        );
+                                        
+                                        const existingMedia = await existingMediaResponse.json();
+                                        
+                                        if (existingMedia.length === 0) {
+                                            // Create media file record
+                                            const mediaData = {
+                                                original_url: mediaUrl,
+                                                local_path: `twitter-media/${tweet.id}/${Date.now()}.jpg`,
+                                                filename: `${tweet.id}_${Date.now()}.jpg`,
+                                                file_type: 'image/jpeg',
+                                                file_size: 0, // Will be updated when downloaded
+                                                tweet_id: tweet.id,
+                                                downloaded_at: null // Will be updated when downloaded
+                                            };
+                                            
+                                            const createMediaResponse = await fetch(
+                                                `${supabaseUrl}/rest/v1/media_files`,
+                                                {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Authorization': `Bearer ${serviceRoleKey}`,
+                                                        'apikey': serviceRoleKey,
+                                                        'Content-Type': 'application/json'
+                                                    },
+                                                    body: JSON.stringify(mediaData)
+                                                }
+                                            );
+                                            
+                                            if (createMediaResponse.ok) {
+                                                processedMedia++;
+                                                console.log(`Saved media: ${mediaUrl}`);
+                                            }
+                                        }
+                                    } catch (mediaError) {
+                                        console.error(`Error processing media ${mediaUrl}:`, mediaError.message);
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -236,15 +315,18 @@ Deno.serve(async (req) => {
         const result = {
             data: {
                 success: true,
+                mode: mode,
                 processed_threads: processedThreads,
                 processed_tweets: processedTweets,
+                processed_media: processedMedia,
                 total_conversations: threadGroups.size,
+                threads_to_process: threadsToProcess.length,
                 timestamp: new Date().toISOString()
             }
         };
 
         console.log('Twitter sync completed successfully');
-        console.log(`Processed ${processedThreads} new threads and ${processedTweets} new tweets`);
+        console.log(`Mode: ${mode} - Processed ${processedThreads} new threads, ${processedTweets} new tweets, and ${processedMedia} new media files`);
 
         return new Response(JSON.stringify(result), {
             headers: { ...corsHeaders, 'Content-Type': 'application/json' }
