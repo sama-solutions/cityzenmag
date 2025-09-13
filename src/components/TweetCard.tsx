@@ -209,7 +209,11 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
                   <img 
                     src={getLocalMediaUrl(media)}
                     alt={`Media ${index + 1}`}
-                    className="w-full h-auto object-contain rounded-xl border border-gray-200 group-hover:opacity-90 transition-opacity shadow-lg"
+                    className="w-full object-contain rounded-xl border border-gray-200 group-hover:opacity-90 transition-opacity shadow-lg"
+                    style={{
+                      maxHeight: '400px',
+                      height: 'auto'
+                    }}
                     loading="lazy"
                     onClick={() => handleImageClick(index)}
                     onError={(e) => {
@@ -316,31 +320,37 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
         </div>
       )}
 
-      {/* Modal d'agrandissement des images - Version corrigée */}
+      {/* Modal d'agrandissement des images - Version adaptée à l'écran */}
       {isImageModalOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center"
+          className="fixed inset-0 bg-black bg-opacity-95 flex items-center justify-center p-2 sm:p-4"
           style={{ zIndex: 9999 }}
           onClick={() => setIsImageModalOpen(false)}
         >
           <div 
-            className="relative max-w-4xl max-h-4xl"
+            className="relative w-full h-full flex items-center justify-center"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Bouton fermer */}
             <button
               onClick={() => setIsImageModalOpen(false)}
-              className="absolute top-4 right-4 z-10 bg-red-600 text-white p-3 rounded-full hover:bg-red-700 text-xl font-bold"
+              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-10 bg-red-600 text-white p-2 sm:p-3 rounded-full hover:bg-red-700 text-lg sm:text-xl font-bold shadow-lg"
             >
               ✕
             </button>
             
-            {/* Image */}
+            {/* Image avec contraintes d'écran */}
             {tweetMediaFiles.length > 0 && tweetMediaFiles[selectedImageIndex] && (
               <img
                 src={getLocalMediaUrl(tweetMediaFiles[selectedImageIndex])}
                 alt={`Image ${selectedImageIndex + 1}`}
                 className="max-w-full max-h-full object-contain"
+                style={{
+                  maxWidth: 'calc(100vw - 1rem)',
+                  maxHeight: 'calc(100vh - 1rem)',
+                  width: 'auto',
+                  height: 'auto'
+                }}
                 onError={(e) => {
                   console.log('🖼️ Image error, trying fallback')
                   const target = e.target as HTMLImageElement
@@ -352,8 +362,8 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
             )}
             
             {/* Info debug */}
-            <div className="absolute bottom-4 left-4 bg-blue-600 text-white p-2 rounded">
-              Modal ouvert - Image {selectedImageIndex + 1} / {tweetMediaFiles.length}
+            <div className="absolute bottom-2 left-2 sm:bottom-4 sm:left-4 bg-blue-600 text-white p-2 rounded text-sm">
+              Image {selectedImageIndex + 1} / {tweetMediaFiles.length}
             </div>
             
             {/* Message si pas d'images */}
