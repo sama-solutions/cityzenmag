@@ -39,6 +39,29 @@ export function Home() {
     if (text.length <= maxLength) return text
     return text.substring(0, maxLength).trim() + '...'
   }
+
+  // Images de fallback pour la démonstration
+  const getFallbackImage = (thread: any) => {
+    const fallbackImages = [
+      'https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=800&h=600&fit=crop&crop=center', // Sénégal flag
+      'https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=800&h=600&fit=crop&crop=center', // African politics
+      'https://images.unsplash.com/photo-1541872705-1f73c6400ec9?w=800&h=600&fit=crop&crop=center', // Government building
+      'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop&crop=face', // African leader
+      'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop&crop=center', // Democracy
+    ]
+    
+    // Utiliser l'ID du thread pour sélectionner une image de manière déterministe
+    const index = thread.thread_id ? parseInt(thread.thread_id.slice(-1)) % fallbackImages.length : 0
+    return fallbackImages[index]
+  }
+
+  const getImageUrl = (thread: any) => {
+    // Priorité : image featured > image de fallback
+    if (thread.featured_image?.url) {
+      return thread.featured_image.url
+    }
+    return getFallbackImage(thread)
+  }
   
   return (
     <div className="space-y-8">
@@ -49,17 +72,19 @@ export function Home() {
             ? 'bg-gradient-to-br from-orange-600 via-blue-900 to-green-700 border-4 border-yellow-400/20'
             : 'bg-gradient-to-br from-gray-900 via-black to-gray-800 border border-gray-700'
         }`}>
-          {/* Image de fond si disponible */}
-          {latestThread.featured_image && (
-            <div className="absolute inset-0">
-              <img 
-                src={latestThread.featured_image.url} 
-                alt={latestThread.title}
-                className="w-full h-full object-cover opacity-20"
-              />
-              <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
-            </div>
-          )}
+          {/* Image de fond */}
+          <div className="absolute inset-0">
+            <img 
+              src={getImageUrl(latestThread)}
+              alt={latestThread.title}
+              className="w-full h-full object-cover opacity-30"
+              onError={(e) => {
+                // Fallback si l'image ne charge pas
+                e.currentTarget.src = 'https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=800&h=600&fit=crop&crop=center'
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-black/70 via-black/50 to-black/70"></div>
+          </div>
 
           <div className="relative z-10 p-8 md:p-12 lg:p-16">
             {/* Header CityzenMag */}
@@ -139,36 +164,47 @@ export function Home() {
                   </div>
                 </div>
 
-                {/* Image ou visualisation */}
+                {/* Image de l'article */}
                 <div className="relative">
-                  {latestThread.featured_image ? (
-                    <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                      <img 
-                        src={latestThread.featured_image.url} 
-                        alt={latestThread.title}
-                        className="w-full h-64 md:h-80 object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                  <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                    <img 
+                      src={getImageUrl(latestThread)}
+                      alt={latestThread.title}
+                      className="w-full h-64 md:h-80 object-cover"
+                      onError={(e) => {
+                        // Fallback si l'image ne charge pas
+                        e.currentTarget.src = 'https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=800&h=600&fit=crop&crop=center'
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                    
+                    {/* Badge sur l'image */}
+                    <div className="absolute top-4 left-4">
+                      <span className={`px-3 py-1 rounded-full text-xs font-bold ${
+                        theme === 'senegalais'
+                          ? 'bg-yellow-400 text-orange-900'
+                          : 'bg-white text-black'
+                      }`}>
+                        🔥 TRENDING
+                      </span>
                     </div>
-                  ) : (
-                    <div className={`relative rounded-2xl p-8 shadow-2xl ${
-                      theme === 'senegalais'
-                        ? 'bg-gradient-to-br from-yellow-400/20 to-orange-500/20 border border-yellow-400/30'
-                        : 'bg-white/10 border border-white/20'
-                    }`}>
-                      <div className="text-center space-y-4">
-                        <div className={`w-20 h-20 rounded-full flex items-center justify-center mx-auto ${
-                          theme === 'senegalais' ? 'bg-yellow-400' : 'bg-white'
-                        }`}>
-                          <span className={`text-3xl ${
-                            theme === 'senegalais' ? 'text-orange-900' : 'text-black'
-                          }`}>📰</span>
+
+                    {/* Métadonnées sur l'image */}
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="flex items-center justify-between text-white text-sm">
+                        <div className="flex items-center space-x-4">
+                          <div className="flex items-center space-x-1">
+                            <Eye className="w-4 h-4" />
+                            <span>2.3k vues</span>
+                          </div>
+                          <div className="flex items-center space-x-1">
+                            <Heart className="w-4 h-4" />
+                            <span>156 likes</span>
+                          </div>
                         </div>
-                        <h3 className="text-xl font-bold text-white">Article Twitter</h3>
-                        <p className="text-gray-300">Thread analysé et structuré</p>
                       </div>
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
@@ -236,7 +272,17 @@ export function Home() {
             ? 'bg-gradient-to-br from-orange-500 via-yellow-500 to-green-500 border-4 border-yellow-400/20'
             : 'bg-gradient-to-br from-gray-900 via-black to-gray-800 border border-gray-700'
         }`}>
-          <div className="relative text-center py-20 px-8">
+          {/* Image de fond par défaut */}
+          <div className="absolute inset-0">
+            <img 
+              src="https://images.unsplash.com/photo-1586339949916-3e9457bef6d3?w=1200&h=800&fit=crop&crop=center"
+              alt="Sénégal"
+              className="w-full h-full object-cover opacity-30"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-black/60 via-black/40 to-black/60"></div>
+          </div>
+          
+          <div className="relative z-10 text-center py-20 px-8">
             <h1 className="text-6xl font-bold text-white mb-6 tracking-tight font-sans">
               CityzenMag
             </h1>
