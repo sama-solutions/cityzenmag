@@ -19,6 +19,7 @@ import {
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 import { ThemeSelector } from './ThemeSelector'
+import { AdvancedSearchBar } from './search/AdvancedSearchBar'
 import { useSyncTwitter } from '../hooks/useData'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -28,11 +29,9 @@ export function Header() {
   const [isParticipateMenuOpen, setIsParticipateMenuOpen] = useState(false)
   const [contentMenuTimeout, setContentMenuTimeout] = useState<NodeJS.Timeout | null>(null)
   const [participateMenuTimeout, setParticipateMenuTimeout] = useState<NodeJS.Timeout | null>(null)
-  const [searchQuery, setSearchQuery] = useState('')
   const { syncNow, loading: syncing } = useSyncTwitter()
   const { isAdmin } = useAuth()
   const { theme } = useTheme()
-  const navigate = useNavigate()
 
   // Nettoyage des timeouts au démontage
   useEffect(() => {
@@ -41,13 +40,6 @@ export function Header() {
       if (participateMenuTimeout) clearTimeout(participateMenuTimeout)
     }
   }, [contentMenuTimeout, participateMenuTimeout])
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery)}`)
-    }
-  }
 
   const handleSync = async () => {
     try {
@@ -254,24 +246,13 @@ export function Header() {
 
           {/* Actions à droite */}
           <div className="hidden lg:flex items-center space-x-4">
-            {/* Search Bar - Compacte */}
-            <form onSubmit={handleSearch} className="flex items-center">
-              <div className="relative">
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Rechercher..."
-                  className="w-64 pl-4 pr-10 py-2 bg-white/90 border border-orange-300 rounded-xl focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 focus:bg-white outline-none font-sans placeholder-gray-600 shadow-md backdrop-blur-sm"
-                />
-                <button 
-                  type="submit"
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-600 hover:text-orange-700 p-1 rounded-md hover:bg-yellow-100 transition-all"
-                >
-                  <Search className="w-4 h-4" />
-                </button>
-              </div>
-            </form>
+            {/* Search Bar Avancée */}
+            <div className="w-80">
+              <AdvancedSearchBar
+                size="sm"
+                placeholder="Rechercher..."
+              />
+            </div>
 
             {/* Sync Button - Compact */}
             <button
@@ -388,23 +369,10 @@ export function Header() {
 
               {/* Mobile Search */}
               <div className="px-4 pt-4 border-t border-white/20">
-                <form onSubmit={handleSearch} className="flex items-center">
-                  <div className="relative w-full">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={(e) => setSearchQuery(e.target.value)}
-                      placeholder="Rechercher..."
-                      className="w-full pl-4 pr-10 py-3 bg-white/90 border border-orange-300 rounded-xl focus:ring-2 focus:ring-yellow-400/50 focus:border-yellow-400 focus:bg-white outline-none font-sans placeholder-gray-600 shadow-lg"
-                    />
-                    <button 
-                      type="submit"
-                      className="absolute right-2 top-1/2 transform -translate-y-1/2 text-orange-600 hover:text-orange-700 bg-yellow-400 w-8 h-8 rounded-lg flex items-center justify-center shadow-md"
-                    >
-                      <Search className="w-4 h-4" />
-                    </button>
-                  </div>
-                </form>
+                <AdvancedSearchBar
+                  size="md"
+                  placeholder="Rechercher..."
+                />
               </div>
 
               {/* Mobile Sync Button */}
