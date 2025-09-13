@@ -1,12 +1,14 @@
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Calendar, Hash, CheckCircle, Clock, ExternalLink, AlertCircle } from 'lucide-react'
+import { ArrowLeft, Calendar, Hash, CheckCircle, Clock, ExternalLink, AlertCircle, Presentation, Monitor } from 'lucide-react'
 import { useThreadWithTweets } from '../hooks/useData'
 import { TweetCard } from '../components/TweetCard'
 import { LoadingSpinner } from '../components/LoadingSpinner'
+import { useState } from 'react'
 
 export function ThreadDetail() {
   const { id } = useParams<{ id: string }>()
   const { threadData, loading, error } = useThreadWithTweets(id)
+  const [presentationMode, setPresentationMode] = useState(false)
 
   if (loading) return <LoadingSpinner />
   if (error) return (
@@ -58,15 +60,39 @@ export function ThreadDetail() {
   })
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {/* Back Button */}
-      <Link 
-        to="/" 
-        className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-medium"
-      >
-        <ArrowLeft className="w-4 h-4" />
-        <span>Retour aux threads</span>
-      </Link>
+    <div className={`${presentationMode ? 'max-w-7xl' : 'max-w-4xl'} mx-auto space-y-6`}>
+      {/* Navigation and Controls */}
+      <div className="flex items-center justify-between">
+        <Link 
+          to="/" 
+          className="inline-flex items-center space-x-2 text-blue-600 hover:text-blue-800 font-medium"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Retour aux threads</span>
+        </Link>
+        
+        {/* Presentation Mode Toggle */}
+        <button
+          onClick={() => setPresentationMode(!presentationMode)}
+          className={`inline-flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${
+            presentationMode
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+          }`}
+        >
+          {presentationMode ? (
+            <>
+              <Monitor className="w-4 h-4" />
+              <span>Mode Normal</span>
+            </>
+          ) : (
+            <>
+              <Presentation className="w-4 h-4" />
+              <span>Mode Présentation</span>
+            </>
+          )}
+        </button>
+      </div>
 
       {/* Thread Header */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
@@ -148,24 +174,34 @@ export function ThreadDetail() {
       </div>
 
       {/* Tweets */}
-      <div className="space-y-1">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Thread complet ({sortedTweets.length} tweets)
-        </h2>
+      <div className={presentationMode ? 'space-y-8' : 'space-y-1'}>
+        <div className="flex items-center justify-between">
+          <h2 className={`font-semibold text-gray-900 mb-4 ${
+            presentationMode ? 'text-2xl' : 'text-xl'
+          }`}>
+            Thread complet ({sortedTweets.length} tweets)
+          </h2>
+          
+          {presentationMode && (
+            <div className="text-sm text-gray-500 bg-blue-50 px-3 py-1 rounded-full">
+              Mode Présentation Activé
+            </div>
+          )}
+        </div>
         
         {sortedTweets.length > 0 ? (
-          <div className="space-y-0">
+          <div className={presentationMode ? 'space-y-8' : 'space-y-0'}>
             {sortedTweets.map((tweet, index) => (
               <div key={tweet.id} className="relative">
-                {/* Connection Line */}
-                {index < sortedTweets.length - 1 && (
+                {/* Connection Line - Hidden in presentation mode */}
+                {!presentationMode && index < sortedTweets.length - 1 && (
                   <div className="absolute left-6 top-full w-0.5 h-4 bg-gray-200 z-10" />
                 )}
                 
                 <TweetCard 
                   tweet={tweet} 
                   mediaFiles={threadData.media_files}
-                  showBorder={index === 0 || index === sortedTweets.length - 1}
+                  showBorder={presentationMode || index === 0 || index === sortedTweets.length - 1}
                 />
               </div>
             ))}

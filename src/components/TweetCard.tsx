@@ -48,22 +48,22 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
   }
 
   return (
-    <div className={`bg-white rounded-lg p-6 ${showBorder ? 'border border-gray-200' : ''}`}>
+    <div className={`bg-white rounded-lg p-8 ${showBorder ? 'border border-gray-200' : ''} min-h-[400px]`}>
       {/* Tweet Header */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center">
-            <span className="text-white font-bold text-lg">L</span>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-4">
+          <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
+            <span className="text-white font-bold text-2xl">L</span>
           </div>
           <div>
-            <div className="flex items-center space-x-2">
-              <h4 className="font-semibold text-gray-900">@loi200812</h4>
-              <span className="text-blue-600 text-sm font-medium bg-blue-50 px-2 py-1 rounded">
+            <div className="flex items-center space-x-3">
+              <h4 className="font-bold text-xl text-gray-900">@loi200812</h4>
+              <span className="text-blue-600 text-lg font-bold bg-blue-50 px-4 py-2 rounded-lg">
                 {tweet.position}
               </span>
             </div>
-            <p className="text-sm text-gray-500 flex items-center space-x-1">
-              <Calendar className="w-3 h-3" />
+            <p className="text-base text-gray-500 flex items-center space-x-2 mt-1">
+              <Calendar className="w-4 h-4" />
               <span>{formatDate(tweet.date_posted)}</span>
             </p>
           </div>
@@ -75,75 +75,114 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
           rel="noopener noreferrer"
           className="text-gray-400 hover:text-blue-600 transition-colors"
         >
-          <ExternalLink className="w-4 h-4" />
+          <ExternalLink className="w-6 h-6" />
         </a>
       </div>
 
-      {/* Tweet Content */}
-      <div className="mb-4">
-        <p 
-          className="text-gray-800 leading-relaxed"
-          dangerouslySetInnerHTML={{ __html: formatContent(tweet.content) }}
-        />
+      {/* Main Content Layout: Image Left, Text Right */}
+      <div className="flex gap-8 items-start">
+        {/* Media Section - Left Side */}
+        {tweetMediaFiles.length > 0 && (
+          <div className="flex-shrink-0 w-1/3">
+            <div className="space-y-4">
+              {tweetMediaFiles.map((media, index) => (
+                <div key={index} className="relative group">
+                  <img 
+                    src={getLocalMediaUrl(media)}
+                    alt={`Media ${index + 1}`}
+                    className="w-full h-auto object-contain rounded-xl border border-gray-200 group-hover:opacity-90 transition-opacity shadow-lg"
+                    loading="lazy"
+                    onError={(e) => {
+                      // Fallback to original URL if local image fails
+                      const target = e.target as HTMLImageElement
+                      target.src = media.original_url
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-xl" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Text Content - Right Side */}
+        <div className={`${tweetMediaFiles.length > 0 ? 'flex-1' : 'w-full'} flex flex-col justify-center`}>
+          <div className="space-y-4">
+            <p 
+              className="text-gray-800 leading-relaxed text-xl font-medium"
+              style={{ fontSize: '1.375rem', lineHeight: '1.6' }}
+              dangerouslySetInnerHTML={{ __html: formatContent(tweet.content) }}
+            />
+            
+            {/* Engagement Stats - Moved to bottom of text */}
+            <div className="flex items-center space-x-8 pt-4 border-t border-gray-100">
+              {tweet.engagement.likes > 0 && (
+                <div className="flex items-center space-x-2 text-gray-500">
+                  <Heart className="w-5 h-5" />
+                  <span className="text-lg font-medium">{tweet.engagement.likes}</span>
+                </div>
+              )}
+              {tweet.engagement.retweets > 0 && (
+                <div className="flex items-center space-x-2 text-gray-500">
+                  <Repeat className="w-5 h-5" />
+                  <span className="text-lg font-medium">{tweet.engagement.retweets}</span>
+                </div>
+              )}
+              {tweet.engagement.replies > 0 && (
+                <div className="flex items-center space-x-2 text-gray-500">
+                  <MessageCircle className="w-5 h-5" />
+                  <span className="text-lg font-medium">{tweet.engagement.replies}</span>
+                </div>
+              )}
+              {tweet.engagement.quotes > 0 && (
+                <div className="flex items-center space-x-2 text-gray-500">
+                  <Eye className="w-5 h-5" />
+                  <span className="text-lg font-medium">{tweet.engagement.quotes}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Media */}
-      {tweetMediaFiles.length > 0 && (
-        <div className="mb-4">
-          <div className={`grid gap-3 ${
-            tweetMediaFiles.length === 1 ? 'grid-cols-1' : 
-            tweetMediaFiles.length === 2 ? 'grid-cols-1 sm:grid-cols-2' : 
-            'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-          }`}>
-            {tweetMediaFiles.map((media, index) => (
-              <div key={index} className="relative group">
-                <img 
-                  src={getLocalMediaUrl(media)}
-                  alt={`Media ${index + 1}`}
-                  className="w-full max-w-full h-auto object-contain rounded-lg border border-gray-200 group-hover:opacity-90 transition-opacity shadow-sm"
-                  loading="lazy"
-                  onError={(e) => {
-                    // Fallback to original URL if local image fails
-                    const target = e.target as HTMLImageElement
-                    target.src = media.original_url
-                  }}
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-200 rounded-lg" />
+      {/* Fallback for tweets without media - Full width text */}
+      {tweetMediaFiles.length === 0 && (
+        <div className="mt-6">
+          <p 
+            className="text-gray-800 leading-relaxed text-xl font-medium text-center"
+            style={{ fontSize: '1.5rem', lineHeight: '1.6' }}
+            dangerouslySetInnerHTML={{ __html: formatContent(tweet.content) }}
+          />
+          
+          {/* Engagement Stats for no-media tweets */}
+          <div className="flex items-center justify-center space-x-8 pt-6 border-t border-gray-100 mt-6">
+            {tweet.engagement.likes > 0 && (
+              <div className="flex items-center space-x-2 text-gray-500">
+                <Heart className="w-5 h-5" />
+                <span className="text-lg font-medium">{tweet.engagement.likes}</span>
               </div>
-            ))}
+            )}
+            {tweet.engagement.retweets > 0 && (
+              <div className="flex items-center space-x-2 text-gray-500">
+                <Repeat className="w-5 h-5" />
+                <span className="text-lg font-medium">{tweet.engagement.retweets}</span>
+              </div>
+            )}
+            {tweet.engagement.replies > 0 && (
+              <div className="flex items-center space-x-2 text-gray-500">
+                <MessageCircle className="w-5 h-5" />
+                <span className="text-lg font-medium">{tweet.engagement.replies}</span>
+              </div>
+            )}
+            {tweet.engagement.quotes > 0 && (
+              <div className="flex items-center space-x-2 text-gray-500">
+                <Eye className="w-5 h-5" />
+                <span className="text-lg font-medium">{tweet.engagement.quotes}</span>
+              </div>
+            )}
           </div>
         </div>
       )}
-
-      {/* Engagement Stats */}
-      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-        <div className="flex items-center space-x-6 text-sm text-gray-500">
-          {tweet.engagement.likes > 0 && (
-            <div className="flex items-center space-x-1">
-              <Heart className="w-4 h-4" />
-              <span>{tweet.engagement.likes}</span>
-            </div>
-          )}
-          {tweet.engagement.retweets > 0 && (
-            <div className="flex items-center space-x-1">
-              <Repeat className="w-4 h-4" />
-              <span>{tweet.engagement.retweets}</span>
-            </div>
-          )}
-          {tweet.engagement.replies > 0 && (
-            <div className="flex items-center space-x-1">
-              <MessageCircle className="w-4 h-4" />
-              <span>{tweet.engagement.replies}</span>
-            </div>
-          )}
-          {tweet.engagement.quotes > 0 && (
-            <div className="flex items-center space-x-1">
-              <Eye className="w-4 h-4" />
-              <span>{tweet.engagement.quotes}</span>
-            </div>
-          )}
-        </div>
-      </div>
     </div>
   )
 }
