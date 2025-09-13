@@ -95,9 +95,6 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
       isImageModalOpen: true,
       imageUrl: getLocalMediaUrl(tweetMediaFiles[index])
     })
-    
-    // Alert pour confirmer
-    alert(`Image ${index + 1} cliquée ! Modal devrait s'ouvrir.`)
   }
 
   // Gestion du clavier pour le modal
