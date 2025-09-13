@@ -5,30 +5,23 @@ import {
   FolderOpen, 
   FileText, 
   Calendar, 
-  Menu,
+  Menu as MenuIcon,
   BarChart3,
   LogOut,
-  Settings
+  Home
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useTheme } from '../../contexts/ThemeContext'
 import { ThemeSelector } from '../ThemeSelector'
 
-interface SidebarItem {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  path: string
-  description: string
-}
-
-  const menuItems = [
-    { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
-    { path: '/admin/categories', icon: FolderOpen, label: 'Catégories' },
-    { path: '/admin/content', icon: FileText, label: 'Contenu' },
-    { path: '/admin/scheduler', icon: Calendar, label: 'Planificateur' },
-    { path: '/admin/menus', icon: Menu, label: 'Menus' },
-    { path: '/admin/analytics', icon: BarChart3, label: 'Analytics' }
-  ]
+const menuItems = [
+  { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
+  { path: '/admin/categories', icon: FolderOpen, label: 'Catégories' },
+  { path: '/admin/content', icon: FileText, label: 'Contenu' },
+  { path: '/admin/scheduler', icon: Calendar, label: 'Planificateur' },
+  { path: '/admin/menus', icon: MenuIcon, label: 'Menus' },
+  { path: '/admin/analytics', icon: BarChart3, label: 'Analytics' }
+]
 
 export function AdminSidebar() {
   const { logout } = useAuth()
@@ -68,35 +61,35 @@ export function AdminSidebar() {
         </div>
       </div>
 
-        {/* Navigation */}
-        <nav className="flex-1 px-4 space-y-2">
-          {menuItems.map((item) => {
-            const isActive = item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path)
-            const Icon = item.icon
-            
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
-                  isActive
-                    ? theme === 'senegalais'
-                      ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white shadow-lg'
-                      : 'bg-black text-white shadow-lg'
-                    : 'text-gray-700 hover:bg-gray-100 hover:text-gray-900'
-                }`}
-              >
-                <Icon className={`mr-3 h-5 w-5 transition-colors ${
-                  isActive ? 'text-white' : 'text-gray-500 group-hover:text-gray-700'
-                }`} />
-                {!isCollapsed && (
-                  <div className="flex-1">
-                    <div className="font-medium">{item.label}</div>
-                  </div>
-                )}
-              </Link>
-            )
-          })
+      {/* Navigation */}
+      <nav className="flex-1 px-4 py-4 space-y-2">
+        {menuItems.map((item) => {
+          const isActive = item.exact ? location.pathname === item.path : location.pathname.startsWith(item.path)
+          const Icon = item.icon
+          
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className={`group flex items-center px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 ${
+                isActive
+                  ? theme === 'senegalais'
+                    ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white shadow-lg'
+                    : 'bg-white/10 text-white shadow-lg'
+                  : 'text-white/70 hover:text-white hover:bg-white/5'
+              }`}
+            >
+              <Icon className={`mr-3 h-5 w-5 transition-colors ${
+                isActive ? 'text-white' : 'text-white/70 group-hover:text-white'
+              }`} />
+              {!isCollapsed && (
+                <div className="flex-1">
+                  <div className="font-medium">{item.label}</div>
+                </div>
+              )}
+            </Link>
+          )
+        })}
       </nav>
 
       {/* Footer */}
