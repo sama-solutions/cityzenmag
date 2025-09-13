@@ -85,6 +85,7 @@ export function Header() {
   }
 
   return (
+    <>
     <header className={`shadow-2xl border-b-4 ${
       theme === 'senegalais'
         ? 'bg-gradient-to-r from-orange-800 via-blue-900 to-yellow-600 border-yellow-400/30'
@@ -412,15 +413,14 @@ export function Header() {
             </div>
           </div>
         )}
-          </div>
-        </div>
-      </header>
+      </div>
+    </header>
 
-      {/* Panel des favoris */}
-      <FavoritesPanel
-        isOpen={showFavorites}
-        onClose={() => setShowFavorites(false)}
-      />
+    {/* Panel des favoris */}
+    <FavoritesPanel
+      isOpen={showFavorites}
+      onClose={() => setShowFavorites(false)}
+    />
     </>
   )
 }

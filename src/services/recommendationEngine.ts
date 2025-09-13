@@ -87,7 +87,7 @@ export class RecommendationEngine {
         id: i.id,
         type: 'interviews',
         title: i.title,
-        description: i.summary,
+        description: i.description || '',
         publishedAt: i.publishedAt,
         author: i.interviewee.name,
         category: i.category,

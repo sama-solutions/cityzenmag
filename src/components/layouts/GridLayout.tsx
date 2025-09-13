@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import type { Thread } from '../../types/thread'
+import type { Thread } from '../../types/database'
 
 interface GridLayoutProps {
   threads: Thread[]
