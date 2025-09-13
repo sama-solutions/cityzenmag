@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "start": "vite --port 3002",
+    "start:clean": "./scripts/start-clean.sh",
+    "start:force": "node scripts/start-clean.cjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:prod": "BUILD_MODE=prod tsc -b && vite build",
