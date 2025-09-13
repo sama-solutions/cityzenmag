@@ -1,0 +1,91 @@
+#!/usr/bin/env node
+
+console.log('🔍 Diagnostic Complet - Agrandissement Photos')
+console.log('=' .repeat(60))
+
+console.log('\n📋 Étapes de diagnostic systématique:')
+
+console.log('\n1️⃣ ÉTAPE 1: Vérification des données')
+console.log('   🌐 Aller sur: http://localhost:3003/')
+console.log('   🔧 Ouvrir DevTools (F12) → Console')
+console.log('   👀 Observer les logs:')
+console.log('      - "🔍 useThreadWithTweets: Récupération du thread [ID]"')
+console.log('      - "✅ useThreadWithTweets: X tweets récupérés"')
+console.log('      - "✅ useThreadWithTweets: X médias récupérés"')
+
+console.log('\n2️⃣ ÉTAPE 2: Analyse des médias par tweet')
+console.log('   👀 Observer les logs:')
+console.log('      - "🖼️ TweetCard media debug:"')
+console.log('      - "✅ Images disponibles pour ce tweet: X"')
+console.log('      - "⚠️ Aucune image pour ce tweet"')
+
+console.log('\n3️⃣ ÉTAPE 3: Test d\'interaction')
+console.log('   🖱️ Cliquer sur une image (si visible)')
+console.log('   👀 Observer les logs:')
+console.log('      - "🖼️ Image clicked:"')
+console.log('      - "🖼️ Modal state updated:"')
+
+console.log('\n4️⃣ ÉTAPE 4: Vérification du rendu')
+console.log('   🔍 Inspecter l\'élément modal')
+console.log('   👀 Chercher: <div class="fixed inset-0 z-50">')
+console.log('   ✅ Vérifier la visibilité du modal')
+
+console.log('\n🚨 DIAGNOSTICS PAR SYMPTÔME:')
+
+console.log('\n❌ SYMPTÔME A: "0 médias récupérés"')
+console.log('   🔧 CAUSE: Base de données vide')
+console.log('   💡 SOLUTION:')
+console.log('      1. Cliquer sur le bouton "Sync" dans l\'interface')
+console.log('      2. Attendre la synchronisation complète')
+console.log('      3. Rafraîchir la page (Ctrl+F5)')
+console.log('      4. Retester')
+
+console.log('\n❌ SYMPTÔME B: "Médias récupérés mais aucune image visible"')
+console.log('   🔧 CAUSE: Problème de filtrage par tweet_id')
+console.log('   💡 SOLUTION:')
+console.log('      1. Vérifier les logs "allMediaFiles" vs "mediaFiles"')
+console.log('      2. Contrôler la correspondance des tweet_id')
+console.log('      3. Vérifier les types de données (string vs number)')
+
+console.log('\n❌ SYMPTÔME C: "Images visibles mais clic non détecté"')
+console.log('   🔧 CAUSE: Problème d\'event handler')
+console.log('   💡 SOLUTION:')
+console.log('      1. Vérifier l\'attribut onClick sur l\'image')
+console.log('      2. Tester avec un alert() simple')
+console.log('      3. Contrôler les conflits d\'événements')
+
+console.log('\n❌ SYMPTÔME D: "Clic détecté mais modal invisible"')
+console.log('   🔧 CAUSE: Problème CSS ou condition de rendu')
+console.log('   💡 SOLUTION:')
+console.log('      1. Vérifier isImageModalOpen = true')
+console.log('      2. Augmenter le z-index (z-50 → z-[9999])')
+console.log('      3. Tester avec styles inline')
+
+console.log('\n📊 CHECKLIST DE VALIDATION:')
+console.log('□ Application démarre sans erreur')
+console.log('□ Connexion Supabase établie')
+console.log('□ Threads récupérés (> 0)')
+console.log('□ Tweets récupérés (> 0)')
+console.log('□ Médias récupérés (> 0)')
+console.log('□ Images visibles dans l\'interface')
+console.log('□ Hover effects fonctionnels')
+console.log('□ Clic détecté dans les logs')
+console.log('□ État modal mis à jour')
+console.log('□ Modal rendu dans le DOM')
+console.log('□ Modal visible à l\'écran')
+
+console.log('\n🔄 ACTIONS DE RÉCUPÉRATION:')
+console.log('1. 🔄 Synchronisation: Bouton "Sync" → Attendre → Rafraîchir')
+console.log('2. 🧹 Cache: Ctrl+Shift+R pour vider le cache')
+console.log('3. 🔒 Onglet privé: Tester dans un nouvel onglet privé')
+console.log('4. 🌐 Réseau: DevTools → Network pour voir les requêtes')
+console.log('5. 🐛 Console: Chercher les erreurs JavaScript')
+
+console.log('\n🎯 OBJECTIF:')
+console.log('Identifier précisément à quelle étape le processus échoue')
+console.log('pour appliquer la correction appropriée.')
+
+console.log('\n🌐 URL de test: http://localhost:3003/')
+console.log('📱 DevTools: F12 → Console + Elements + Network')
+
+process.exit(0)

@@ -30,8 +30,16 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
     tweetId: tweet.tweet_id,
     totalMediaFiles: mediaFiles.length,
     tweetMediaFiles: tweetMediaFiles.length,
-    mediaFiles: tweetMediaFiles.map(m => ({ id: m.id, tweet_id: m.tweet_id, local_path: m.local_path }))
+    mediaFiles: tweetMediaFiles.map(m => ({ id: m.id, tweet_id: m.tweet_id, local_path: m.local_path })),
+    allMediaFiles: mediaFiles.map(m => ({ id: m.id, tweet_id: m.tweet_id, local_path: m.local_path }))
   })
+  
+  // Debug: Test si on a des images
+  if (tweetMediaFiles.length > 0) {
+    console.log('✅ Images disponibles pour ce tweet:', tweetMediaFiles.length)
+  } else {
+    console.log('⚠️ Aucune image pour ce tweet. Total médias:', mediaFiles.length)
+  }
   
   const formatContent = (content: string) => {
     // First, convert URLs to clickable links

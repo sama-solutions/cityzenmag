@@ -187,7 +187,7 @@ export function useThreadWithTweets(threadId: string | undefined) {
         setLoading(true)
         setError(null)
         
-        // console.log(`🔍 useThreadWithTweets: Récupération du thread ${threadId}`)
+        console.log(`🔍 useThreadWithTweets: Récupération du thread ${threadId}`)
         
         // Fetch thread data
         const { data: thread, error: threadError } = await supabase
@@ -220,7 +220,7 @@ export function useThreadWithTweets(threadId: string | undefined) {
           throw tweetsError
         }
 
-        // console.log(`✅ useThreadWithTweets: ${tweets?.length || 0} tweets récupérés`)
+        console.log(`✅ useThreadWithTweets: ${tweets?.length || 0} tweets récupérés`)
 
         // Fetch media files for this thread's tweets
         const tweetIds = tweets?.map(t => t.tweet_id) || []
@@ -236,7 +236,7 @@ export function useThreadWithTweets(threadId: string | undefined) {
             // console.error('⚠️ useThreadWithTweets: Erreur médias:', mediaError)
           } else {
             mediaFiles = media || []
-            // console.log(`✅ useThreadWithTweets: ${mediaFiles.length} médias récupérés`)
+            console.log(`✅ useThreadWithTweets: ${mediaFiles.length} médias récupérés`)
           }
         } else {
           // console.log('⚠️ useThreadWithTweets: Aucun tweet, pas de médias à récupérer')
