@@ -201,7 +201,7 @@ F12 → Console → Chercher les erreurs JavaScript
 
 ## 🌐 **URLs et Outils**
 
-**Application** : http://localhost:3003/  
+**Application** : http://localhost:3002/  
 **DevTools** : F12 → Console + Elements + Network  
 **Supabase Dashboard** : https://supabase.com/dashboard  
 
@@ -218,7 +218,8 @@ node scripts/test-agrandissement-logs.cjs
 
 **Identifier précisément** à quelle étape le processus d'agrandissement échoue pour appliquer la **correction appropriée** et restaurer la fonctionnalité complète.
 
-**Status** : 🔧 **DIAGNOSTIC PRÊT** - Outils et logs activés  
+**Status** : ✅ **DIAGNOSTIC COMPLET PRÊT** - Port corrigé + Outils activés  
+**URL Correcte** : http://localhost:3002/  
 **Action** : **Test immédiat** avec observation des logs  
 **Résultat attendu** : **Identification du symptôme** et **correction ciblée**
 

@@ -5,7 +5,7 @@ console.log('=' .repeat(60))
 
 console.log('\n📋 Instructions de test:')
 console.log('1. L\'application démarre avec des logs de debug activés')
-console.log('2. Ouvrir http://localhost:3003/ dans le navigateur')
+console.log('2. Ouvrir http://localhost:3002/ dans le navigateur')
 console.log('3. Ouvrir les DevTools (F12) → onglet Console')
 console.log('4. Cliquer sur un thread avec des images')
 
@@ -44,7 +44,7 @@ console.log('- handleImageClick appelé avec l\'index correct')
 console.log('- isImageModalOpen = true après clic')
 console.log('- Modal rendu avec z-50 et position fixed')
 
-console.log('\n🌐 URL de test: http://localhost:3003/')
+console.log('\n🌐 URL de test: http://localhost:3002/')
 console.log('📱 Ouvrir DevTools: F12 → Console')
 console.log('🖱️ Cliquer sur une image et observer les logs')
 

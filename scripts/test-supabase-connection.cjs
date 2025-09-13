@@ -5,7 +5,7 @@ console.log('=' .repeat(60))
 
 console.log('\n📋 Vérifications de connectivité:')
 console.log('1. L\'application démarre avec logs activés')
-console.log('2. Ouvrir http://localhost:3003/ dans le navigateur')
+console.log('2. Ouvrir http://localhost:3002/ dans le navigateur')
 console.log('3. Ouvrir DevTools (F12) → Console')
 console.log('4. Observer les logs de récupération de données')
 
@@ -53,7 +53,7 @@ console.log('- Quelques médias associés aux tweets')
 console.log('- Pas d\'erreurs de connexion')
 
 console.log('\n🌐 URLs importantes:')
-console.log('- Application: http://localhost:3003/')
+console.log('- Application: http://localhost:3002/')
 console.log('- Supabase Dashboard: https://supabase.com/dashboard')
 
 console.log('\n💡 Test rapide:')

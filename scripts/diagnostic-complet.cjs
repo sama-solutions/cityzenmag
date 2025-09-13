@@ -5,8 +5,8 @@ console.log('=' .repeat(60))
 
 console.log('\n📋 Étapes de diagnostic systématique:')
 
-console.log('\n1️⃣ ÉTAPE 1: Vérification des données')
-console.log('   🌐 Aller sur: http://localhost:3003/')
+console.log('1️⃣ ÉTAPE 1: Vérification des données')
+console.log('   🌐 Aller sur: http://localhost:3002/')
 console.log('   🔧 Ouvrir DevTools (F12) → Console')
 console.log('   👀 Observer les logs:')
 console.log('      - "🔍 useThreadWithTweets: Récupération du thread [ID]"')
@@ -85,7 +85,7 @@ console.log('\n🎯 OBJECTIF:')
 console.log('Identifier précisément à quelle étape le processus échoue')
 console.log('pour appliquer la correction appropriée.')
 
-console.log('\n🌐 URL de test: http://localhost:3003/')
+console.log('\n🌐 URL de test: http://localhost:3002/')
 console.log('📱 DevTools: F12 → Console + Elements + Network')
 
 process.exit(0)
