@@ -1,10 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import { supabase } from '../lib/supabase'
-import type { User } from '@supabase/supabase-js'
+import React, { createContext, useContext, useState } from 'react'
 import type { AdminUser } from '../types/admin'
 
 interface AuthContextType {
-  user: User | null
+  user: any | null
   adminUser: AdminUser | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<any>
@@ -16,84 +14,71 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<any | null>(null)
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  // Charger l'utilisateur au démarrage
-  useEffect(() => {
-    async function loadUser() {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        setUser(user)
-        
-        if (user) {
-          await loadAdminUser(user.id)
-        }
-      } catch (error) {
-        console.error('Erreur chargement utilisateur:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadUser()
-
-    // Écouter les changements d'authentification
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user || null)
-        
-        if (session?.user) {
-          await loadAdminUser(session.user.id)
-        } else {
-          setAdminUser(null)
-        }
-        
-        setLoading(false)
-      }
-    )
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const loadAdminUser = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('*')
-        .eq('user_id', userId)
-        .eq('is_active', true)
-        .maybeSingle()
-      
-      if (error) {
-        console.error('Erreur chargement admin user:', error)
-        return
-      }
-      
-      setAdminUser(data)
-    } catch (error) {
-      console.error('Erreur loadAdminUser:', error)
-    }
-  }
+  const [loading, setLoading] = useState(false)
 
   const signIn = async (email: string, password: string) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    })
-    
-    if (error) throw error
-    return data
+    try {
+      setLoading(true)
+      
+      // Simulation d'authentification pour le développement
+      if (email === 'admin@cityzenmag.com' && password === 'admin123') {
+        const mockUser = { id: '1', email }
+        const mockAdminUser: AdminUser = {
+          id: '1',
+          user_id: '1',
+          email,
+          full_name: 'Administrateur CityzenMag',
+          role: 'super_admin',
+          permissions: ['read', 'write', 'delete', 'admin'],
+          is_active: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }
+        
+        setUser(mockUser)
+        setAdminUser(mockAdminUser)
+        
+        // Sauvegarder dans localStorage pour persistance
+        localStorage.setItem('cityzenmag-user', JSON.stringify(mockUser))
+        localStorage.setItem('cityzenmag-admin', JSON.stringify(mockAdminUser))
+        
+        return { user: mockUser }
+      } else {
+        throw new Error('Identifiants incorrects')
+      }
+    } catch (error) {
+      throw error
+    } finally {
+      setLoading(false)
+    }
   }
 
   const signOut = async () => {
-    const { error } = await supabase.auth.signOut()
-    if (error) throw error
-    
     setUser(null)
     setAdminUser(null)
+    localStorage.removeItem('cityzenmag-user')
+    localStorage.removeItem('cityzenmag-admin')
   }
+
+  // Charger l'utilisateur depuis localStorage au démarrage
+  React.useEffect(() => {
+    try {
+      const savedUser = localStorage.getItem('cityzenmag-user')
+      const savedAdmin = localStorage.getItem('cityzenmag-admin')
+      
+      if (savedUser) {
+        setUser(JSON.parse(savedUser))
+      }
+      
+      if (savedAdmin) {
+        setAdminUser(JSON.parse(savedAdmin))
+      }
+    } catch (error) {
+      console.error('Erreur chargement utilisateur depuis localStorage:', error)
+    }
+  }, [])
 
   const isAdmin = !!(user && adminUser)
 
