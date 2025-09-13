@@ -70,6 +70,7 @@ export function TweetCard({ tweet, mediaFiles, showBorder = true }: TweetCardPro
 
   const handleImageClick = (index: number) => {
     console.log('🖼️ Image clicked:', { index, tweetMediaFilesLength: tweetMediaFiles.length })
+    alert(`Image ${index + 1} cliquée ! Total images: ${tweetMediaFiles.length}`)
     setSelectedImageIndex(index)
     setIsImageModalOpen(true)
     console.log('🖼️ Modal state updated:', { selectedImageIndex: index, isImageModalOpen: true })

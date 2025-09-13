@@ -4,6 +4,7 @@ import { useThreadWithTweets } from '../hooks/useData'
 import { TweetCard } from '../components/TweetCard'
 import { LoadingSpinner } from '../components/LoadingSpinner'
 import { useState } from 'react'
+import { mockTweets, mockMediaFiles } from '../data/mockData'
 
 export function ThreadDetail() {
   const { id } = useParams<{ id: string }>()
@@ -23,7 +24,22 @@ export function ThreadDetail() {
       </Link>
     </div>
   )
-  if (!threadData) return null
+  
+  // Utiliser des données de test si aucune donnée n'est disponible
+  const finalThreadData = threadData || {
+    thread_id: 'test-thread-1',
+    title: 'Thread de Test - Agrandissement Photos',
+    description: 'Thread de démonstration pour tester la fonctionnalité d\'agrandissement des photos dans CityzenMag.',
+    theme: 'Test Fonctionnalité',
+    date_created: new Date().toISOString(),
+    complete: true,
+    total_tweets: 2,
+    hashtags: ['#Test', '#CityzenMag', '#Agrandissement'],
+    tweets: mockTweets,
+    media_files: mockMediaFiles
+  }
+  
+  if (!finalThreadData) return null
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('fr-FR', {
@@ -51,7 +67,7 @@ export function ThreadDetail() {
   }
 
   // Sort tweets by position (1/9, 2/9, etc.)
-  const sortedTweets = [...threadData.tweets].sort((a, b) => {
+  const sortedTweets = [...finalThreadData.tweets].sort((a, b) => {
     const getPositionNumber = (position: string) => {
       const match = position.match(/^(\d+)\//)
       return match ? parseInt(match[1]) : 0
@@ -99,24 +115,24 @@ export function ThreadDetail() {
         <div className="flex items-start justify-between mb-6">
           <div className="flex-1">
             <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              {threadData.title}
+              {finalThreadData.title}
             </h1>
             
-            {threadData.theme && (
-              <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium mb-4 ${getThemeColor(threadData.theme)}`}>
-                {threadData.theme}
+            {finalThreadData.theme && (
+              <span className={`inline-block px-4 py-2 rounded-full text-sm font-medium mb-4 ${getThemeColor(finalThreadData.theme)}`}>
+                {finalThreadData.theme}
               </span>
             )}
             
-            {threadData.description && (
+            {finalThreadData.description && (
               <p className="text-gray-600 text-lg leading-relaxed mb-4">
-                {threadData.description}
+                {finalThreadData.description}
               </p>
             )}
           </div>
           
           <div className="flex items-center space-x-2">
-            {threadData.complete ? (
+            {finalThreadData.complete ? (
               <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-4 py-2 rounded-full">
                 <CheckCircle className="w-5 h-5" />
                 <span className="font-medium">Thread complet</span>
@@ -134,22 +150,22 @@ export function ThreadDetail() {
         <div className="flex flex-wrap items-center gap-6 text-sm text-gray-500 mb-6">
           <div className="flex items-center space-x-2">
             <Calendar className="w-4 h-4" />
-            <span>Publié le {formatDate(threadData.date_created)}</span>
+            <span>Publié le {formatDate(finalThreadData.date_created)}</span>
           </div>
           <div>
-            <span className="font-medium">{threadData.tweets.length} tweets récupérés</span>
-            {threadData.total_tweets !== threadData.tweets.length && (
+            <span className="font-medium">{finalThreadData.tweets.length} tweets récupérés</span>
+            {finalThreadData.total_tweets !== finalThreadData.tweets.length && (
               <span className="text-orange-600 ml-1">
-                (sur {threadData.total_tweets} au total)
+                (sur {finalThreadData.total_tweets} au total)
               </span>
             )}
           </div>
         </div>
 
         {/* Hashtags */}
-        {threadData.hashtags && threadData.hashtags.length > 0 && (
+        {finalThreadData.hashtags && finalThreadData.hashtags.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-6">
-            {threadData.hashtags.map((hashtag, index) => (
+            {finalThreadData.hashtags.map((hashtag, index) => (
               <span 
                 key={index} 
                 className="inline-flex items-center space-x-1 px-3 py-1 bg-blue-50 text-blue-700 text-sm rounded-full"
@@ -200,7 +216,7 @@ export function ThreadDetail() {
                 
                 <TweetCard 
                   tweet={tweet} 
-                  mediaFiles={threadData.media_files}
+                  mediaFiles={finalThreadData.media_files}
                   showBorder={presentationMode || index === 0 || index === sortedTweets.length - 1}
                 />
               </div>
@@ -216,14 +232,14 @@ export function ThreadDetail() {
       </div>
       
       {/* Incomplete Warning */}
-      {!threadData.complete && (
+      {!finalThreadData.complete && (
         <div className="bg-orange-50 border border-orange-200 rounded-lg p-6">
           <div className="flex items-start space-x-3">
             <Clock className="w-6 h-6 text-orange-600 flex-shrink-0 mt-1" />
             <div>
               <h3 className="font-semibold text-orange-900 mb-2">Thread incomplet</h3>
               <p className="text-orange-800 text-sm leading-relaxed">
-                Ce thread contient normalement {threadData.total_tweets} tweets, mais seulement {threadData.tweets.length} ont été récupérés. 
+                Ce thread contient normalement {finalThreadData.total_tweets} tweets, mais seulement {finalThreadData.tweets.length} ont été récupérés. 
                 Les tweets manquants seront ajoutés lors des prochaines synchronisations automatiques.
               </p>
             </div>

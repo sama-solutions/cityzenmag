@@ -53,6 +53,21 @@ export function Home() {
   
   return (
     <div className="space-y-8">
+      {/* Lien de test pour l'agrandissement des photos */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h3 className="font-semibold text-blue-900 mb-1">Test Agrandissement Photos</h3>
+            <p className="text-blue-700 text-sm">Thread de démonstration avec images pour tester la fonctionnalité d'agrandissement</p>
+          </div>
+          <Link
+            to="/thread/test-thread-1"
+            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          >
+            Tester Agrandissement 🖼️
+          </Link>
+        </div>
+      </div>
       {/* Hero Section avec dernier post */}
       {latestThread ? (
         <div className={`relative overflow-hidden rounded-3xl shadow-2xl ${
