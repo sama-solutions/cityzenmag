@@ -1,76 +1,72 @@
 # Dependencies
 node_modules/
-.pnpm-store/
-
-# Build outputs
-dist/
-build/
-.vite/
-.tmp/
-
-# Environment files
-.env
-.env.local
-.env.production
-.env.development
-
-# TypeScript
-*.tsbuildinfo
-.tsbuildinfo
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-logs/
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Runtime data
-pids/
-*.pid
-*.seed
-*.pid.lock
+# Production builds
+dist/
+build/
 
-# Coverage directory used by tools like istanbul
-coverage/
-*.lcov
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Logs
+*.log
+logs/
+server.log
 
 # Temporary files
 *.tmp
 *.temp
+temp/
+tmp/
 
 # Backup files
+backup*/
 *.backup
 *.bak
 
-# Test files temporaires
-test-*.js
-debug-*.js
-verification-*.js
+# Test coverage
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.parcel-cache/
 
 # Documentation temporaire
-diagnostic-*.md
-diagnostic-*.sh
-test-exhaustif-*.sh
-test-rapport-*.md
-RAPPORT-*.md
-RESOLUTION-*.md
-SCRIPTS-*.md
-STATUS-*.md
+GUIDE_*.md
+RAPPORT_*.md
+DIAGNOSTIC_*.md
+VALIDATION_*.md
+RESUME_*.md
+PHASE*.md
+TEST_*.md
+BACKUP_*.txt
+*.backup.md
 
-# Fichiers de sauvegarde
-*.loi200812
-loi200812-blog/
-
-# Supabase local
-.supabase/
+# Scripts de développement
+backup*.sh
+test-*.sh
+diagnostic*.sh

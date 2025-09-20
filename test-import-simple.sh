@@ -1,3 +1,0 @@
-#!/bin/bash\n\necho \"Test import Twitter\"\n\ncurl -X POST \"https://ghpptudzucrnygrozpht.supabase.co/functions/v1/twitter-sync\" \\\n  -H \"apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdocHB0dWR6dWNybnlncm96cGh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MzYzODUsImV4cCI6MjA3MzIxMjM4NX0.nJgb0WAdzxeCmPuxb6ttatYdraLWyrA2-z89JAnXwc4\" \\\n  -H \"Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdocHB0dWR6dWNybnlncm96cGh0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc2MzYzODUsImV4cCI6MjA3MzIxMjM4NX0.nJgb0WAdzxeCmPuxb6ttatYdraLWyrA2-z89JAnXwc4\" \\\n  -H \"Content-Type: application/json\" \\\n  -d '{\"mode\": \"latest\", \"limit\": 10}'\n\necho \"\"\necho \"Test terminé\""
-  }
-]
