@@ -42,7 +42,7 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
         className={`block p-4 rounded-xl border transition-all hover:shadow-md ${
           theme === 'senegalais'
             ? 'bg-white border-orange-200 hover:border-orange-300'
-            : 'bg-white border-gray-200 hover:border-gray-300'
+            : 'theme-surface theme-border border hover:shadow-md'
         }`}
       >
         <div className="flex items-start space-x-4">
@@ -67,17 +67,17 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
 
           {/* Contenu */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-gray-900 line-clamp-2 mb-2">
+            <h3 className="font-bold theme-text line-clamp-2 mb-2">
               {report.title}
             </h3>
-            <div className="flex items-center space-x-2 text-sm text-gray-600 mb-2">
+            <div className="flex items-center space-x-2 text-sm theme-text-muted mb-2">
               <User className="w-3 h-3" />
               <span>{report.photographer.name}</span>
               <span>•</span>
               <MapPin className="w-3 h-3" />
               <span>{report.location.name}</span>
             </div>
-            <div className="flex items-center space-x-4 text-xs text-gray-500">
+            <div className="flex items-center space-x-4 text-xs theme-text-muted">
               <span className="flex items-center space-x-1">
                 <ImageIcon className="w-3 h-3" />
                 <span>{report.images.length} photos</span>
@@ -106,7 +106,7 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
       className={`block group overflow-hidden rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
         theme === 'senegalais'
           ? 'bg-white border-orange-200 hover:border-orange-300'
-          : 'bg-white border-gray-200 hover:border-gray-300'
+          : 'theme-surface border theme-border hover:shadow-xl'
       }`}
     >
       {/* Image de couverture */}
@@ -125,10 +125,10 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
           }`}>
             <div className="text-center">
               <Camera className={`w-16 h-16 mx-auto mb-2 ${
-                theme === 'senegalais' ? 'text-orange-600' : 'text-gray-600'
+                theme === 'senegalais' ? 'text-orange-600' : 'theme-text-muted'
               }`} />
               <p className={`text-sm font-medium ${
-                theme === 'senegalais' ? 'text-orange-800' : 'text-gray-700'
+                theme === 'senegalais' ? 'text-orange-800' : 'theme-text'
               }`}>
                 Reportage Photo
               </p>
@@ -177,13 +177,13 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
       {/* Contenu */}
       <div className="p-6 space-y-4">
         {/* Titre */}
-        <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="text-xl font-bold theme-text line-clamp-2 group-hover:text-orange-600 transition-colors">
           {report.title}
         </h3>
 
         {/* Description */}
         {report.description && (
-          <p className="text-gray-600 line-clamp-2 leading-relaxed">
+          <p className="theme-text-muted line-clamp-2 leading-relaxed">
             {report.description}
           </p>
         )}
@@ -205,10 +205,10 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
               }`} />
             </div>
           )}
-          <div>
-            <p className="font-medium text-gray-900">{report.photographer.name}</p>
+            <div>
+            <p className="font-medium theme-text">{report.photographer.name}</p>
             {report.photographer.specialties && report.photographer.specialties.length > 0 && (
-              <p className="text-sm text-gray-600">{report.photographer.specialties[0]}</p>
+              <p className="text-sm theme-text-muted">{report.photographer.specialties[0]}</p>
             )}
           </div>
         </div>
@@ -227,14 +227,14 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
               </span>
             ))}
             {report.tags.length > 3 && (
-              <span className="text-xs text-gray-500">+{report.tags.length - 3} autres</span>
+              <span className="text-xs theme-text-muted">+{report.tags.length - 3} autres</span>
             )}
           </div>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
+        <div className="flex items-center justify-between pt-4 border-t theme-border">
+          <div className="flex items-center space-x-4 text-sm theme-text-muted">
             <span className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
               <span>
@@ -256,7 +256,7 @@ export function PhotoReportCard({ report, compact = false }: PhotoReportCardProp
           </div>
 
           <div className={`text-sm font-medium ${
-            theme === 'senegalais' ? 'text-orange-600' : 'text-gray-900'
+            theme === 'senegalais' ? 'text-orange-600' : 'theme-text'
           }`}>
             Voir la galerie →
           </div>

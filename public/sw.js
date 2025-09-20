@@ -1,3 +1,248 @@
-// Service Worker pour CityzenMag PWA\nconst CACHE_NAME = 'cityzenmag-v1.0.0'\nconst STATIC_CACHE = 'cityzenmag-static-v1'\nconst DYNAMIC_CACHE = 'cityzenmag-dynamic-v1'\nconst API_CACHE = 'cityzenmag-api-v1'\n\n// Ressources à mettre en cache immédiatement\nconst STATIC_ASSETS = [\n  '/',\n  '/manifest.json',\n  '/icons/icon-192x192.png',\n  '/icons/icon-512x512.png'\n]\n\n// URLs des API à mettre en cache\nconst API_URLS = [\n  'https://ghpptudzucrnygrozpht.supabase.co/rest/v1/threads',\n  'https://ghpptudzucrnygrozpht.supabase.co/rest/v1/tweets',\n  'https://ghpptudzucrnygrozpht.supabase.co/rest/v1/media_files'\n]\n\n// Installation du Service Worker\nself.addEventListener('install', (event) => {\n  console.log('🔧 Service Worker: Installation')\n  \n  event.waitUntil(\n    caches.open(STATIC_CACHE)\n      .then((cache) => {\n        console.log('📦 Service Worker: Mise en cache des ressources statiques')\n        return cache.addAll(STATIC_ASSETS)\n      })\n      .then(() => {\n        console.log('✅ Service Worker: Installation terminée')\n        return self.skipWaiting()\n      })\n      .catch((error) => {\n        console.error('❌ Service Worker: Erreur installation:', error)\n      })\n  )\n})\n\n// Activation du Service Worker\nself.addEventListener('activate', (event) => {\n  console.log('🚀 Service Worker: Activation')\n  \n  event.waitUntil(\n    caches.keys()\n      .then((cacheNames) => {\n        return Promise.all(\n          cacheNames.map((cacheName) => {\n            if (cacheName !== STATIC_CACHE && \n                cacheName !== DYNAMIC_CACHE && \n                cacheName !== API_CACHE) {\n              console.log('🗑️ Service Worker: Suppression ancien cache:', cacheName)\n              return caches.delete(cacheName)\n            }\n          })\n        )\n      })\n      .then(() => {\n        console.log('✅ Service Worker: Activation terminée')\n        return self.clients.claim()\n      })\n  )\n})\n\n// Interception des requêtes\nself.addEventListener('fetch', (event) => {\n  const { request } = event\n  const url = new URL(request.url)\n  \n  // Stratégie pour les ressources statiques\n  if (STATIC_ASSETS.some(asset => request.url.includes(asset))) {\n    event.respondWith(\n      caches.match(request)\n        .then((response) => {\n          return response || fetch(request)\n        })\n    )\n    return\n  }\n  \n  // Stratégie pour les API Supabase (Cache First avec fallback)\n  if (url.hostname.includes('supabase.co')) {\n    event.respondWith(\n      caches.open(API_CACHE)\n        .then((cache) => {\n          return cache.match(request)\n            .then((cachedResponse) => {\n              if (cachedResponse) {\n                // Retourner la réponse en cache et mettre à jour en arrière-plan\n                fetch(request)\n                  .then((fetchResponse) => {\n                    if (fetchResponse.ok) {\n                      cache.put(request, fetchResponse.clone())\n                    }\n                  })\n                  .catch(() => {\n                    // Ignorer les erreurs de mise à jour en arrière-plan\n                  })\n                return cachedResponse\n              } else {\n                // Pas de cache, essayer de récupérer et mettre en cache\n                return fetch(request)\n                  .then((fetchResponse) => {\n                    if (fetchResponse.ok) {\n                      cache.put(request, fetchResponse.clone())\n                    }\n                    return fetchResponse\n                  })\n                  .catch(() => {\n                    // En cas d'erreur, retourner une réponse par défaut\n                    return new Response(\n                      JSON.stringify({ \n                        error: 'Données non disponibles hors ligne',\n                        offline: true \n                      }),\n                      {\n                        status: 200,\n                        headers: { 'Content-Type': 'application/json' }\n                      }\n                    )\n                  })\n              }\n            })\n        })\n    )\n    return\n  }\n  \n  // Stratégie pour les autres ressources (Network First avec cache fallback)\n  event.respondWith(\n    fetch(request)\n      .then((response) => {\n        // Si la réponse est OK, la mettre en cache\n        if (response.ok) {\n          const responseClone = response.clone()\n          caches.open(DYNAMIC_CACHE)\n            .then((cache) => {\n              cache.put(request, responseClone)\n            })\n        }\n        return response\n      })\n      .catch(() => {\n        // En cas d'échec réseau, chercher en cache\n        return caches.match(request)\n          .then((cachedResponse) => {\n            if (cachedResponse) {\n              return cachedResponse\n            }\n            \n            // Si c'est une navigation, retourner la page d'accueil en cache\n            if (request.mode === 'navigate') {\n              return caches.match('/')\n            }\n            \n            // Sinon, retourner une réponse d'erreur\n            return new Response(\n              'Contenu non disponible hors ligne',\n              {\n                status: 503,\n                statusText: 'Service Unavailable',\n                headers: { 'Content-Type': 'text/plain' }\n              }\n            )\n          })\n      })\n  )\n})\n\n// Gestion des messages du client\nself.addEventListener('message', (event) => {\n  if (event.data && event.data.type === 'SKIP_WAITING') {\n    self.skipWaiting()\n  }\n  \n  if (event.data && event.data.type === 'GET_VERSION') {\n    event.ports[0].postMessage({ version: CACHE_NAME })\n  }\n  \n  if (event.data && event.data.type === 'CLEAR_CACHE') {\n    caches.keys().then((cacheNames) => {\n      return Promise.all(\n        cacheNames.map((cacheName) => caches.delete(cacheName))\n      )\n    }).then(() => {\n      event.ports[0].postMessage({ success: true })\n    })\n  }\n})\n\n// Synchronisation en arrière-plan\nself.addEventListener('sync', (event) => {\n  if (event.tag === 'background-sync') {\n    console.log('🔄 Service Worker: Synchronisation en arrière-plan')\n    event.waitUntil(\n      // Ici on pourrait synchroniser les données avec Supabase\n      Promise.resolve()\n    )\n  }\n})\n\n// Notifications push (pour plus tard)\nself.addEventListener('push', (event) => {\n  if (event.data) {\n    const data = event.data.json()\n    const options = {\n      body: data.body,\n      icon: '/icons/icon-192x192.png',\n      badge: '/icons/icon-72x72.png',\n      vibrate: [100, 50, 100],\n      data: {\n        dateOfArrival: Date.now(),\n        primaryKey: data.primaryKey\n      },\n      actions: [\n        {\n          action: 'explore',\n          title: 'Lire l\\'article',\n          icon: '/icons/icon-96x96.png'\n        },\n        {\n          action: 'close',\n          title: 'Fermer',\n          icon: '/icons/icon-96x96.png'\n        }\n      ]\n    }\n    \n    event.waitUntil(\n      self.registration.showNotification(data.title, options)\n    )\n  }\n})\n\n// Gestion des clics sur notifications\nself.addEventListener('notificationclick', (event) => {\n  event.notification.close()\n  \n  if (event.action === 'explore') {\n    event.waitUntil(\n      clients.openWindow('/')\n    )\n  }\n})\n\nconsole.log('🎉 Service Worker CityzenMag chargé avec succès')"
-  }
+// Service Worker pour CityzenMag PWA
+const CACHE_NAME = 'cityzenmag-v1.0.0'
+const STATIC_CACHE = 'cityzenmag-static-v1'
+const DYNAMIC_CACHE = 'cityzenmag-dynamic-v1'
+const API_CACHE = 'cityzenmag-api-v1'
+
+// Ressources à mettre en cache immédiatement
+const STATIC_ASSETS = [
+  '/',
+  '/manifest.json',
+  '/icons/icon-192x192.png',
+  '/icons/icon-512x512.png'
 ]
+
+// URLs des API à mettre en cache
+const API_URLS = [
+  'https://ghpptudzucrnygrozpht.supabase.co/rest/v1/threads',
+  'https://ghpptudzucrnygrozpht.supabase.co/rest/v1/tweets',
+  'https://ghpptudzucrnygrozpht.supabase.co/rest/v1/media_files'
+]
+
+// Installation du Service Worker
+self.addEventListener('install', (event) => {
+  console.log('🔧 Service Worker: Installation')
+  
+  event.waitUntil(
+    caches.open(STATIC_CACHE)
+      .then((cache) => {
+        console.log('📦 Service Worker: Mise en cache des ressources statiques')
+        return cache.addAll(STATIC_ASSETS)
+      })
+      .then(() => {
+        console.log('✅ Service Worker: Installation terminée')
+        return self.skipWaiting()
+      })
+      .catch((error) => {
+        console.error('❌ Service Worker: Erreur installation:', error)
+      })
+  )
+})
+
+// Activation du Service Worker
+self.addEventListener('activate', (event) => {
+  console.log('🚀 Service Worker: Activation')
+  
+  event.waitUntil(
+    caches.keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== STATIC_CACHE && 
+                cacheName !== DYNAMIC_CACHE && 
+                cacheName !== API_CACHE) {
+              console.log('🗑️ Service Worker: Suppression ancien cache:', cacheName)
+              return caches.delete(cacheName)
+            }
+          })
+        )
+      })
+      .then(() => {
+        console.log('✅ Service Worker: Activation terminée')
+        return self.clients.claim()
+      })
+  )
+})
+
+// Interception des requêtes
+self.addEventListener('fetch', (event) => {
+  const { request } = event
+  const url = new URL(request.url)
+  
+  // Stratégie pour les ressources statiques
+  if (STATIC_ASSETS.some(asset => request.url.includes(asset))) {
+    event.respondWith(
+      caches.match(request)
+        .then((response) => {
+          return response || fetch(request)
+        })
+    )
+    return
+  }
+  
+  // Stratégie pour les API Supabase (Cache First avec fallback)
+  if (url.hostname.includes('supabase.co')) {
+    event.respondWith(
+      caches.open(API_CACHE)
+        .then((cache) => {
+          return cache.match(request)
+            .then((cachedResponse) => {
+              if (cachedResponse) {
+                // Retourner la réponse en cache et mettre à jour en arrière-plan
+                fetch(request)
+                  .then((fetchResponse) => {
+                    if (fetchResponse.ok) {
+                      cache.put(request, fetchResponse.clone())
+                    }
+                  })
+                  .catch(() => {
+                    // Ignorer les erreurs de mise à jour en arrière-plan
+                  })
+                return cachedResponse
+              } else {
+                // Pas de cache, essayer de récupérer et mettre en cache
+                return fetch(request)
+                  .then((fetchResponse) => {
+                    if (fetchResponse.ok) {
+                      cache.put(request, fetchResponse.clone())
+                    }
+                    return fetchResponse
+                  })
+                  .catch(() => {
+                    // En cas d'erreur, retourner une réponse par défaut
+                    return new Response(
+                      JSON.stringify({ 
+                        error: 'Données non disponibles hors ligne',
+                        offline: true 
+                      }),
+                      {
+                        status: 200,
+                        headers: { 'Content-Type': 'application/json' }
+                      }
+                    )
+                  })
+              }
+            })
+        })
+    )
+    return
+  }
+  
+  // Stratégie pour les autres ressources (Network First avec cache fallback)
+  event.respondWith(
+    fetch(request)
+      .then((response) => {
+        // Si la réponse est OK, la mettre en cache
+        if (response.ok) {
+          const responseClone = response.clone()
+          caches.open(DYNAMIC_CACHE)
+            .then((cache) => {
+              cache.put(request, responseClone)
+            })
+        }
+        return response
+      })
+      .catch(() => {
+        // En cas d'échec réseau, chercher en cache
+        return caches.match(request)
+          .then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse
+            }
+            
+            // Si c'est une navigation, retourner la page d'accueil en cache
+            if (request.mode === 'navigate') {
+              return caches.match('/')
+            }
+            
+            // Sinon, retourner une réponse d'erreur
+            return new Response(
+              'Contenu non disponible hors ligne',
+              {
+                status: 503,
+                statusText: 'Service Unavailable',
+                headers: { 'Content-Type': 'text/plain' }
+              }
+            )
+          })
+      })
+  )
+})
+
+// Gestion des messages du client
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting()
+  }
+  
+  if (event.data && event.data.type === 'GET_VERSION') {
+    event.ports[0].postMessage({ version: CACHE_NAME })
+  }
+  
+  if (event.data && event.data.type === 'CLEAR_CACHE') {
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => caches.delete(cacheName))
+      )
+    }).then(() => {
+      event.ports[0].postMessage({ success: true })
+    })
+  }
+})
+
+// Synchronisation en arrière-plan
+self.addEventListener('sync', (event) => {
+  if (event.tag === 'background-sync') {
+    console.log('🔄 Service Worker: Synchronisation en arrière-plan')
+    event.waitUntil(
+      // Ici on pourrait synchroniser les données avec Supabase
+      Promise.resolve()
+    )
+  }
+})
+
+// Notifications push (pour plus tard)
+self.addEventListener('push', (event) => {
+  if (event.data) {
+    const data = event.data.json()
+    const options = {
+      body: data.body,
+      icon: '/icons/icon-192x192.png',
+      badge: '/icons/icon-72x72.png',
+      vibrate: [100, 50, 100],
+      data: {
+        dateOfArrival: Date.now(),
+        primaryKey: data.primaryKey
+      },
+      actions: [
+        {
+          action: 'explore',
+          title: 'Lire l\'article',
+          icon: '/icons/icon-96x96.png'
+        },
+        {
+          action: 'close',
+          title: 'Fermer',
+          icon: '/icons/icon-96x96.png'
+        }
+      ]
+    }
+    
+    event.waitUntil(
+      self.registration.showNotification(data.title, options)
+    )
+  }
+})
+
+// Gestion des clics sur notifications
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close()
+  
+  if (event.action === 'explore') {
+    event.waitUntil(
+      clients.openWindow('/')
+    )
+  }
+})
+
+console.log('🎉 Service Worker CityzenMag chargé avec succès')

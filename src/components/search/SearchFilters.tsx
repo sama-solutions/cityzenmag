@@ -76,8 +76,8 @@ export function SearchFilters({
           hasActiveFilters
             ? theme === 'senegalais'
               ? 'bg-orange-100 border-orange-300 text-orange-800'
-              : 'bg-blue-100 border-blue-300 text-blue-800'
-            : 'bg-white border-gray-300 text-gray-700 hover:bg-gray-50'
+              : 'theme-primary-bg'
+            : 'theme-surface theme-text theme-border hover:bg-gray-50'
         }`}
       >
         <Filter className="w-4 h-4" />
@@ -94,29 +94,29 @@ export function SearchFilters({
   }
 
   return (
-    <div className={`bg-white rounded-xl border shadow-lg p-6 ${
-      theme === 'senegalais' ? 'border-orange-200' : 'border-gray-200'
+    <div className={`theme-surface rounded-xl border shadow-lg p-6 ${
+      theme === 'senegalais' ? 'border-orange-200' : 'theme-border'
     }`}>
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center space-x-2">
           <Filter className={`w-5 h-5 ${
-            theme === 'senegalais' ? 'text-orange-600' : 'text-gray-600'
+            theme === 'senegalais' ? 'text-orange-600' : 'theme-text-muted'
           }`} />
-          <h3 className="text-lg font-semibold text-gray-900">Filtres de recherche</h3>
+          <h3 className="text-lg font-semibold theme-text">Filtres de recherche</h3>
         </div>
         <div className="flex items-center space-x-2">
           {hasActiveFilters && (
             <button
               onClick={clearAllFilters}
-              className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-sm theme-text-muted hover:opacity-80 transition-colors"
             >
               Effacer tout
             </button>
           )}
           <button
             onClick={onToggle}
-            className="p-1 text-gray-400 hover:text-gray-600 transition-colors"
+            className="p-1 theme-text-muted hover:opacity-80 transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -131,10 +131,10 @@ export function SearchFilters({
             className="flex items-center justify-between w-full text-left"
           >
             <div className="flex items-center space-x-2">
-              <Tag className="w-4 h-4 text-gray-500" />
-              <span className="font-medium text-gray-900">Types de contenu</span>
+              <Tag className="w-4 h-4 theme-text-muted" />
+              <span className="font-medium theme-text">Types de contenu</span>
             </div>
-            <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${
+            <ChevronDown className={`w-4 h-4 theme-text-muted transition-transform ${
               expandedSections.has('types') ? 'rotate-180' : ''
             }`} />
           </button>
@@ -153,8 +153,8 @@ export function SearchFilters({
                         : 'text-blue-600 focus:ring-blue-500'
                     }`}
                   />
-                  <span className="text-gray-700">{typeLabels[type as keyof typeof typeLabels] || type}</span>
-                  <span className="text-sm text-gray-500">({count})</span>
+                  <span className="theme-text">{typeLabels[type as keyof typeof typeLabels] || type}</span>
+                  <span className="text-sm theme-text-muted">({count})</span>
                 </label>
               ))}
             </div>
@@ -169,10 +169,10 @@ export function SearchFilters({
               className="flex items-center justify-between w-full text-left"
             >
               <div className="flex items-center space-x-2">
-                <Tag className="w-4 h-4 text-gray-500" />
-                <span className="font-medium text-gray-900">Thèmes</span>
+                <Tag className="w-4 h-4 theme-text-muted" />
+                <span className="font-medium theme-text">Thèmes</span>
               </div>
-              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${
+              <ChevronDown className={`w-4 h-4 theme-text-muted transition-transform ${
                 expandedSections.has('themes') ? 'rotate-180' : ''
               }`} />
             </button>
@@ -191,8 +191,8 @@ export function SearchFilters({
                           : 'text-blue-600 focus:ring-blue-500'
                       }`}
                     />
-                    <span className="text-gray-700">{theme}</span>
-                    <span className="text-sm text-gray-500">({count})</span>
+                    <span className="theme-text">{theme}</span>
+                    <span className="text-sm theme-text-muted">({count})</span>
                   </label>
                 ))}
               </div>
@@ -208,10 +208,10 @@ export function SearchFilters({
               className="flex items-center justify-between w-full text-left"
             >
               <div className="flex items-center space-x-2">
-                <MapPin className="w-4 h-4 text-gray-500" />
-                <span className="font-medium text-gray-900">Lieux</span>
+                <MapPin className="w-4 h-4 theme-text-muted" />
+                <span className="font-medium theme-text">Lieux</span>
               </div>
-              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${
+              <ChevronDown className={`w-4 h-4 theme-text-muted transition-transform ${
                 expandedSections.has('locations') ? 'rotate-180' : ''
               }`} />
             </button>
@@ -230,8 +230,8 @@ export function SearchFilters({
                           : 'text-blue-600 focus:ring-blue-500'
                       }`}
                     />
-                    <span className="text-gray-700">{location}</span>
-                    <span className="text-sm text-gray-500">({count})</span>
+                    <span className="theme-text">{location}</span>
+                    <span className="text-sm theme-text-muted">({count})</span>
                   </label>
                 ))}
               </div>
@@ -247,10 +247,10 @@ export function SearchFilters({
               className="flex items-center justify-between w-full text-left"
             >
               <div className="flex items-center space-x-2">
-                <User className="w-4 h-4 text-gray-500" />
-                <span className="font-medium text-gray-900">Auteurs</span>
+                <User className="w-4 h-4 theme-text-muted" />
+                <span className="font-medium theme-text">Auteurs</span>
               </div>
-              <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${
+              <ChevronDown className={`w-4 h-4 theme-text-muted transition-transform ${
                 expandedSections.has('authors') ? 'rotate-180' : ''
               }`} />
             </button>
@@ -269,8 +269,8 @@ export function SearchFilters({
                           : 'text-blue-600 focus:ring-blue-500'
                       }`}
                     />
-                    <span className="text-gray-700">{author}</span>
-                    <span className="text-sm text-gray-500">({count})</span>
+                    <span className="theme-text">{author}</span>
+                    <span className="text-sm theme-text-muted">({count})</span>
                   </label>
                 ))}
               </div>
@@ -285,8 +285,8 @@ export function SearchFilters({
             className="flex items-center justify-between w-full text-left"
           >
             <div className="flex items-center space-x-2">
-              <Calendar className="w-4 h-4 text-gray-500" />
-              <span className="font-medium text-gray-900">Période</span>
+              <Calendar className="w-4 h-4 theme-text-muted" />
+              <span className="font-medium theme-text">Période</span>
             </div>
             <ChevronDown className={`w-4 h-4 text-gray-500 transition-transform ${
               expandedSections.has('dates') ? 'rotate-180' : ''
@@ -296,7 +296,7 @@ export function SearchFilters({
           {expandedSections.has('dates') && (
             <div className="mt-3 space-y-3">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium theme-text mb-1">
                   Date de début
                 </label>
                 <input
@@ -306,11 +306,11 @@ export function SearchFilters({
                     ...filters.dateRange,
                     start: e.target.value || undefined
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border theme-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium theme-text mb-1">
                   Date de fin
                 </label>
                 <input
@@ -320,7 +320,7 @@ export function SearchFilters({
                     ...filters.dateRange,
                     end: e.target.value || undefined
                   })}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-3 py-2 border theme-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
             </div>

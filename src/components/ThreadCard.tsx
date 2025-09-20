@@ -8,9 +8,10 @@ interface ThreadCardProps {
   thread: Thread & { featured_image?: MediaFile }
   viewMode?: 'grid' | 'list'
   compact?: boolean
+  index?: number
 }
 
-export function ThreadCard({ thread, viewMode = 'grid', compact = false }: ThreadCardProps) {
+export function ThreadCard({ thread, viewMode = 'grid', compact = false, index }: ThreadCardProps) {
   const { theme } = useTheme()
   
   const formatDate = (dateString: string) => {
@@ -61,13 +62,42 @@ export function ThreadCard({ thread, viewMode = 'grid', compact = false }: Threa
   const baseClasses = `block overflow-hidden transition-all duration-500 group transform hover:-translate-y-2 ${
     theme === 'senegalais'
       ? 'bg-white rounded-2xl shadow-lg border-2 border-orange-200/50 hover:shadow-2xl hover:border-orange-300 backdrop-blur-sm'
-      : 'bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg hover:border-gray-300'
+      : 'theme-surface rounded-xl shadow-sm border theme-border hover:shadow-lg'
   }`
 
   // Mode compact pour les colonnes
   if (compact) {
     return (
-      <Link to={`/thread/${thread.thread_id}`} className={`${baseClasses} hover:-translate-y-1`}>
+      <Link to={`/thread/${thread.thread_id}`} className={`relative ${baseClasses} hover:-translate-y-1`}>
+        {/* Badge de numérotation pour mode compact */}
+        {index && (
+          <div className="absolute top-2 right-2 z-10">
+            <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold shadow-lg ${
+              theme === 'senegalais'
+                ? 'bg-gradient-to-br from-orange-600 to-yellow-500 text-white border border-white/20'
+                : 'bg-black text-white border border-gray-300'
+            }`}>
+              {index}
+            </div>
+          </div>
+        )}
+        
+        {/* Image compacte si disponible */}
+        {thread.featured_image && (
+          <div className="relative">
+            <img 
+              src={getLocalMediaUrl(thread.featured_image)}
+              alt={thread.title}
+              className="w-full h-32 object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement
+                target.src = thread.featured_image!.original_url
+              }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+          </div>
+        )}
+        
         <div className="p-4 space-y-3">
           {/* Header compact */}
           <div className="flex items-start justify-between">
@@ -134,7 +164,19 @@ export function ThreadCard({ thread, viewMode = 'grid', compact = false }: Threa
 
   if (viewMode === 'list') {
     return (
-      <Link to={`/thread/${thread.thread_id}`} className={baseClasses}>
+      <Link to={`/thread/${thread.thread_id}`} className={`relative ${baseClasses}`}>
+        {/* Badge de numérotation pour mode liste */}
+        {index && (
+          <div className="absolute top-4 right-4 z-10">
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold shadow-lg ${
+              theme === 'senegalais'
+                ? 'bg-gradient-to-br from-orange-600 to-yellow-500 text-white border-2 border-white/20'
+                : 'bg-black text-white border-2 border-gray-300'
+            }`}>
+              {index}
+            </div>
+          </div>
+        )}
         <div className="flex items-start space-x-6 p-6">
           {/* Image miniature */}
           {thread.featured_image && (
@@ -214,7 +256,19 @@ export function ThreadCard({ thread, viewMode = 'grid', compact = false }: Threa
 
   // Mode grille (par défaut)
   return (
-    <Link to={`/thread/${thread.thread_id}`} className={baseClasses}>
+    <Link to={`/thread/${thread.thread_id}`} className={`relative ${baseClasses}`}>
+      {/* Badge de numérotation */}
+      {index && (
+        <div className="absolute top-4 right-4 z-10">
+          <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-lg ${
+            theme === 'senegalais'
+              ? 'bg-gradient-to-br from-orange-600 to-yellow-500 text-white border-2 border-white/20'
+              : 'bg-black text-white border-2 border-gray-300'
+          }`}>
+            {index}
+          </div>
+        </div>
+      )}
       {/* Featured Image */}
       {thread.featured_image && (
         <div className={`relative overflow-hidden ${

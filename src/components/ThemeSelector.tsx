@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Palette, Check, Sun, Moon } from 'lucide-react'
+import { Palette, Check, Sun, Moon, Monitor, Waves, Building } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
 
 interface ThemeSelectorProps {
@@ -19,12 +19,21 @@ export function ThemeSelector({ showLabel = true, variant = 'dropdown' }: ThemeS
       >
         {theme === 'senegalais' ? (
           <Sun className="w-5 h-5" />
-        ) : (
+        ) : theme === 'dark' ? (
           <Moon className="w-5 h-5" />
+        ) : theme === 'ocean' ? (
+          <Waves className="w-5 h-5" />
+        ) : theme === 'enterprise' ? (
+          <Building className="w-5 h-5" />
+        ) : (
+          <Monitor className="w-5 h-5" />
         )}
         {showLabel && (
           <span className="font-medium">
-            {theme === 'senegalais' ? 'Sénégalais' : 'Minimaliste'}
+            {theme === 'senegalais' ? 'Sénégalais' : 
+             theme === 'dark' ? 'Sombre' :
+             theme === 'ocean' ? 'Océan' :
+             theme === 'enterprise' ? 'Enterprise' : 'Minimaliste'}
           </span>
         )}
       </button>
@@ -40,7 +49,10 @@ export function ThemeSelector({ showLabel = true, variant = 'dropdown' }: ThemeS
         <Palette className="w-5 h-5" />
         {showLabel && (
           <span className="font-medium">
-            Thème: {theme === 'senegalais' ? 'Sénégalais' : 'Minimaliste'}
+            Thème: {theme === 'senegalais' ? 'Sénégalais' : 
+                     theme === 'dark' ? 'Sombre' :
+                     theme === 'ocean' ? 'Océan' :
+                     theme === 'enterprise' ? 'Enterprise' : 'Minimaliste'}
           </span>
         )}
       </button>
@@ -89,7 +101,7 @@ export function ThemeSelector({ showLabel = true, variant = 'dropdown' }: ThemeS
                   setTheme('minimaliste')
                   setIsOpen(false)
                 }}
-                className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left ${
+                className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left mb-3 ${
                   theme === 'minimaliste'
                     ? 'border-gray-900 bg-gray-50'
                     : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'
@@ -108,6 +120,90 @@ export function ThemeSelector({ showLabel = true, variant = 'dropdown' }: ThemeS
                   <div className="w-6 h-6 rounded-full bg-black"></div>
                   <div className="w-6 h-6 rounded-full bg-gray-500"></div>
                   <div className="w-6 h-6 rounded-full bg-white border border-gray-300"></div>
+                </div>
+              </button>
+              
+              {/* Thème Sombre */}
+              <button
+                onClick={() => {
+                  setTheme('dark')
+                  setIsOpen(false)
+                }}
+                className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left mb-3 ${
+                  theme === 'dark'
+                    ? 'border-blue-500 bg-blue-50'
+                    : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-bold text-gray-900 mb-1">Sombre</div>
+                    <div className="text-sm text-gray-600">Mode nuit pour les yeux sensibles</div>
+                  </div>
+                  {theme === 'dark' && (
+                    <Check className="w-5 h-5 text-blue-600" />
+                  )}
+                </div>
+                <div className="flex space-x-2 mt-3">
+                  <div className="w-6 h-6 rounded-full bg-slate-900"></div>
+                  <div className="w-6 h-6 rounded-full bg-slate-700"></div>
+                  <div className="w-6 h-6 rounded-full bg-blue-500"></div>
+                </div>
+              </button>
+              
+              {/* Thème Océan */}
+              <button
+                onClick={() => {
+                  setTheme('ocean')
+                  setIsOpen(false)
+                }}
+                className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left mb-3 ${
+                  theme === 'ocean'
+                    ? 'border-cyan-500 bg-cyan-50'
+                    : 'border-gray-200 hover:border-cyan-300 hover:bg-cyan-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-bold text-gray-900 mb-1">Océan</div>
+                    <div className="text-sm text-gray-600">Inspiration marine et fraîcheur</div>
+                  </div>
+                  {theme === 'ocean' && (
+                    <Check className="w-5 h-5 text-cyan-600" />
+                  )}
+                </div>
+                <div className="flex space-x-2 mt-3">
+                  <div className="w-6 h-6 rounded-full bg-cyan-500"></div>
+                  <div className="w-6 h-6 rounded-full bg-cyan-600"></div>
+                  <div className="w-6 h-6 rounded-full bg-blue-400"></div>
+                </div>
+              </button>
+              
+              {/* Thème Enterprise */}
+              <button
+                onClick={() => {
+                  setTheme('enterprise')
+                  setIsOpen(false)
+                }}
+                className={`w-full p-4 rounded-xl border-2 transition-all duration-300 text-left ${
+                  theme === 'enterprise'
+                    ? 'border-gray-500 bg-gray-50'
+                    : 'border-gray-200 hover:border-gray-400 hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div>
+                    <div className="font-bold text-gray-900 mb-1">Enterprise</div>
+                    <div className="text-sm text-gray-600">Design corporate et professionnel</div>
+                  </div>
+                  {theme === 'enterprise' && (
+                    <Check className="w-5 h-5 text-gray-600" />
+                  )}
+                </div>
+                <div className="flex space-x-2 mt-3">
+                  <div className="w-6 h-6 rounded-full bg-gray-800"></div>
+                  <div className="w-6 h-6 rounded-full bg-gray-600"></div>
+                  <div className="w-6 h-6 rounded-full bg-blue-600"></div>
                 </div>
               </button>
             </div>

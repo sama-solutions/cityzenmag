@@ -13,13 +13,54 @@
   --theme-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 }
 
-/* Classe thématiques génériques */
+/* Classes thématiques génériques */
 .theme-text {
   color: var(--theme-text) !important;
 }
 
 .theme-text-muted {
   color: var(--theme-text-secondary) !important;
+}
+
+/* Correction des contrastes pour tous les thèmes */
+body.theme-minimaliste .theme-text {
+  color: #000000 !important;
+}
+
+body.theme-minimaliste .theme-text-muted {
+  color: #6c757d !important;
+}
+
+body.theme-dark .theme-text {
+  color: #f1f5f9 !important;
+}
+
+body.theme-dark .theme-text-muted {
+  color: #94a3b8 !important;
+}
+
+body.theme-ocean .theme-text {
+  color: #0f172a !important;
+}
+
+body.theme-ocean .theme-text-muted {
+  color: #475569 !important;
+}
+
+body.theme-enterprise .theme-text {
+  color: #111827 !important;
+}
+
+body.theme-enterprise .theme-text-muted {
+  color: #6b7280 !important;
+}
+
+body.theme-senegalais .theme-text {
+  color: #1f2937 !important;
+}
+
+body.theme-senegalais .theme-text-muted {
+  color: #6b7280 !important;
 }
 
 .theme-bg {
@@ -48,6 +89,14 @@
 /* Thème Sénégalais */
 body.theme-senegalais {
   font-family: var(--theme-font-sans);
+  --theme-primary: #D2691E;
+  --theme-secondary: #1e3a8a;
+  --theme-accent: #fbbf24;
+  --theme-background: linear-gradient(135deg, #fed7aa 0%, #fef3c7 50%, #dbeafe 100%);
+  --theme-surface: #ffffff;
+  --theme-text: #1f2937;
+  --theme-text-secondary: #6b7280;
+  --theme-font-sans: "Inter", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif;
 }
 
 .theme-senegalais .admin-card {
@@ -73,9 +122,6 @@ body.theme-minimaliste {
   background-color: #ffffff;
   color: #000000;
   line-height: 1.6;
-}
-
-.theme-minimaliste {
   --theme-primary: #000000;
   --theme-secondary: #6c757d;
   --theme-accent: #374151;
@@ -218,6 +264,380 @@ body.theme-minimaliste {
 
 .theme-minimaliste .main-content {
   padding: 4rem 0;
+}
+
+/* Thème Sombre */
+body.theme-dark {
+  font-family: "Inter", "system-ui", "-apple-system", sans-serif;
+  background-color: #0f172a;
+  color: #f1f5f9;
+  line-height: 1.6;
+  --theme-primary: #3b82f6;
+  --theme-secondary: #64748b;
+  --theme-accent: #06b6d4;
+  --theme-background: #0f172a;
+  --theme-surface: #1e293b;
+  --theme-text: #f1f5f9;
+  --theme-text-secondary: #94a3b8;
+  --theme-font-sans: "Inter", "system-ui", "-apple-system", sans-serif;
+}
+
+/* Thème Océan */
+body.theme-ocean {
+  font-family: "Inter", "system-ui", "-apple-system", sans-serif;
+  background: linear-gradient(135deg, #cffafe 0%, #e0f2fe 50%, #f0f9ff 100%);
+  color: #0f172a;
+  line-height: 1.6;
+  --theme-primary: #0891b2;
+  --theme-secondary: #0e7490;
+  --theme-accent: #06b6d4;
+  --theme-background: linear-gradient(135deg, #cffafe 0%, #e0f2fe 50%, #f0f9ff 100%);
+  --theme-surface: #ffffff;
+  --theme-text: #0f172a;
+  --theme-text-secondary: #475569;
+  --theme-font-sans: "Inter", "system-ui", "-apple-system", sans-serif;
+}
+
+/* Thème Enterprise */
+body.theme-enterprise {
+  font-family: "Inter", "system-ui", "-apple-system", sans-serif;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  color: #111827;
+  line-height: 1.6;
+  --theme-primary: #1f2937;
+  --theme-secondary: #4b5563;
+  --theme-accent: #3b82f6;
+  --theme-background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+  --theme-surface: #ffffff;
+  --theme-text: #111827;
+  --theme-text-secondary: #6b7280;
+  --theme-font-sans: "Inter", "system-ui", "-apple-system", sans-serif;
+}
+
+.theme-dark .admin-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+  border-radius: 12px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.3);
+}
+
+.theme-dark .btn-primary {
+  background: #3b82f6;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-dark .btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px 0 rgb(59 130 246 / 0.3);
+}
+
+.theme-dark .btn-secondary {
+  background: #1e293b;
+  color: #f1f5f9;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-dark .btn-secondary:hover {
+  background: #334155;
+  border-color: #64748b;
+}
+
+.theme-dark input,
+.theme-dark textarea,
+.theme-dark select {
+  background: #1e293b;
+  border: 1px solid #475569;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #f1f5f9;
+  transition: all 0.2s ease;
+}
+
+.theme-dark input:focus,
+.theme-dark textarea:focus,
+.theme-dark select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+
+.theme-dark h1,
+.theme-dark h2,
+.theme-dark h3,
+.theme-dark h4,
+.theme-dark h5,
+.theme-dark h6 {
+  color: #f1f5f9;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.theme-dark p,
+.theme-dark div {
+  color: #f1f5f9;
+  line-height: 1.6;
+}
+
+.theme-dark .text-muted {
+  color: #94a3b8 !important;
+}
+
+/* Sidebar admin pour thème dark */
+.theme-dark .admin-sidebar {
+  background: #0f172a;
+  border: none;
+  padding: 2rem 0;
+}
+
+.theme-dark .admin-sidebar a {
+  color: #f1f5f9;
+  padding: 1rem 2rem;
+  margin: 0.25rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.theme-dark .admin-sidebar a:hover,
+.theme-dark .admin-sidebar a.active {
+  background: #1e293b;
+  color: #f1f5f9;
+}
+
+/* Styles spécifiques thème Océan */
+.theme-ocean .admin-card {
+  background: #ffffff;
+  border: 1px solid #a5f3fc;
+  border-radius: 12px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 1px 3px 0 rgb(8 145 178 / 0.1);
+}
+
+.theme-ocean .btn-primary {
+  background: #0891b2;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-ocean .btn-primary:hover {
+  background: #0e7490;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px 0 rgb(8 145 178 / 0.3);
+}
+
+.theme-ocean .btn-secondary {
+  background: #ffffff;
+  color: #0891b2;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border: 1px solid #67e8f9;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-ocean .btn-secondary:hover {
+  background: #cffafe;
+  border-color: #0891b2;
+}
+
+.theme-ocean input,
+.theme-ocean textarea,
+.theme-ocean select {
+  background: #ffffff;
+  border: 1px solid #a5f3fc;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #0f172a;
+  transition: all 0.2s ease;
+}
+
+.theme-ocean input:focus,
+.theme-ocean textarea:focus,
+.theme-ocean select:focus {
+  outline: none;
+  border-color: #0891b2;
+  box-shadow: 0 0 0 3px rgb(8 145 178 / 0.1);
+}
+
+.theme-ocean h1,
+.theme-ocean h2,
+.theme-ocean h3,
+.theme-ocean h4,
+.theme-ocean h5,
+.theme-ocean h6 {
+  color: #0f172a;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.theme-ocean p,
+.theme-ocean div {
+  color: #0f172a;
+  line-height: 1.6;
+}
+
+.theme-ocean .text-muted {
+  color: #475569 !important;
+}
+
+/* Sidebar admin pour thème océan */
+.theme-ocean .admin-sidebar {
+  background: #0891b2;
+  border: none;
+  padding: 2rem 0;
+}
+
+.theme-ocean .admin-sidebar a {
+  color: #ffffff;
+  padding: 1rem 2rem;
+  margin: 0.25rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.theme-ocean .admin-sidebar a:hover,
+.theme-ocean .admin-sidebar a.active {
+  background: #0e7490;
+  color: #ffffff;
+}
+
+/* Styles spécifiques thème Enterprise */
+.theme-enterprise .admin-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  box-shadow: 0 1px 3px 0 rgb(31 41 55 / 0.1);
+}
+
+.theme-enterprise .btn-primary {
+  background: #1f2937;
+  color: #ffffff;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-enterprise .btn-primary:hover {
+  background: #374151;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px 0 rgb(31 41 55 / 0.3);
+}
+
+.theme-enterprise .btn-secondary {
+  background: #ffffff;
+  color: #1f2937;
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  letter-spacing: -0.025em;
+}
+
+.theme-enterprise .btn-secondary:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.theme-enterprise input,
+.theme-enterprise textarea,
+.theme-enterprise select {
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.theme-enterprise input:focus,
+.theme-enterprise textarea:focus,
+.theme-enterprise select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+
+.theme-enterprise h1,
+.theme-enterprise h2,
+.theme-enterprise h3,
+.theme-enterprise h4,
+.theme-enterprise h5,
+.theme-enterprise h6 {
+  color: #111827;
+  font-weight: 600;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+}
+
+.theme-enterprise p,
+.theme-enterprise div {
+  color: #111827;
+  line-height: 1.6;
+}
+
+.theme-enterprise .text-muted {
+  color: #6b7280 !important;
+}
+
+/* Sidebar admin pour thème enterprise */
+.theme-enterprise .admin-sidebar {
+  background: #1f2937;
+  border: none;
+  padding: 2rem 0;
+}
+
+.theme-enterprise .admin-sidebar a {
+  color: #f9fafb;
+  padding: 1rem 2rem;
+  margin: 0.25rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.theme-enterprise .admin-sidebar a:hover,
+.theme-enterprise .admin-sidebar a.active {
+  background: #374151;
+  color: #ffffff;
 }
 
 /* Animations */

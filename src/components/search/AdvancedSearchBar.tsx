@@ -135,13 +135,13 @@ export function AdvancedSearchBar({
         <div className={`relative flex items-center ${sizeClasses[size]} ${
           theme === 'senegalais'
             ? 'bg-white border-2 border-orange-300 focus-within:border-yellow-400'
-            : 'bg-white border border-gray-300 focus-within:border-blue-500'
+            : 'theme-surface border theme-border focus-within:border-blue-500'
         } rounded-xl shadow-lg transition-all duration-200`}>
           
           {/* Icône de recherche */}
           <div className="flex items-center justify-center pl-4">
             <Search className={`${iconSizes[size]} ${
-              theme === 'senegalais' ? 'text-orange-600' : 'text-gray-500'
+              theme === 'senegalais' ? 'text-orange-600' : 'theme-text-muted'
             }`} />
           </div>
 
@@ -158,7 +158,7 @@ export function AdvancedSearchBar({
               }
             }}
             placeholder={placeholder}
-            className={`flex-1 px-4 py-0 bg-transparent border-none outline-none ${sizeClasses[size]} placeholder-gray-500`}
+            className={`flex-1 px-4 py-0 bg-transparent border-none outline-none ${sizeClasses[size]} theme-text placeholder-gray-500`}
           />
 
           {/* Bouton clear */}
@@ -179,7 +179,7 @@ export function AdvancedSearchBar({
               className={`flex items-center justify-center px-3 border-l ${
                 theme === 'senegalais'
                   ? 'border-orange-200 text-orange-600 hover:bg-orange-50'
-                  : 'border-gray-200 text-gray-500 hover:bg-gray-50'
+                  : 'border theme-border theme-text-muted hover:bg-gray-50'
               } transition-colors`}
             >
               <Filter className={iconSizes[size]} />
@@ -194,7 +194,7 @@ export function AdvancedSearchBar({
               query.trim()
                 ? theme === 'senegalais'
                   ? 'bg-gradient-to-r from-orange-500 to-yellow-500 text-white hover:from-orange-600 hover:to-yellow-600'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'theme-primary-bg'
                 : 'bg-gray-100 text-gray-400 cursor-not-allowed'
             }`}
           >
@@ -205,13 +205,13 @@ export function AdvancedSearchBar({
 
       {/* Dropdown avec suggestions */}
       {isOpen && (
-        <div className={`absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-xl border z-50 max-h-96 overflow-y-auto ${
-          theme === 'senegalais' ? 'border-orange-200' : 'border-gray-200'
+        <div className={`absolute top-full left-0 right-0 mt-2 theme-surface rounded-xl shadow-xl border z-50 max-h-96 overflow-y-auto ${
+          theme === 'senegalais' ? 'border-orange-200' : 'theme-border'
         }`}>
           
           {/* Loading */}
           {isLoading && (
-            <div className="p-4 text-center text-gray-500">
+            <div className="p-4 text-center theme-text-muted">
               <div className="animate-spin w-5 h-5 border-2 border-gray-300 border-t-blue-600 rounded-full mx-auto"></div>
               <p className="mt-2 text-sm">Recherche en cours...</p>
             </div>
@@ -220,17 +220,17 @@ export function AdvancedSearchBar({
           {/* Suggestions de recherche */}
           {!isLoading && suggestions.length > 0 && (
             <div className="p-2">
-              <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide">
+              <div className="px-3 py-2 text-xs font-semibold theme-text-muted uppercase tracking-wide">
                 Suggestions
               </div>
               {suggestions.map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => selectSuggestion(suggestion)}
-                  className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                  className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 rounded-lg transition-colors theme-text"
                 >
-                  <Search className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-900">{suggestion}</span>
+                  <Search className="w-4 h-4 theme-text-muted" />
+                  <span className="theme-text">{suggestion}</span>
                 </button>
               ))}
             </div>
@@ -238,8 +238,8 @@ export function AdvancedSearchBar({
 
           {/* Historique des recherches */}
           {!isLoading && query.length === 0 && searchHistory.length > 0 && (
-            <div className="p-2 border-t border-gray-100">
-              <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide flex items-center space-x-2">
+            <div className="p-2 border-t theme-border">
+              <div className="px-3 py-2 text-xs font-semibold theme-text-muted uppercase tracking-wide flex items-center space-x-2">
                 <Clock className="w-3 h-3" />
                 <span>Recherches récentes</span>
               </div>
@@ -247,10 +247,10 @@ export function AdvancedSearchBar({
                 <button
                   key={index}
                   onClick={() => selectSuggestion(historyItem)}
-                  className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                  className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 rounded-lg transition-colors theme-text"
                 >
-                  <Clock className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-700">{historyItem}</span>
+                  <Clock className="w-4 h-4 theme-text-muted" />
+                  <span className="theme-text">{historyItem}</span>
                 </button>
               ))}
             </div>
@@ -258,8 +258,8 @@ export function AdvancedSearchBar({
 
           {/* Recherches populaires */}
           {!isLoading && query.length === 0 && popularSearches.length > 0 && (
-            <div className="p-2 border-t border-gray-100">
-              <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide flex items-center space-x-2">
+            <div className="p-2 border-t theme-border">
+              <div className="px-3 py-2 text-xs font-semibold theme-text-muted uppercase tracking-wide flex items-center space-x-2">
                 <TrendingUp className="w-3 h-3" />
                 <span>Recherches populaires</span>
               </div>
@@ -267,10 +267,10 @@ export function AdvancedSearchBar({
                 <button
                   key={index}
                   onClick={() => selectSuggestion(popularItem)}
-                  className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                  className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-50 rounded-lg transition-colors theme-text"
                 >
-                  <TrendingUp className="w-4 h-4 text-gray-400" />
-                  <span className="text-gray-700">{popularItem}</span>
+                  <TrendingUp className="w-4 h-4 theme-text-muted" />
+                  <span className="theme-text">{popularItem}</span>
                 </button>
               ))}
             </div>
@@ -278,16 +278,16 @@ export function AdvancedSearchBar({
 
           {/* Message si aucun résultat */}
           {!isLoading && query.length > 2 && suggestions.length === 0 && (
-            <div className="p-4 text-center text-gray-500">
-              <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-              <p className="text-sm">Aucune suggestion trouvée</p>
-              <p className="text-xs text-gray-400 mt-1">Essayez des mots-clés différents</p>
+            <div className="p-4 text-center theme-text-muted">
+              <Search className="w-8 h-8 mx-auto mb-2 theme-text-muted" />
+              <p className="text-sm theme-text">Aucune suggestion trouvée</p>
+              <p className="text-xs theme-text-muted mt-1">Essayez des mots-clés différents</p>
             </div>
           )}
 
           {/* Raccourcis clavier */}
-          <div className="p-3 border-t border-gray-100 bg-gray-50">
-            <div className="flex items-center justify-between text-xs text-gray-500">
+          <div className="p-3 border-t theme-border bg-gray-50">
+            <div className="flex items-center justify-between text-xs theme-text-muted">
               <span>Appuyez sur Entrée pour rechercher</span>
               <span>Échap pour fermer</span>
             </div>

@@ -80,7 +80,7 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
         className={`block p-4 rounded-xl border transition-all hover:shadow-md ${
           theme === 'senegalais'
             ? 'bg-white border-orange-200 hover:border-orange-300'
-            : 'bg-white border-gray-200 hover:border-gray-300'
+            : 'theme-surface theme-border border hover:shadow-md'
         }`}
       >
         <div className="flex items-start space-x-4">
@@ -106,7 +106,7 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
           {/* Contenu */}
           <div className="flex-1 min-w-0">
             <div className="flex items-start justify-between mb-2">
-              <h3 className="font-bold text-gray-900 line-clamp-2 flex-1">
+              <h3 className="font-bold theme-text line-clamp-2 flex-1">
                 {testimonial.title}
               </h3>
               {showModerationStatus && (
@@ -116,11 +116,11 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
               )}
             </div>
             
-            <p className="text-gray-600 line-clamp-2 mb-2 text-sm">
+            <p className="theme-text-muted line-clamp-2 mb-2 text-sm">
               {testimonial.content}
             </p>
             
-            <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+            <div className="flex items-center space-x-2 text-xs theme-text-muted mb-2">
               <span className="flex items-center space-x-1">
                 <User className="w-3 h-3" />
                 <span>{testimonial.author.anonymous ? 'Anonyme' : testimonial.author.name}</span>
@@ -132,7 +132,7 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
               </span>
             </div>
             
-            <div className="flex items-center space-x-4 text-xs text-gray-500">
+            <div className="flex items-center space-x-4 text-xs theme-text-muted">
               <span className="flex items-center space-x-1">
                 <Eye className="w-3 h-3" />
                 <span>{testimonial.viewCount}</span>
@@ -167,7 +167,7 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
       className={`block group overflow-hidden rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
         theme === 'senegalais'
           ? 'bg-white border-orange-200 hover:border-orange-300'
-          : 'bg-white border-gray-200 hover:border-gray-300'
+          : 'theme-surface border theme-border hover:shadow-xl'
       }`}
     >
       {/* Header avec badges */}
@@ -210,7 +210,7 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
           )}
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="text-xl font-bold theme-text line-clamp-2 group-hover:text-orange-600 transition-colors">
           {testimonial.title}
         </h3>
       </div>
@@ -218,7 +218,7 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
       {/* Contenu */}
       <div className="p-6 space-y-4">
         {/* Extrait du contenu */}
-        <p className="text-gray-600 line-clamp-3 leading-relaxed">
+        <p className="theme-text-muted line-clamp-3 leading-relaxed">
           {testimonial.content}
         </p>
 
@@ -248,10 +248,10 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
             </div>
           )}
           <div>
-            <p className="font-medium text-gray-900">
+            <p className="font-medium theme-text">
               {testimonial.author.anonymous ? 'Témoignage anonyme' : testimonial.author.name}
             </p>
-            <div className="flex items-center space-x-2 text-sm text-gray-600">
+            <div className="flex items-center space-x-2 text-sm theme-text-muted">
               <MapPin className="w-3 h-3" />
               <span>{testimonial.author.location}</span>
               {testimonial.author.age && (
@@ -278,14 +278,14 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
               </span>
             ))}
             {testimonial.tags.length > 3 && (
-              <span className="text-xs text-gray-500">+{testimonial.tags.length - 3} autres</span>
+              <span className="text-xs theme-text-muted">+{testimonial.tags.length - 3} autres</span>
             )}
           </div>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
+        <div className="flex items-center justify-between pt-4 border-t theme-border">
+          <div className="flex items-center space-x-4 text-sm theme-text-muted">
             <span className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
               <span>
@@ -313,7 +313,7 @@ export function TestimonialCard({ testimonial, compact = false, showModerationSt
           </div>
 
           <div className={`text-sm font-medium ${
-            theme === 'senegalais' ? 'text-orange-600' : 'text-gray-900'
+            theme === 'senegalais' ? 'text-orange-600' : 'theme-text'
           }`}>
             Lire →
           </div>

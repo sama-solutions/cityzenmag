@@ -19,6 +19,7 @@ import {
   Bookmark
 } from 'lucide-react'
 import { useTheme } from '../contexts/ThemeContext'
+import { useSiteSettings } from '../contexts/SiteSettingsContext'
 import { ThemeSelector } from './ThemeSelector'
 import { AdvancedSearchBar } from './search/AdvancedSearchBar'
 import { FavoritesPanel } from './social/FavoritesPanel'
@@ -35,6 +36,7 @@ export function Header() {
   const { syncNow, loading: syncing } = useSyncTwitter()
   const { isAdmin } = useAuth()
   const { theme } = useTheme()
+  const { settings } = useSiteSettings()
 
   // Nettoyage des timeouts au démontage
   useEffect(() => {
@@ -93,24 +95,36 @@ export function Header() {
     }`}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
-          {/* Logo - Style adaptatif */}
+          {/* Logo - Style adaptatif avec paramètres personnalisés */}
           <Link to="/" className="flex items-center space-x-4 group">
-            <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg border-3 group-hover:scale-110 transition-transform ${
-              theme === 'senegalais'
-                ? 'bg-gradient-to-br from-yellow-400 to-orange-600 border-white/20'
-                : 'bg-black border-gray-300'
-            }`}>
-              <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L15.09 5.09L19 4L18.18 7.82L22 9L18.18 10.18L19 14L15.09 12.91L12 16L8.91 12.91L5 14L5.82 10.18L2 9L5.82 7.82L5 4L8.91 5.09L12 2Z"/>
-              </svg>
-            </div>
+            {/* Logo personnalisé ou icône par défaut */}
+            {settings.logo ? (
+              <img 
+                src={settings.logo} 
+                alt="Logo" 
+                className="w-12 h-12 rounded-2xl object-cover shadow-lg border-3 border-white/20 group-hover:scale-110 transition-transform"
+              />
+            ) : (
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg border-3 group-hover:scale-110 transition-transform ${
+                theme === 'senegalais'
+                  ? 'bg-gradient-to-br from-yellow-400 to-orange-600 border-white/20'
+                  : theme === 'dark'
+                    ? 'bg-gradient-to-br from-slate-700 to-slate-600 border-slate-500'
+                    : 'bg-black border-gray-300'
+              }`}>
+                <svg className="w-7 h-7 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2L15.09 5.09L19 4L18.18 7.82L22 9L18.18 10.18L19 14L15.09 12.91L12 16L8.91 12.91L5 14L5.82 10.18L2 9L5.82 7.82L5 4L8.91 5.09L12 2Z"/>
+                </svg>
+              </div>
+            )}
+            
             <div>
               <h1 className={`text-2xl font-bold font-sans ${
-                theme === 'senegalais' ? 'text-white' : 'text-gray-900'
-              }`}>CityzenMag</h1>
+                theme === 'senegalais' ? 'text-white' : 'theme-text'
+              }`}>{settings.title}</h1>
               <p className={`text-sm font-sans ${
-                theme === 'senegalais' ? 'text-yellow-200' : 'text-gray-600'
-              }`}>Magazine de Transparence & Modernisation</p>
+                theme === 'senegalais' ? 'text-yellow-200' : 'theme-text-muted'
+              }`}>{settings.subtitle}</p>
             </div>
           </Link>
 
@@ -120,7 +134,7 @@ export function Header() {
             <Link 
               to="/" 
               className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
-                theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+                theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'theme-text'
               }`}
             >
               <Hash className="w-4 h-4" />
@@ -133,7 +147,7 @@ export function Header() {
                 onMouseEnter={handleContentMenuEnter}
                 onMouseLeave={handleContentMenuLeave}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
-                  theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+                  theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'theme-text'
                 }`}
               >
                 <FileText className="w-4 h-4" />
@@ -150,52 +164,52 @@ export function Header() {
                 >
                   <Link
                     to="/search"
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 theme-text hover:bg-gray-50 transition-colors"
                   >
-                    <Search className="w-4 h-4 text-gray-500" />
+                    <Search className="w-4 h-4 theme-text-muted" />
                     <div>
                       <div className="font-medium">Rechercher</div>
-                      <div className="text-xs text-gray-500">Articles et analyses</div>
+                      <div className="text-xs theme-text-muted">Articles et analyses</div>
                     </div>
                   </Link>
                   <Link
                     to="/interviews"
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 theme-text hover:bg-gray-50 transition-colors"
                   >
-                    <Mic className="w-4 h-4 text-gray-500" />
+                    <Mic className="w-4 h-4 theme-text-muted" />
                     <div>
                       <div className="font-medium">Interviews</div>
-                      <div className="text-xs text-gray-500">Témoignages d'experts</div>
+                      <div className="text-xs theme-text-muted">Témoignages d'experts</div>
                     </div>
                   </Link>
                   <Link
                     to="/reportages"
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 theme-text hover:bg-gray-50 transition-colors"
                   >
-                    <Camera className="w-4 h-4 text-gray-500" />
+                    <Camera className="w-4 h-4 theme-text-muted" />
                     <div>
                       <div className="font-medium">Reportages Photo</div>
-                      <div className="text-xs text-gray-500">Galeries immersives</div>
+                      <div className="text-xs theme-text-muted">Galeries immersives</div>
                     </div>
                   </Link>
                   <Link
                     to="/videos"
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 theme-text hover:bg-gray-50 transition-colors"
                   >
-                    <Video className="w-4 h-4 text-gray-500" />
+                    <Video className="w-4 h-4 theme-text-muted" />
                     <div>
                       <div className="font-medium">Vidéos Analyses</div>
-                      <div className="text-xs text-gray-500">Décryptages d'experts</div>
+                      <div className="text-xs theme-text-muted">Décryptages d'experts</div>
                     </div>
                   </Link>
                   <Link
                     to="/temoignages"
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 theme-text hover:bg-gray-50 transition-colors"
                   >
-                    <MessageCircle className="w-4 h-4 text-gray-500" />
+                    <MessageCircle className="w-4 h-4 theme-text-muted" />
                     <div>
                       <div className="font-medium">Témoignages Citoyens</div>
-                      <div className="text-xs text-gray-500">Voix des citoyens</div>
+                      <div className="text-xs theme-text-muted">Voix des citoyens</div>
                     </div>
                   </Link>
                 </div>
@@ -208,7 +222,7 @@ export function Header() {
                 onMouseEnter={handleParticipateMenuEnter}
                 onMouseLeave={handleParticipateMenuLeave}
                 className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-bold transition-all hover:bg-white/10 backdrop-blur-sm ${
-                  theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'text-gray-700 hover:text-gray-900'
+                  theme === 'senegalais' ? 'text-yellow-200 hover:text-white' : 'theme-text'
                 }`}
               >
                 <Plus className="w-4 h-4" />
@@ -225,22 +239,22 @@ export function Header() {
                 >
                   <Link
                     to="/debat"
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 theme-text hover:bg-gray-50 transition-colors"
                   >
-                    <MessageSquare className="w-4 h-4 text-gray-500" />
+                    <MessageSquare className="w-4 h-4 theme-text-muted" />
                     <div>
                       <div className="font-medium">Proposer un débat</div>
-                      <div className="text-xs text-gray-500">Organiser une discussion</div>
+                      <div className="text-xs theme-text-muted">Organiser une discussion</div>
                     </div>
                   </Link>
                   <Link
                     to="/partager-histoire"
-                    className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-50 transition-colors"
+                    className="flex items-center space-x-3 px-4 py-3 theme-text hover:bg-gray-50 transition-colors"
                   >
-                    <Heart className="w-4 h-4 text-gray-500" />
+                    <Heart className="w-4 h-4 theme-text-muted" />
                     <div>
                       <div className="font-medium">Partager votre histoire</div>
-                      <div className="text-xs text-gray-500">Témoignage citoyen</div>
+                      <div className="text-xs theme-text-muted">Témoignage citoyen</div>
                     </div>
                   </Link>
                 </div>
@@ -264,7 +278,7 @@ export function Header() {
               className={`flex items-center space-x-2 px-4 py-2 rounded-xl font-medium transition-all ${
                 theme === 'senegalais'
                   ? 'bg-orange-100 text-orange-600 hover:bg-orange-200 border border-orange-300'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
+                  : 'theme-primary-bg'
               }`}
               title="Mes favoris"
             >
@@ -403,7 +417,7 @@ export function Header() {
                   className={`flex items-center justify-center space-x-3 px-6 py-3 rounded-xl font-bold transition-all shadow-lg font-sans border w-full ${
                     syncing 
                       ? 'bg-gray-100/80 text-gray-500 cursor-not-allowed border-gray-300' 
-                      : 'bg-white text-orange-600 hover:bg-yellow-50 border-orange-300'
+                      : 'theme-surface theme-text theme-border'
                   }`}
                 >
                   <Twitter className={`w-4 h-4 ${syncing ? 'animate-spin' : ''}`} />

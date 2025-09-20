@@ -7,93 +7,178 @@ import {
   Users, 
   Eye,
   Clock,
-  CheckCircle
+  CheckCircle,
+  Twitter,
+  Edit3,
+  Database,
+  Activity
 } from 'lucide-react'
 import { useAdminContent, useAdminCategories } from '../../hooks/useAdmin'
+import { useThreads } from '../../hooks/useData'
+import { useArticles } from '../../hooks/useArticles'
 import { useTheme } from '../../contexts/ThemeContext'
+import { DrillDownModal } from '../../components/admin/DrillDownModal'
+import { ThreadsDrillDown } from '../../components/admin/drilldown/ThreadsDrillDown'
+import { ArticlesDrillDown } from '../../components/admin/drilldown/ArticlesDrillDown'
+import { CategoriesDrillDown } from '../../components/admin/drilldown/CategoriesDrillDown'
+import { ViewsDrillDown } from '../../components/admin/drilldown/ViewsDrillDown'
 
 interface DashboardStats {
   totalThreads: number
-  publishedThreads: number
-  draftThreads: number
+  totalArticles: number
+  publishedArticles: number
+  draftArticles: number
   totalCategories: number
   totalViews: number
   totalLikes: number
+  totalTweets: number
+  completeThreads: number
 }
 
 export function AdminDashboard() {
-  const { threads, categories, loading: contentLoading } = useAdminContent()
+  const { threads, loading: threadsLoading } = useThreads()
+  const { articles, getPublishedArticles } = useArticles()
   const { categories: adminCategories, loading: categoriesLoading } = useAdminCategories()
   const { theme } = useTheme()
+  const [drillDownModal, setDrillDownModal] = useState<{
+    isOpen: boolean
+    title: string
+    type: 'threads' | 'articles' | 'categories' | 'views' | 'likes' | 'tweets' | 'complete' | 'published' | 'draft'
+  }>({ isOpen: false, title: '', type: 'threads' })
   const [stats, setStats] = useState<DashboardStats>({
     totalThreads: 0,
-    publishedThreads: 0,
-    draftThreads: 0,
+    totalArticles: 0,
+    publishedArticles: 0,
+    draftArticles: 0,
     totalCategories: 0,
     totalViews: 0,
-    totalLikes: 0
+    totalLikes: 0,
+    totalTweets: 0,
+    completeThreads: 0
   })
 
   useEffect(() => {
-    if (threads && categories) {
-      const publishedCount = threads.filter(t => t.status?.slug === 'published').length
-      const draftCount = threads.filter(t => t.status?.slug === 'draft').length
-      
-      setStats({
-        totalThreads: threads.length,
-        publishedThreads: publishedCount,
-        draftThreads: draftCount,
-        totalCategories: adminCategories.length,
-        totalViews: threads.reduce((sum, t) => sum + (t.view_count || 0), 0),
-        totalLikes: threads.reduce((sum, t) => sum + (t.like_count || 0), 0)
-      })
-    }
-  }, [threads, categories, adminCategories])
+    const publishedArticles = getPublishedArticles()
+    const draftArticles = articles.filter(a => a.status === 'draft')
+    const completeThreadsCount = threads?.filter(t => t.complete).length || 0
+    const totalTweets = threads?.reduce((sum, t) => sum + (t.total_tweets || 0), 0) || 0
+    
+    setStats({
+      totalThreads: threads?.length || 0,
+      totalArticles: articles.length,
+      publishedArticles: publishedArticles.length,
+      draftArticles: draftArticles.length,
+      totalCategories: adminCategories.length,
+      totalViews: threads?.reduce((sum, t) => sum + (t.view_count || 0), 0) || 0,
+      totalLikes: threads?.reduce((sum, t) => sum + (t.like_count || 0), 0) || 0,
+      totalTweets: totalTweets,
+      completeThreads: completeThreadsCount
+    })
+  }, [threads, articles, getPublishedArticles, adminCategories])
 
-  const isLoading = contentLoading || categoriesLoading
+  const isLoading = threadsLoading || categoriesLoading
+
+  const openDrillDown = (type: typeof drillDownModal.type, title: string) => {
+    setDrillDownModal({ isOpen: true, title, type })
+  }
+
+  const closeDrillDown = () => {
+    setDrillDownModal({ isOpen: false, title: '', type: 'threads' })
+  }
+
+  const renderDrillDownContent = () => {
+    switch (drillDownModal.type) {
+      case 'threads':
+        return <ThreadsDrillDown filterType="all" />
+      case 'articles':
+        return <ArticlesDrillDown filterType="all" />
+      case 'published':
+        return <ArticlesDrillDown filterType="published" />
+      case 'draft':
+        return <ArticlesDrillDown filterType="draft" />
+      case 'complete':
+        return <ThreadsDrillDown filterType="complete" />
+      case 'categories':
+        return <CategoriesDrillDown />
+      case 'views':
+        return <ViewsDrillDown />
+      default:
+        return <ThreadsDrillDown filterType="all" />
+    }
+  }
 
   const statCards = [
     {
-      title: 'Total Articles',
+      title: 'Threads Twitter',
       value: stats.totalThreads,
-      icon: FileText,
-      color: theme === 'senegalais' ? 'from-blue-900 to-blue-800' : 'from-gray-900 to-gray-800',
-      textColor: 'text-white'
+      icon: Twitter,
+      color: theme === 'senegalais' ? 'from-blue-600 to-blue-700' : 'from-blue-600 to-blue-700',
+      textColor: 'text-white',
+      description: 'Analyses importées depuis X',
+      drillDownType: 'threads' as const
+    },
+    {
+      title: 'Articles Éditoriaux',
+      value: stats.totalArticles,
+      icon: Edit3,
+      color: theme === 'senegalais' ? 'from-green-600 to-green-700' : 'from-green-600 to-green-700',
+      textColor: 'text-white',
+      description: 'Contenus rédigés par l\'equipe',
+      drillDownType: 'articles' as const
     },
     {
       title: 'Articles Publiés',
-      value: stats.publishedThreads,
+      value: stats.publishedArticles,
       icon: CheckCircle,
-      color: theme === 'senegalais' ? 'from-green-600 to-green-700' : 'from-green-600 to-green-700',
-      textColor: 'text-white'
+      color: theme === 'senegalais' ? 'from-emerald-600 to-emerald-700' : 'from-emerald-600 to-emerald-700',
+      textColor: 'text-white',
+      description: 'Articles visibles publiquement',
+      drillDownType: 'published' as const
     },
     {
       title: 'Brouillons',
-      value: stats.draftThreads,
+      value: stats.draftArticles,
       icon: Clock,
-      color: theme === 'senegalais' ? 'from-orange-600 to-orange-700' : 'from-yellow-500 to-yellow-600',
-      textColor: 'text-white'
+      color: theme === 'senegalais' ? 'from-orange-600 to-orange-700' : 'from-orange-600 to-orange-700',
+      textColor: 'text-white',
+      description: 'Articles en cours de rédaction',
+      drillDownType: 'draft' as const
+    },
+    {
+      title: 'Analyses Totales',
+      value: stats.totalTweets,
+      icon: Activity,
+      color: theme === 'senegalais' ? 'from-purple-600 to-purple-700' : 'from-purple-600 to-purple-700',
+      textColor: 'text-white',
+      description: 'Tweets analysés au total',
+      drillDownType: 'tweets' as const
+    },
+    {
+      title: 'Dossiers Complets',
+      value: stats.completeThreads,
+      icon: FileText,
+      color: theme === 'senegalais' ? 'from-indigo-600 to-indigo-700' : 'from-indigo-600 to-indigo-700',
+      textColor: 'text-white',
+      description: 'Threads terminés et complets',
+      drillDownType: 'complete' as const
     },
     {
       title: 'Catégories',
       value: stats.totalCategories,
       icon: FolderOpen,
-      color: theme === 'senegalais' ? 'from-yellow-600 to-yellow-700' : 'from-blue-600 to-blue-700',
-      textColor: 'text-white'
+      color: theme === 'senegalais' ? 'from-yellow-600 to-yellow-700' : 'from-yellow-600 to-yellow-700',
+      textColor: 'text-white',
+      description: 'Catégories de contenu',
+      drillDownType: 'categories' as const
     },
     {
       title: 'Vues Totales',
       value: stats.totalViews,
       icon: Eye,
-      color: theme === 'senegalais' ? 'from-purple-600 to-purple-700' : 'from-purple-600 to-purple-700',
-      textColor: 'text-white'
-    },
-    {
-      title: 'J\'aime',
-      value: stats.totalLikes,
-      icon: TrendingUp,
-      color: theme === 'senegalais' ? 'from-pink-600 to-pink-700' : 'from-red-600 to-red-700',
-      textColor: 'text-white'
+      color: theme === 'senegalais' ? 'from-pink-600 to-pink-700' : 'from-pink-600 to-pink-700',
+      textColor: 'text-white',
+      description: 'Vues cumulées des threads',
+      drillDownType: 'views' as const
     }
   ]
 
@@ -133,16 +218,17 @@ export function AdminDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((card) => {
           const Icon = card.icon
           return (
             <div 
               key={card.title}
-              className={`admin-card p-6 bg-gradient-to-br ${card.color} text-white relative overflow-hidden group`}
+              onClick={() => openDrillDown(card.drillDownType, card.title)}
+              className={`admin-card p-6 bg-gradient-to-br ${card.color} text-white relative overflow-hidden group hover:scale-105 transition-all duration-300 cursor-pointer`}
             >
               {/* Background pattern */}
-              <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
+              <div className="absolute top-0 right-0 w-24 h-24 opacity-10">
                 <Icon className="w-full h-full" />
               </div>
               
@@ -152,15 +238,21 @@ export function AdminDashboard() {
                     <Icon className="w-6 h-6 text-white" />
                   </div>
                   <div className="text-right">
-                    <div className="text-3xl font-bold">
+                    <div className="text-2xl font-bold">
                       {card.value.toLocaleString()}
                     </div>
                   </div>
                 </div>
                 
-                <h3 className="text-lg font-semibold text-white/90">
+                <h3 className="text-lg font-semibold text-white/90 mb-2">
                   {card.title}
                 </h3>
+                
+                {card.description && (
+                  <p className="text-sm text-white/70">
+                    {card.description}
+                  </p>
+                )}
               </div>
             </div>
           )
@@ -211,6 +303,15 @@ export function AdminDashboard() {
           </div>
         )}
       </div>
+
+      {/* Modal de drill down */}
+      <DrillDownModal
+        isOpen={drillDownModal.isOpen}
+        onClose={closeDrillDown}
+        title={`Détails - ${drillDownModal.title}`}
+      >
+        {renderDrillDownContent()}
+      </DrillDownModal>
     </div>
   )
 }

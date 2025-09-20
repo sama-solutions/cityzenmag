@@ -1,0 +1,56 @@
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Calendar, User, ArrowRight, Eye, Heart } from 'lucide-react'
+import { useTheme } from '../contexts/ThemeContext'
+import { useData } from '../hooks/useData'
+import { ThreadCard } from '../components/ThreadCard'
+import { LoadingSpinner } from '../components/LoadingSpinner'
+
+export function Home() {
+  const { theme } = useTheme()
+  const { threads, loading, error } = useData()
+  
+  if (loading) return <LoadingSpinner />
+  
+  if (error) {
+    return (
+      <div className="text-center py-12">
+        <div className="text-red-600 mb-4">
+          <p className="text-lg font-semibold">Erreur de chargement</p>
+          <p className="text-sm text-gray-600">{error}</p>
+        </div>
+      </div>
+    )
+  }
+
+  // Récupérer le dernier article pour la hero section
+  const latestThread = threads && threads.length > 0 ? threads[0] : null
+  const remainingThreads = threads && threads.length > 1 ? threads.slice(1, 9) : []
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('fr-FR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    })
+  }
+
+  const truncateText = (text: string, maxLength: number) => {
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength).trim() + '...'
+  }
+
+  // Fonction pour obtenir l'URL de l'image du tweet
+  const getTweetImageUrl = (thread: any) => {
+    if (thread.featured_image) {
+      // Priorité à l'URL originale, puis local_path, puis url
+      return thread.featured_image.original_url || 
+             thread.featured_image.local_path || 
+             thread.featured_image.url
+    }
+    return null
+  }
+  
+  return (
+    <div className="space-y-8">
+      {/* Lien de test pour l'agrandissement des photos */}

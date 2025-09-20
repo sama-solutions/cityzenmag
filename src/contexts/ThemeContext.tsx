@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import type { ThemeMode, ThemeConfig } from '../types/admin'
 
+type ExtendedThemeMode = ThemeMode | 'dark' | 'ocean' | 'enterprise'
+
 interface ThemeContextType {
-  theme: ThemeMode
-  setTheme: (theme: ThemeMode) => void
+  theme: ExtendedThemeMode
+  setTheme: (theme: ExtendedThemeMode) => void
   themeConfig: ThemeConfig
   toggleTheme: () => void
 }
@@ -40,22 +42,73 @@ const minimalisteTheme: ThemeConfig = {
   }
 }
 
+const darkTheme: ThemeConfig = {
+  mode: 'dark',
+  colors: {
+    primary: '#3b82f6',
+    secondary: '#64748b',
+    accent: '#06b6d4',
+    background: '#0f172a',
+    surface: '#1e293b',
+    text: '#f1f5f9',
+    textSecondary: '#94a3b8'
+  },
+  fonts: {
+    sans: '"Inter", "system-ui", "-apple-system", sans-serif'
+  }
+}
+
+const oceanTheme: ThemeConfig = {
+  mode: 'ocean',
+  colors: {
+    primary: '#0891b2', // Cyan océan
+    secondary: '#0e7490', // Cyan foncé
+    accent: '#06b6d4', // Cyan clair
+    background: 'linear-gradient(135deg, #cffafe 0%, #e0f2fe 50%, #f0f9ff 100%)',
+    surface: '#ffffff',
+    text: '#0f172a',
+    textSecondary: '#475569'
+  },
+  fonts: {
+    sans: '"Inter", "system-ui", "-apple-system", sans-serif'
+  }
+}
+
+const enterpriseTheme: ThemeConfig = {
+  mode: 'enterprise',
+  colors: {
+    primary: '#1f2937', // Gris anthracite
+    secondary: '#4b5563', // Gris moyen
+    accent: '#3b82f6', // Bleu corporate
+    background: 'linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%)',
+    surface: '#ffffff',
+    text: '#111827',
+    textSecondary: '#6b7280'
+  },
+  fonts: {
+    sans: '"Inter", "system-ui", "-apple-system", sans-serif'
+  }
+}
+
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined)
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<ThemeMode>('senegalais')
+  const [theme, setThemeState] = useState<ExtendedThemeMode>('senegalais')
 
   useEffect(() => {
     // Charger le thème depuis localStorage
-    const savedTheme = localStorage.getItem('cityzenmag-theme') as ThemeMode
-    if (savedTheme && (savedTheme === 'senegalais' || savedTheme === 'minimaliste')) {
+    const savedTheme = localStorage.getItem('cityzenmag-theme') as ExtendedThemeMode
+    if (savedTheme && ['senegalais', 'minimaliste', 'dark', 'ocean', 'enterprise'].includes(savedTheme)) {
       setThemeState(savedTheme)
     }
   }, [])
 
   useEffect(() => {
     // Appliquer le thème aux CSS variables
-    const config = theme === 'senegalais' ? senegalaisTheme : minimalisteTheme
+    const config = theme === 'senegalais' ? senegalaisTheme : 
+                   theme === 'dark' ? darkTheme :
+                   theme === 'ocean' ? oceanTheme :
+                   theme === 'enterprise' ? enterpriseTheme : minimalisteTheme
     const root = document.documentElement
     
     root.style.setProperty('--theme-primary', config.colors.primary)
@@ -69,18 +122,32 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     
     // Appliquer la classe du thème au body
     document.body.className = `theme-${theme}`
+    
+    // Ajouter/supprimer la classe dark pour Tailwind
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
   }, [theme])
 
-  const setTheme = (newTheme: ThemeMode) => {
+  const setTheme = (newTheme: ExtendedThemeMode) => {
     setThemeState(newTheme)
     localStorage.setItem('cityzenmag-theme', newTheme)
   }
 
   const toggleTheme = () => {
-    setTheme(theme === 'senegalais' ? 'minimaliste' : 'senegalais')
+    const nextTheme = theme === 'senegalais' ? 'minimaliste' : 
+                      theme === 'minimaliste' ? 'dark' :
+                      theme === 'dark' ? 'ocean' :
+                      theme === 'ocean' ? 'enterprise' : 'senegalais'
+    setTheme(nextTheme)
   }
 
-  const themeConfig = theme === 'senegalais' ? senegalaisTheme : minimalisteTheme
+  const themeConfig = theme === 'senegalais' ? senegalaisTheme : 
+                      theme === 'dark' ? darkTheme :
+                      theme === 'ocean' ? oceanTheme :
+                      theme === 'enterprise' ? enterpriseTheme : minimalisteTheme
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, themeConfig, toggleTheme }}>

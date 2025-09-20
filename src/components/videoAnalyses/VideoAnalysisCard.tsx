@@ -56,7 +56,7 @@ export function VideoAnalysisCard({ video, compact = false }: VideoAnalysisCardP
         className={`block p-4 rounded-xl border transition-all hover:shadow-md ${
           theme === 'senegalais'
             ? 'bg-white border-orange-200 hover:border-orange-300'
-            : 'bg-white border-gray-200 hover:border-gray-300'
+            : 'theme-surface theme-border border hover:shadow-md'
         }`}
       >
         <div className="flex items-start space-x-4">
@@ -79,16 +79,16 @@ export function VideoAnalysisCard({ video, compact = false }: VideoAnalysisCardP
 
           {/* Contenu */}
           <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-gray-900 line-clamp-2 mb-2">
+            <h3 className="font-bold theme-text line-clamp-2 mb-2">
               {video.title}
             </h3>
-            <div className="flex items-center space-x-2 text-sm text-gray-600 mb-2">
+            <div className="flex items-center space-x-2 text-sm theme-text-muted mb-2">
               <User className="w-3 h-3" />
               <span>{video.speaker.name}</span>
               <span>•</span>
               <span>{video.speaker.role}</span>
             </div>
-            <div className="flex items-center space-x-4 text-xs text-gray-500">
+            <div className="flex items-center space-x-4 text-xs theme-text-muted">
               <span className="flex items-center space-x-1">
                 <BookOpen className="w-3 h-3" />
                 <span>{video.chapters.length} chapitres</span>
@@ -117,7 +117,7 @@ export function VideoAnalysisCard({ video, compact = false }: VideoAnalysisCardP
       className={`block group overflow-hidden rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
         theme === 'senegalais'
           ? 'bg-white border-orange-200 hover:border-orange-300'
-          : 'bg-white border-gray-200 hover:border-gray-300'
+          : 'theme-surface border theme-border hover:shadow-xl'
       }`}
     >
       {/* Thumbnail avec overlay */}
@@ -179,13 +179,13 @@ export function VideoAnalysisCard({ video, compact = false }: VideoAnalysisCardP
       {/* Contenu */}
       <div className="p-6 space-y-4">
         {/* Titre */}
-        <h3 className="text-xl font-bold text-gray-900 line-clamp-2 group-hover:text-orange-600 transition-colors">
+        <h3 className="text-xl font-bold theme-text line-clamp-2 group-hover:text-orange-600 transition-colors">
           {video.title}
         </h3>
 
         {/* Description */}
         {video.description && (
-          <p className="text-gray-600 line-clamp-2 leading-relaxed">
+          <p className="theme-text-muted line-clamp-2 leading-relaxed">
             {video.description}
           </p>
         )}
@@ -208,8 +208,8 @@ export function VideoAnalysisCard({ video, compact = false }: VideoAnalysisCardP
             </div>
           )}
           <div>
-            <p className="font-medium text-gray-900">{video.speaker.name}</p>
-            <p className="text-sm text-gray-600">{video.speaker.role}</p>
+            <p className="font-medium theme-text">{video.speaker.name}</p>
+            <p className="text-sm theme-text-muted">{video.speaker.role}</p>
           </div>
         </div>
 
@@ -227,14 +227,14 @@ export function VideoAnalysisCard({ video, compact = false }: VideoAnalysisCardP
               </span>
             ))}
             {video.tags.length > 3 && (
-              <span className="text-xs text-gray-500">+{video.tags.length - 3} autres</span>
+              <span className="text-xs theme-text-muted">+{video.tags.length - 3} autres</span>
             )}
           </div>
         )}
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <div className="flex items-center space-x-4 text-sm text-gray-500">
+        <div className="flex items-center justify-between pt-4 border-t theme-border">
+          <div className="flex items-center space-x-4 text-sm theme-text-muted">
             <span className="flex items-center space-x-1">
               <Calendar className="w-4 h-4" />
               <span>
@@ -256,7 +256,7 @@ export function VideoAnalysisCard({ video, compact = false }: VideoAnalysisCardP
           </div>
 
           <div className={`text-sm font-medium ${
-            theme === 'senegalais' ? 'text-orange-600' : 'text-gray-900'
+            theme === 'senegalais' ? 'text-orange-600' : 'theme-text'
           }`}>
             Regarder →
           </div>

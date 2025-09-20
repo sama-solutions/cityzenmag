@@ -2,6 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { ErrorBoundary } from './components/ErrorBoundary.tsx'
 import './index.css'
+import './styles/themes.css'
 import App from './App.tsx'
 
 // Enregistrement du Service Worker pour PWA

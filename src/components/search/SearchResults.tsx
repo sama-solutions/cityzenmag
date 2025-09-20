@@ -111,16 +111,16 @@ export function SearchResults({
   return (
     <div className="space-y-6">
       {/* Informations sur la recherche */}
-      <div className="flex items-center justify-between text-sm text-gray-600">
+      <div className="flex items-center justify-between text-sm theme-text-muted">
         <div>
-          <span className="font-medium text-gray-900">{total.toLocaleString()}</span> résultat{total > 1 ? 's' : ''} 
+          <span className="font-medium theme-text">{total.toLocaleString()}</span> résultat{total > 1 ? 's' : ''} 
           {query && (
             <>
-              {' '}pour <span className="font-medium text-gray-900">"{query}"</span>
+              {' '}pour <span className="font-medium theme-text">"{query}"</span>
             </>
           )}
         </div>
-        <div className="flex items-center space-x-1">
+          <div className="flex items-center space-x-1 theme-text-muted">
           <Clock className="w-4 h-4" />
           <span>{executionTime}ms</span>
         </div>
@@ -131,7 +131,7 @@ export function SearchResults({
         {results.map((result) => (
           <div
             key={`${result.type}-${result.id}`}
-            className="bg-white rounded-xl border border-gray-200 hover:border-gray-300 transition-all duration-200 hover:shadow-md"
+            className="theme-surface rounded-xl border theme-border hover:shadow-md transition-all duration-200"
           >
             <Link to={result.url} className="block p-6">
               <div className="flex items-start space-x-4">
@@ -148,7 +148,7 @@ export function SearchResults({
                     />
                   ) : (
                     <div className={`w-16 h-16 rounded-lg flex items-center justify-center text-2xl ${
-                      theme === 'senegalais' ? 'bg-orange-100' : 'bg-gray-100'
+                      theme === 'senegalais' ? 'bg-orange-100' : 'theme-surface'
                     }`}>
                       {getTypeIcon(result.type)}
                     </div>
@@ -162,19 +162,19 @@ export function SearchResults({
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${getTypeColor(result.type)}`}>
                       {getTypeIcon(result.type)} {getTypeLabel(result.type)}
                     </span>
-                    <div className="flex items-center text-sm text-gray-500">
+                    <div className="flex items-center text-sm theme-text-muted">
                       <Calendar className="w-4 h-4 mr-1" />
                       {formatDate(result.date)}
                     </div>
                   </div>
 
                   {/* Titre */}
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-semibold theme-text mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
                     {result.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-gray-600 mb-3 line-clamp-2">
+                  <p className="theme-text-muted mb-3 line-clamp-2">
                     {result.description}
                   </p>
 
@@ -184,7 +184,7 @@ export function SearchResults({
                       {result.highlights.map((highlight, index) => (
                         <p
                           key={index}
-                          className="text-sm text-gray-700 mb-1"
+                          className="text-sm theme-text mb-1"
                           dangerouslySetInnerHTML={{ __html: highlight }}
                         />
                       ))}
@@ -192,7 +192,7 @@ export function SearchResults({
                   )}
 
                   {/* Métadonnées et metadata */}
-                  <div className="flex items-center space-x-4 text-sm text-gray-500">
+                  <div className="flex items-center space-x-4 text-sm theme-text-muted">
                     {result.author && (
                       <div className="flex items-center">
                         <User className="w-4 h-4 mr-1" />
@@ -206,7 +206,7 @@ export function SearchResults({
                       </div>
                     )}
                     {result.theme && (
-                      <span className="px-2 py-1 bg-gray-100 rounded-full text-xs">
+                      <span className="px-2 py-1 theme-surface rounded-full text-xs theme-text">
                         {result.theme}
                       </span>
                     )}
@@ -226,13 +226,13 @@ export function SearchResults({
       {/* Message si plus de résultats */}
       {results.length < total && (
         <div className="text-center py-6">
-          <p className="text-gray-600 mb-4">
+          <p className="theme-text-muted mb-4">
             Affichage de {results.length} résultats sur {total.toLocaleString()}
           </p>
           <button className={`px-6 py-3 rounded-xl font-medium transition-all ${
             theme === 'senegalais'
               ? 'bg-orange-100 text-orange-800 hover:bg-orange-200'
-              : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+              : 'theme-primary-bg'
           }`}>
             Charger plus de résultats
           </button>

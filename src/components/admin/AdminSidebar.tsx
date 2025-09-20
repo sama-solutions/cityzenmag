@@ -8,7 +8,12 @@ import {
   Menu as MenuIcon,
   BarChart3,
   LogOut,
-  Home
+  Home,
+  Share2,
+  PenTool,
+  Layout,
+  Database,
+  Settings
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
 import { useTheme } from '../../contexts/ThemeContext'
@@ -16,11 +21,16 @@ import { ThemeSelector } from '../ThemeSelector'
 
 const menuItems = [
   { path: '/admin', icon: LayoutDashboard, label: 'Dashboard', exact: true },
+  { path: '/admin/articles', icon: PenTool, label: 'Articles' },
+  { path: '/admin/sections', icon: Layout, label: 'Sections' },
   { path: '/admin/categories', icon: FolderOpen, label: 'Catégories' },
   { path: '/admin/content', icon: FileText, label: 'Contenu' },
   { path: '/admin/scheduler', icon: Calendar, label: 'Planificateur' },
   { path: '/admin/menus', icon: MenuIcon, label: 'Menus' },
-  { path: '/admin/analytics', icon: BarChart3, label: 'Analytics' }
+  { path: '/admin/social', icon: Share2, label: 'Réseaux Sociaux' },
+  { path: '/admin/analytics', icon: BarChart3, label: 'Analytics' },
+  { path: '/admin/supabase', icon: Database, label: 'Supabase' },
+  { path: '/admin/settings', icon: Settings, label: 'Paramètres' }
 ]
 
 export function AdminSidebar() {
